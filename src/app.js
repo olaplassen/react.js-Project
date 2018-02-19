@@ -12,7 +12,7 @@ class Menu extends React.Component {
     );
   }
 }
-
+console.log("hei")
 // Component that shows a list of all the customers
 class CustomerList extends React.Component {
   constructor() {
