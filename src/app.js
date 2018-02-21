@@ -12,7 +12,7 @@ class Menu extends React.Component {
     );
   }
 }
-console.log("hei")
+
 // Component that shows a list of all the customers
 class CustomerList extends React.Component {
   constructor() {
@@ -28,7 +28,12 @@ class CustomerList extends React.Component {
         <li key={customer.id}>
           <Link to={'/customer/' + customer.id}>{customer.firstName}</Link>
           <button onClick={() => {
-            console.log('button for customer ' + customer.id + ' clicked');
+            customerService.removeCustomer(customer.id);
+            customerService.getCustomers((result) => {
+              this.customers = result;
+              this.forceUpdate(); // Rerender component with updated data
+            });
+
           }}>x</button>
         </li>
       );
@@ -38,11 +43,11 @@ class CustomerList extends React.Component {
       <div>
         Customers:
         <ul>{listItems}</ul>
-        Logginn:
+        New customer:
         <div>
-          Username: <input type='text' ref='username' />
-          Password: <input type='text' ref='password' />
-          <button ref='newCustomerButton'>Logg inn</button>
+          Name: <input type='text' ref='newName' />
+          City: <input type='text' ref='newCity' />
+          <button ref='newCustomerButton'>Add</button>
         </div>
       </div>
     );
@@ -66,7 +71,10 @@ class CustomerList extends React.Component {
         });
       });
     };
-  }
+
+
+
+  };
 }
 
 // Detailed view of one customer
@@ -88,7 +96,12 @@ class CustomerDetails extends React.Component {
           <li>Name: {this.customer.firstName}</li>
           <li>City: {this.customer.city}</li>
         </ul>
+        Change name: <input type='text' ref='changedName' />
+        Change city: <input type='text' ref='changedCity' />
+        <button ref='changeCustomerButton'>Add</button>
       </div>
+
+
     );
   }
 
@@ -99,6 +112,19 @@ class CustomerDetails extends React.Component {
       this.customer = result;
       this.forceUpdate(); // Rerender component with updated data
     });
+
+    this.refs.changeCustomerButton.onclick = () => {
+      customerService.changeCustomer(this.refs.changedName.value, this.refs.changedCity.value, this.id, (result) => {
+        this.refs.changedName.value = "";
+        this.refs.changedCity.value = "";
+
+        customerService.getCustomer(this.id, (result) => {
+          this.customer = result;
+          this.forceUpdate(); // Rerender component with updated data
+        });
+      });
+    };
+
   }
 }
 
