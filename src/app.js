@@ -41,12 +41,12 @@ class CustomerList extends React.Component {
 
     return (
       <div>
-        Customers:
+        Loginn:
         <ul>{listItems}</ul>
         New customer:
         <div>
-          Name: <input type='text' ref='newName' />
-          City: <input type='text' ref='newCity' />
+          Usrname: <input type='text' ref='username' />
+          Password: <input type='text' ref='password' />
           <button ref='newCustomerButton'>Add</button>
         </div>
       </div>
