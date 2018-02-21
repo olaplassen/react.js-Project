@@ -8,7 +8,7 @@ export default class LoginPage extends React.Component {
   render() {
     return (
       <div>
-      hei
+      hei morn
       </div>
     );
   }
