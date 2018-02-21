@@ -74,6 +74,6 @@ class UserService {
   }
 }
 
-let UserService = new UserService();
+let userService = new UserService();
 
 export { userService };
