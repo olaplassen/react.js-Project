@@ -9,9 +9,9 @@ class Menu extends React.Component {
     return (
       <div>
         Menu: <br/>
-        <Link to='/login'>Login</Link> <br/>
-        <Link to='/'>Registration</Link>
-scvsv
+        <Link to='/'>Login</Link> <br/>
+        <Link to='/login'>Registration</Link>
+
       </div>
     );
   }
