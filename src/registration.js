@@ -4,7 +4,7 @@ import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { UserService } from './services';
 
 
-export default class LoginPage extends React.Component {
+ export default class Registration extends React.Component {
   render() {
     return (
       <div>

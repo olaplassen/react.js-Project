@@ -2,21 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { UserService } from './services';
-import LoginPage from './login.js'
+import Registration from './registration.js'
 
 class Menu extends React.Component {
   render() {
+
     return (
       <div>
-        Menu: <br/>
-        <Link to='/'>Login</Link> <br/>
-        <Link to='/login'>Registration</Link>
+        Login: <br/>
+        <input ref="username" placeholder="Type your username"></input><br/>
+        <input ref="passworde" placeholder="Type your password"></input><br/>
+        <Link to='/'>Forgot password</Link> <br/>
+        <Link to='/registration'>Registration</Link>
 
       </div>
     );
   }
-}
 
+
+}
+// componentDidMount() {
+//
+//   userService.getUsers((result) => {
+//     this
+//   })
+// }
 
 
 // The Route-elements define the different pages of the application
@@ -31,7 +41,7 @@ ReactDOM.render((
       <Menu />
 
       <Switch>
-        <Route exact path='/login' component={LoginPage}/>
+        <Route exact path='/registration' component={Registration}/>
         <Route exact path='/' />
       </Switch>
     </div>
