@@ -11,7 +11,7 @@ class Menu extends React.Component {
         Menu: <br/>
         <Link to='/login'>Login</Link> <br/>
         <Link to='/'>Registration</Link>
-
+scvsv
       </div>
     );
   }
