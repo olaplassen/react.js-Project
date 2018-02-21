@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
-import { customerService } from './services';
+import { UserService } from './services';
 
 class Menu extends React.Component {
   render() {
@@ -12,6 +12,31 @@ class Menu extends React.Component {
     );
   }
 }
+class Login extends React.Component {
+  constructor() {
+    super();
+
+    
+  }
+  render() {
+
+  }
+  return (
+    <div>
+      Login:
+
+
+      <div>
+        Username <input type='text' ref='newName' />
+        Password: <input type='text' ref='newCity' />
+        <button ref='loginButton'>Add</button>
+      </div>
+    </div>
+  );
+
+ }
+
+
 
 // The Route-elements define the different pages of the application
 // through a path and which component should be used for the path.
@@ -24,8 +49,8 @@ ReactDOM.render((
     <div>
       <Menu />
       <Switch>
-        <Route exact path='/' component={CustomerList} />
-        <Route exact path='/customer/:customerId' component={CustomerDetails} />
+        <Route exact path='/'/>
+        <Route exact path='/' />
       </Switch>
     </div>
   </HashRouter>
