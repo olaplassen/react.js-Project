@@ -43,7 +43,7 @@ class CustomerList extends React.Component {
       <div>
         Loginn:
         <ul>{listItems}</ul>
-        New customer:
+        Loginn:
         <div>
           Usrname: <input type='text' ref='username' />
           Password: <input type='text' ref='password' />
