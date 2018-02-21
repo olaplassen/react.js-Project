@@ -12,29 +12,33 @@ class Menu extends React.Component {
     );
   }
 }
-class Login extends React.Component {
-  constructor() {
-    super();
-
-    
-  }
-  render() {
-
-  }
-  return (
-    <div>
-      Login:
-
-
-      <div>
-        Username <input type='text' ref='newName' />
-        Password: <input type='text' ref='newCity' />
-        <button ref='loginButton'>Add</button>
-      </div>
-    </div>
-  );
-
- }
+// class Login extends React.Component {
+//   constructor() {
+//     super();
+//
+//
+//   }
+//   render() {
+//
+//   }
+//
+//   return (
+//     <div>
+//       Login:
+//
+//
+//       <div>
+//         Username <input type='text' ref='newName' />
+//         Password: <input type='text' ref='newCity' />
+//         <button onClick={() => {
+//           console.log("click");
+//
+//         }}>Add</button>
+//       </div>
+//     </div>
+//   );
+//
+//  }
 
 
 
