@@ -2,43 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { UserService } from './services';
+import LoginPage from './login.js'
 
 class Menu extends React.Component {
   render() {
     return (
       <div>
-        Menu: <Link to='/'>Customers</Link>
+        Menu: <br/>
+        <Link to='/login'>Login</Link> <br/>
+        <Link to='/'>Registration</Link>
+
       </div>
     );
   }
 }
-// class Login extends React.Component {
-//   constructor() {
-//     super();
-//
-//
-//   }
-//   render() {
-//
-//   }
-//
-//   return (
-//     <div>
-//       Login:
-//
-//
-//       <div>
-//         Username <input type='text' ref='newName' />
-//         Password: <input type='text' ref='newCity' />
-//         <button onClick={() => {
-//           console.log("click");
-//
-//         }}>Add</button>
-//       </div>
-//     </div>
-//   );
-//
-//  }
 
 
 
@@ -52,8 +29,9 @@ ReactDOM.render((
   <HashRouter>
     <div>
       <Menu />
+
       <Switch>
-        <Route exact path='/'/>
+        <Route exact path='/login' component={LoginPage}/>
         <Route exact path='/' />
       </Switch>
     </div>
