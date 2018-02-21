@@ -68,7 +68,7 @@ class CustomerService {
 
     })
   }
-
+  checkLogin(username, password)
 }
 let customerService = new CustomerService();
 
