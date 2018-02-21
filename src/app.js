@@ -21,7 +21,6 @@ class CustomerList extends React.Component {
     this.customers = [];
   }
 
-//hei
   render() {
     let listItems = [];
     for(let customer of this.customers) {

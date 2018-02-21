@@ -52,6 +52,23 @@ class CustomerService {
       callback();
     });
   }
+
+  changeCustomer(firstName, city, id, callback) {
+    connection.query('UPDATE Customers SET firstName=?, city=? WHERE id=?', [firstName, city, id], (error, result) => {
+      if (error) throw error;
+
+      callback();
+    })
+  }
+
+  removeCustomer(id, callback) {
+    connection.query('DELETE FROM Customers WHERE id=?', [id], (error, result) => {
+      if (error) throw error;
+
+
+    })
+  }
+
 }
 let customerService = new CustomerService();
 
