@@ -28,48 +28,52 @@ function connect() {
 connect();
 
 // Class that performs database queries related to customers
-class CustomerService {
-  getCustomers(callback) {
-    connection.query('SELECT * FROM Customers', (error, result) => {
+class UserService {
+  getUsers(callback) {
+    connection.query('SELECT * FROM Users', (error, result) => {
       if (error) throw error;
 
       callback(result);
     });
   }
 
-  getCustomer(id, callback) {
-    connection.query('SELECT * FROM Customers WHERE id=?', [id], (error, result) => {
+  getUsers(id, callback) {
+    connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
       if (error) throw error;
 
       callback(result[0]);
     });
   }
 
-  addCustomer(firstName, city, callback) {
-    connection.query('INSERT INTO Customers (firstName, city) values (?, ?)', [firstName, city], (error, result) => {
+  addUser(firstName, lastName, city, callback) {
+    connection.query('INSERT INTO Users (firstName, lastName, city) values (?, ?)', [firstName, lastName, city], (error, result) => {
       if (error) throw error;
 
       callback();
     });
   }
 
-  changeCustomer(firstName, city, id, callback) {
-    connection.query('UPDATE Customers SET firstName=?, city=? WHERE id=?', [firstName, city, id], (error, result) => {
+  changeUser(firstName, lastName, city, id, callback) {
+    connection.query('UPDATE Users SET firstName=?, lastName=?, city=? WHERE id=?', [firstName, lastName, city, id], (error, result) => {
       if (error) throw error;
 
       callback();
     })
   }
 
-  removeCustomer(id, callback) {
-    connection.query('DELETE FROM Customers WHERE id=?', [id], (error, result) => {
-      if (error) throw error;
+  // removeCustomer(id, callback) {
+  //   connection.query('DELETE FROM Customers WHERE id=?', [id], (error, result) => {
+  //     if (error) throw error;
+  //
+  //
+  //   })
+  // }
 
+  checkLogin(username, password) {
 
-    })
   }
-  checkLogin(username, password)
 }
-let customerService = new CustomerService();
 
-export { customerService };
+let UserService = new UserService();
+
+export { userService };
