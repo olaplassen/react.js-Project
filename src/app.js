@@ -29,7 +29,7 @@ class Login extends React.Component {
   componentDidMount() {
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
-        
+
       });
     }
   }
@@ -80,6 +80,13 @@ class NewPassword extends React.Component {
       <button ref="newPasswordbtn">Request</button>
       </div>
     );
+  }
+  componentDidMount() {
+  this.refs.newPasswordbtn.onclick = () => {
+    userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
+
+    });
+    }
   }
 }
 
