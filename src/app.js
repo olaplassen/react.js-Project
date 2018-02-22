@@ -13,35 +13,6 @@ class Menu extends React.Component {
   }
 }
 
-// mooooorn fgsdfsdf
-// class Login extends React.Component {
-//   constructor() {
-//     super();
-//
-//
-//   }
-//   render() {
-//
-//   }
-//
-//   return (
-//     <div>
-//       Login:
-//
-//
-//       <div>
-//         Username <input type='text' ref='newName' />
-//         Password: <input type='text' ref='newCity' />
-//         <button onClick={() => {
-//           console.log("click");
-//
-//         }}>Add</button>
-//       </div>
-//     </div>
-//   );
-//
-//  }
-
 
 
 // The Route-elements define the different pages of the application
