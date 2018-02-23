@@ -2,18 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
-import { Header } from './styles';
+import { ul } from './styles';
+import { li } from './styles';
+import { link } from './styles';
+
 
 
 class Menu extends React.Component {
  render() {
 
    return (
-     <div>
-      Menu:
-       <Header><Link to='/login'>Login</Link></Header>
-       <Header><Link to='/registration'>Registration</Link></Header>
-     </div>
+
+     <ul style={ul}>
+
+
+       <li style={li}><Link to ='/login' style={link}>Login</Link></li>
+       <li style={li}><Link to ='/registration' style={link}>Registration</Link></li>
+       </ul>
+
+
    );
  }
 }
