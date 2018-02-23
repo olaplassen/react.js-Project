@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
+import { Header } from './styles';
 
 
 class Menu extends React.Component {
@@ -9,8 +10,9 @@ class Menu extends React.Component {
 
    return (
      <div>
-       <Link to='/login'>Login</Link> { "      "}
-       <Link to='/registration'>Registration</Link>
+      Menu:
+       <Header><Link to='/login'>Login</Link></Header>
+       <Header><Link to='/registration'>Registration</Link></Header>
      </div>
    );
  }

@@ -1,5 +1,5 @@
 import mysql from 'mysql';
-import { mailService } from './mail';
+import { mailService } from './mailservices';
 
 // Setup database server reconnection when server timeouts connection:
 let connection;
@@ -76,8 +76,8 @@ class UserService {
     connection.query('UPDATE Users SET password=? WHERE (userName = ? AND email = ?)', [newpassword, userName, email], (error, result) => {
       if (error) throw error;
       console.log("mail delivered")
-      let subject = "New password";
-      let textmail = newpassword;
+      let subject = "New password for " + userName;
+      let textmail = "Your new password: " + newpassword;
       mailService.sendMail(email, subject, textmail);
 
 
