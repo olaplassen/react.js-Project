@@ -1,22 +1,22 @@
 class Ul {
-connstructor(listStyleType, margin, padding, overflow, backroundColor) {
+constructor(listStyleType, margin, padding, overflow, backgroundColor) {
 
 this.listStyleType = 'none';
-this.margin = '0';
-this.padding = '0';
+this.margin = 0;
+this.padding = 0;
 this.overflow = 'hidden';
-this.backroundColor = '#333';
+this.backgroundColor = '#333';
  }
 }
 
 class Li {
-  connstructor(float) {
+  constructor(float) {
     this.float = 'left';
   }
 }
 
 class Link {
-  connstructor(display, color, textAlign, padding, textDecoration) {
+  constructor(display, color, textAlign, padding, textDecoration) {
     this.display = 'block';
     this.color = 'white';
     this.textAlign = 'center';

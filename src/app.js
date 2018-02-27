@@ -6,21 +6,16 @@ import { ul } from './styles';
 import { li } from './styles';
 import { link } from './styles';
 
-
+console.log(link)
 
 class Menu extends React.Component {
  render() {
 
    return (
-
-     <ul style={ul}>
-
-
+      <ul style={ul}>
        <li style={li}><Link to ='/login' style={link}>Login</Link></li>
        <li style={li}><Link to ='/registration' style={link}>Registration</Link></li>
-       </ul>
-
-
+      </ul>
    );
  }
 }
