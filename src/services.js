@@ -31,13 +31,7 @@ connect();
 
 // Class that performs database queries related to customers
 class UserService {
-  getUsers(callback) {
-    connection.query('SELECT * FROM Users', (error, result) => {
-      if (error) throw error;
 
-      callback(result);
-    });
-  }
 
   getUsers(id, callback) {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
@@ -59,16 +53,16 @@ class UserService {
     connection.query('UPDATE Users SET firstName=?, lastName=?, city=? WHERE id=?', [firstName, lastName, city, id], (error, result) => {
       if (error) throw error;
 
-      callback();
+      callback(result);
     });
   }
-  loginUser(userName, password, callback) {
-    connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [userName, password], (error, result) => {
-
+  loginUser(username, password, callback) {
+    connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
       if (error) throw error;
+
       console.log(result[0]);
 
-      callback();
+      callback(result[0]);
     });
   }
   resetPassword(userName, email, callback) {
