@@ -2,31 +2,43 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
-import { ul } from './styles';
-import { li } from './styles';
-import { link } from './styles';
 
-console.log(link)
+// import { ul } from './styles';
+// import { li } from './styles';
+// import { link } from './styles';
+
+
 
 class Menu extends React.Component {
  render() {
 
    return (
-      <ul style={ul}>
-       <li style={li}><Link to ='/login' style={link}>Login</Link></li>
-       <li style={li}><Link to ='/registration' style={link}>Registration</Link></li>
+     <div className="menu">
+      <ul className="ul">
+      <li className="ul">
+       <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
+       <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
       </ul>
+      </div>
+      <div className="">
+      Velkommen til
+      </div>
    );
  }
 }
 class Login extends React.Component {
   render() {
     return (
-      <div>
-        <input ref="username" placeholder="Type your username"></input><br/>
-        <input ref="password" placeholder="Type your password"></input><br/><br/>
-        <button ref="loginBtn">Login</button> <br/>
+
+      <div className="menu">
+      <form action="/action_page.php">
+        <label htmlFor="username">Username</label>
+        <input className="input" ref="username" placeholder="Type your username"></input><br/>
+        <label htmlFor="password">Password</label>
+        <input className="input" ref="password" placeholder="Type your password"></input><br/><br/>
+        <button className="button" ref="loginBtn">Login</button> <br/>
         <Link to='/newPassword'>Forgot password</Link> <br/>
+        </form>
       </div>
     );
   }
@@ -178,7 +190,7 @@ function checkLogIn(user) {
       <Switch>
         // <Route exact path='/' component={Home} />
          // <Route exact path='/arrangement' component={Login} />
-         <Route exact path='/mypage/:userId' component={MyPage} />
+           <Route exact path='/mypage/:userId' component={MyPage} />
       </Switch>
     </div>
   </HashRouter>
