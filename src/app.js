@@ -34,6 +34,20 @@ class Login extends React.Component {
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
+
+        console.log(result);
+        if (result== undefined) {
+          alert("feil passord")
+        }
+        else {
+          let user = {
+            userId: result.id
+
+          }
+          console.log(user.userId);
+           checkLogIn(user);
+        }
+
       });
     }
   }
@@ -94,8 +108,48 @@ class NewPassword extends React.Component {
   }
 }
 
+class Home extends React.Component {
+  render() {
+    return (
+       <ul style={ul}>
+        <li style={li}><Link to ='/home' style={link}>Home</Link></li>
+        <li style={li}><Link to ='/mypage'style={link}>Mypage</Link></li>
+       </ul>
+    );
+  }
+ }
+
+class MyPage extends React.Component {
+  constructor(props) {
+  super(props);
+
+  this.user = {};
+  this.id = props.match.params.userId
+  console.log(this.id);
+
+  }
+
+  render() {
+    return (
+
+      <div>
 
 
+      </div>
+    );
+  }
+  // componentDidMount() {
+  //   userService.getUsers(this.id, (result) => {
+  //     // this.user = result;
+  //     this.firstName = result.firstName.value;
+  //
+  //
+  //     this.forceUpdate();
+  //     console.log(this.user);
+  //
+  //   })
+  // }
+}
 
 // The Route-elements define the different pages of the application
 // through a path and which component should be used for the path.
@@ -115,3 +169,18 @@ ReactDOM.render((
     </div>
   </HashRouter>
 ), document.getElementById('root'));
+
+function checkLogIn(user) {
+  ReactDOM.render((
+  <HashRouter>
+    <div>
+      <Home />
+      <Switch>
+        // <Route exact path='/' component={Home} />
+         // <Route exact path='/arrangement' component={Login} />
+         <Route exact path='/mypage/:userId' component={MyPage} />
+      </Switch>
+    </div>
+  </HashRouter>
+), document.getElementById('root'))
+};
