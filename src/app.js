@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
-
+import { Form, Text, Radio, TextArea, Checkbox } from 'react-form';
 // import { ul } from './styles';
 // import { li } from './styles';
 // import { link } from './styles';
@@ -15,23 +15,32 @@ class Menu extends React.Component {
    return (
      <div className="menu">
       <ul className="ul">
-      <li className="ul">
+      <li className="li"><Link to ='/frontPage' className="link">Hjem</Link></li>
        <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
        <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
       </ul>
       </div>
-      <div className="">
-      Velkommen til
-      </div>
+
    );
  }
+}
+
+class FrontPage extends React.Component {
+  render() {
+    return (
+    <div className="Menu">
+    <h1 className="">Velkommen</h1>
+
+    </div>
+  );
+  }
 }
 class Login extends React.Component {
   render() {
     return (
 
       <div className="menu">
-      <form action="/action_page.php">
+      <form>
         <label htmlFor="username">Username</label>
         <input className="input" ref="username" placeholder="Type your username"></input><br/>
         <label htmlFor="password">Password</label>
@@ -47,7 +56,7 @@ class Login extends React.Component {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
 
-        console.log(result);
+
         if (result== undefined) {
           alert("feil passord")
         }
@@ -97,7 +106,7 @@ class Registration extends React.Component {
                          this.refs.newPassword.value = "";
 
                        });
-                    }
+                     }
                   }
                 }
 
@@ -120,15 +129,49 @@ class NewPassword extends React.Component {
   }
 }
 
-class Home extends React.Component {
+class LoggedInMenu extends React.Component {
+constructor(props) {
+super(props);
+
+this.user = {};
+this.id = props.userId;
+console.log(this.id);
+}
   render() {
     return (
-       <ul style={ul}>
-        <li style={li}><Link to ='/home' style={link}>Home</Link></li>
-        <li style={li}><Link to ='/mypage'style={link}>Mypage</Link></li>
+       <ul className="ul">
+        <li className="li"><Link to ={'/lhome/' + this.id} className="link">Hjem</Link></li>
+        <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
        </ul>
+
     );
   }
+ }
+ class LoggedInHome extends React.Component {
+   constructor(props) {
+     super(props)
+     this.user = {};
+     this.id = props.match.params.userId;
+
+   }
+   render() {
+
+     return (
+     <div className="Menu">
+     <h1 className="">Velkommen {this.user.firstName}</h1>
+
+     </div>
+   );
+   }
+   componentDidMount() {
+     userService.getUsers(this.id, (result) => {
+       console.log(result);
+       this.user = result;
+       console.log(this.user);
+       this.forceUpdate();
+     }
+   );
+   }
  }
 
 class MyPage extends React.Component {
@@ -136,17 +179,17 @@ class MyPage extends React.Component {
   super(props);
 
   this.user = {};
-  this.id = props.match.params.userId
-  console.log(this.id);
+  this.id = props.match.params.userId;
 
   }
 
   render() {
+    console.log(this.id);
     return (
 
       <div>
 
-
+      <h1>Test</h1>
       </div>
     );
   }
@@ -174,6 +217,7 @@ ReactDOM.render((
     <div>
       <Menu />
       <Switch>
+        <Route exact path='/frontPage' component={FrontPage} />
         <Route exact path='/registration' component={Registration} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/newPassword' component={NewPassword} />
@@ -186,9 +230,9 @@ function checkLogIn(user) {
   ReactDOM.render((
   <HashRouter>
     <div>
-      <Home />
+      <LoggedInMenu userId={user.userId} />
       <Switch>
-        // <Route exact path='/' component={Home} />
+          <Route exact path='/lhome/:userId' component={LoggedInHome} />
          // <Route exact path='/arrangement' component={Login} />
            <Route exact path='/mypage/:userId' component={MyPage} />
       </Switch>
