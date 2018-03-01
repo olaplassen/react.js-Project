@@ -189,21 +189,20 @@ class MyPage extends React.Component {
 
       <div>
 
-      <h1>Test</h1>
+      <h1>Test{this.user.firstName}</h1>
+      <input value={this.user.firstName}/>
       </div>
     );
   }
-  // componentDidMount() {
-  //   userService.getUsers(this.id, (result) => {
-  //     // this.user = result;
-  //     this.firstName = result.firstName.value;
-  //
-  //
-  //     this.forceUpdate();
-  //     console.log(this.user);
-  //
-  //   })
-  // }
+  componentDidMount() {
+    userService.getUsers(this.id, (result) => {
+      console.log(result);
+      this.user = result;
+      console.log(this.user);
+      this.forceUpdate();
+    }
+  );
+  }
 }
 
 // The Route-elements define the different pages of the application
