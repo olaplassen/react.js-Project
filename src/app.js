@@ -183,9 +183,11 @@ class MyPage extends React.Component {
 
   }
 
+  render() {
 
-
-      <h1>Test{this.user.firstName}</h1>
+    return (
+      <div>
+      <h1> test </h1>
       <input value={this.user.firstName}/>
       </div>
     );
