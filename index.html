@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="UTF-8"/>
-    <title>Electron React example</title>
+    <title>Røde Kors Internside</title>
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
   </head>
   <body>
     <div id="root"></div>
@@ -11,8 +12,14 @@
 
     </div>
     <script>
+
     require("babel-register");
+    require("./src/mailservices.js");
     require("./src/app.js");
+    require("./src/styles.js");
+    
+
+
     </script>
   </body>
 </html>
