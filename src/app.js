@@ -183,11 +183,7 @@ class MyPage extends React.Component {
 
   }
 
-  render() {
-    console.log(this.id);
-    return (
 
-      <div>
 
       <h1>Test</h1>
       </div>
