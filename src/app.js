@@ -30,7 +30,7 @@ class FrontPage extends React.Component {
     return (
     <div className="Menu">
     <h1 className="">Velkommen</h1>
-
+    <img src="rkors.jpg" alt="Flowers in Chania">
     </div>
   );
   }
@@ -58,7 +58,7 @@ class Login extends React.Component {
 
 
         if (result== undefined) {
-          alert("feil passord")
+          return alert("feil passord eller brukernavn");
         }
         else {
           let user = {
@@ -76,18 +76,19 @@ class Login extends React.Component {
 class Registration extends React.Component {
  render() {
    return (
-     <div>
-
-     <input ref="newFname" placeholder="Type your firstname"></input><br/>
-     <input ref="newLname" placeholder="Type your lastname"></input><br/>
-     <input ref="newCity" placeholder="Type your city"></input><br/>
-     <input ref="newAddress" placeholder="Type your adress"></input><br/>
-     <input ref="newPost" placeholder="Type your postalnumber"></input><br/>
-     <input ref="newTlf" placeholder="Type your phonenumber"></input><br/>
-     <input ref="newEmail" placeholder="Type your email"></input><br/>
-     <input ref="newUsername" placeholder="Type your username"></input><br/>
-     <input ref="newPassword" placeholder="Type your password"></input><br/>
-     <button ref="newUserbtn">Submit</button>
+     <div className="menu">
+     <form>
+     <input className="input" ref="newFname" placeholder="Type your firstname"></input><br/>
+     <input className="input" ref="newLname" placeholder="Type your lastname"></input><br/>
+     <input className="input" ref="newCity" placeholder="Type your city"></input><br/>
+     <input className="input" ref="newAddress" placeholder="Type your adress"></input><br/>
+     <input className="input" ref="newPost" placeholder="Type your postalnumber"></input><br/>
+     <input className="input" ref="newTlf" placeholder="Type your phonenumber"></input><br/>
+     <input className="input" ref="newEmail" placeholder="Type your email"></input><br/>
+     <input className="input" ref="newUsername" placeholder="Type your username"></input><br/>
+     <input className="input" ref="newPassword" placeholder="Type your password"></input><br/>
+     <button className="button" ref="newUserbtn">Submit</button>
+     </form>
      </div>
    );
  }
@@ -175,7 +176,7 @@ console.log(this.id);
  }
 
 class MyPage extends React.Component {
-  constructor(props) {
+   constructor(props) {
   super(props);
 
   this.user = {};
