@@ -46,10 +46,10 @@ class Login extends React.Component {
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
-
+        console.log(result)
 
         if (result== undefined) {
-          return alert("feil passord eller brukernavn");
+          return (<div> Feil passord</div>);
         }
         else {
           let user = {
@@ -57,12 +57,29 @@ class Login extends React.Component {
 
           }
           console.log(user.userId);
-           checkLogIn(user);
+           checkLogInUser(user);
         }
 
       });
-    }
+
+      userService.loginAdmin(this.refs.username.value, this.refs.password.value, (result) => {
+
+        console.log(result);
+
+        if (result== undefined) {
+          return (<div> Feil passord</div>);
+        }
+        else {
+          let admin = {
+            adminId: result.id
+
+          }
+          console.log(admin.adminId);
+          checkLogInAdmin(admin);
+        }
+      });
   }
+}
 }
 
 // LOCALSTORAGE SØK LAGRE LOGGON
@@ -151,7 +168,7 @@ class newPasswordSendt extends React.Component {
   }
 }
 
-class LoggedInMenu extends React.Component {
+class LoggedInUser extends React.Component {
 constructor(props) {
 super(props);
 
@@ -215,18 +232,23 @@ class MyPage extends React.Component {
       </div>
     );
   }
-  // componentDidMount() {
-  //   userService.getUsers(this.id, (result) => {
-  //     // this.user = result;
-  //     this.firstName = result.firstName.value;
-  //
-  //
-  //     this.forceUpdate();
-  //     console.log(this.user);
-  //
-  //   })
-  // }
 }
+class LoggedInAdmin extends React.Component {
+constructor(props) {
+super(props);
+
+this.admin = {};
+this.id = props.adminId;
+console.log(this.id);
+}
+  render() {
+    return (
+      <h1>Test</h1>
+
+    );
+  }
+ }
+
 
 // The Route-elements define the different pages of the application
 // through a path and which component should be used for the path.
@@ -248,15 +270,30 @@ ReactDOM.render((
   </HashRouter>
 ), document.getElementById('root'));
 
-function checkLogIn(user) {
+function checkLogInUser(user) {
   ReactDOM.render((
   <HashRouter>
     <div>
-      <LoggedInMenu userId={user.userId} />
+      <LoggedInUser userId={user.userId} />
       <Switch>
           <Route exact path='/lhome/:userId' component={LoggedInHome} />
          // <Route exact path='/arrangement' component={Login} />
            <Route exact path='/mypage/:userId' component={MyPage} />
+      </Switch>
+    </div>
+  </HashRouter>
+), document.getElementById('root'))
+};
+
+function checkLogInAdmin(admin) {
+  ReactDOM.render((
+  <HashRouter>
+    <div>
+      <LoggedInAdmin adminId={admin.adminId} />
+      <Switch>
+          // <Route exact path='/lhome/:adminId' component={LoggedInHome} />
+         // <Route exact path='/arrangement' component={Login} />
+           // <Route exact path='/mypage/:userId' component={MyPage} />
       </Switch>
     </div>
   </HashRouter>

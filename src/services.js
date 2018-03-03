@@ -6,9 +6,9 @@ let connection;
 function connect() {
   connection = mysql.createConnection({
     host: 'mysql.stud.iie.ntnu.no',
-    user: 'erlensm',
-    password: 'e6vSqBQX',
-    database: 'erlensm'
+    user: 'g_oops_22',
+    password: 'YpmfXR8f',
+    database: 'g_oops_22'
   });
 
   // Connect to MySQL-server
@@ -65,6 +65,16 @@ class UserService {
       callback(result[0]);
     });
   }
+
+  loginAdmin(username, password, callback) {
+    connection.query('SELECT * FROM Admin WHERE (userName =? AND password=?)', [username, password], (error, result) => {
+      if (error) throw error;
+
+      console.log(result[0]);
+
+      callback(result[0]);
+    });
+  }
   resetPassword(username, email, callback) {
     let newpassword = Math.random().toString(36).slice(-8);
 
@@ -88,14 +98,8 @@ class UserService {
     }
 
     });
-
-
   };
-
-
 }
 
-
 let userService = new UserService();
-
 export { userService };
