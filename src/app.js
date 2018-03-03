@@ -4,7 +4,7 @@ import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
-import { Form, Text, Radio, TextArea, Checkbox } from 'react-form';
+
 
 
 
@@ -116,10 +116,11 @@ class Registration extends React.Component {
 class NewPassword extends React.Component {
   render() {
     return (
-      <div>
-      <input ref="username" placeholder="Type your username"></input><br/>
-      <input ref="email" placeholder="Type your email"></input><br/>
-      <button ref="newPasswordbtn">Request</button>
+      <div className="menu">
+      <h3>Reset password</h3>
+      <input className="input" ref="username" placeholder="Type your username"></input><br/>
+      <input className="input" ref="email" placeholder="Type your email"></input><br/>
+      <button className="button" ref="newPasswordbtn">Request</button>
       </div>
     );
   }
@@ -131,7 +132,9 @@ class NewPassword extends React.Component {
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
     userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
+      if(result != null) {
       this.nextPath('/passwordsendt')
+    }
     });
     }
   }
@@ -140,8 +143,8 @@ class NewPassword extends React.Component {
 class newPasswordSendt extends React.Component {
   render() {
     return (
-      <div>
-      Ditt nye passord har nå blitt sendt til din email adresse.
+      <div className="menu">
+      Ditt nye passord har nå blitt sendt til din email adresse. <br/>
       <Link to="/login">Tilbake til login</Link>
       </div>
     )

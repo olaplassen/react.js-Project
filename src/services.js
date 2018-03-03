@@ -65,18 +65,33 @@ class UserService {
       callback(result[0]);
     });
   }
-  resetPassword(userName, email, callback) {
+  resetPassword(username, email, callback) {
     let newpassword = Math.random().toString(36).slice(-8);
-    connection.query('UPDATE Users SET password=? WHERE (userName = ? AND email = ?)', [newpassword, userName, email], (error, result) => {
+
+    connection.query('SELECT id FROM Users WHERE (userName = ? AND email = ?)', [username, email], (error, result) => {
       if (error) throw error;
-      console.log("mail delivered")
-      let subject = "New password for " + userName;
+      console.log(result[0]);
+      callback(result[0]);
+      if(result[0] != null ) {
+
+    connection.query('UPDATE Users SET password=? WHERE (userName = ? AND email = ?)', [newpassword, username, email], (error, result) => {
+      if (error) throw error;
+      console.log(email)
+      console.log(result)
+      let subject = "New password for " + username;
       let textmail = "Your new password: " + newpassword;
       mailService.sendMail(email, subject, textmail);
-
+      });
+    }
+    else {
+      alert("feil brukernavn eller epost");
+    }
 
     });
-  }
+
+
+  };
+
 
 }
 
