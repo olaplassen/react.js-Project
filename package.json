@@ -6,6 +6,7 @@
     "start": "electron -r babel-register ."
   },
   "dependencies": {
+    "history": "^4.7.2",
     "mysql": "^2.15.0",
     "nodemailer": "^4.5.0",
     "react": "^16.2.0",

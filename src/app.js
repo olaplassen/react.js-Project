@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
+import createHashHistory from 'history/createHashHistory';
+const history: HashHistory = createHashHistory();
 import { Form, Text, Radio, TextArea, Checkbox } from 'react-form';
-// import { ul } from './styles';
-// import { li } from './styles';
-// import { link } from './styles';
+
 
 
 
@@ -15,7 +15,6 @@ class Menu extends React.Component {
    return (
      <div className="menu">
       <ul className="ul">
-      <li className="li"><Link to ='/frontPage' className="link">Hjem</Link></li>
        <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
        <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
       </ul>
@@ -25,21 +24,13 @@ class Menu extends React.Component {
  }
 }
 
-class FrontPage extends React.Component {
-  render() {
-    return (
-    <div className="Menu">
-    <h1 className="">Velkommen</h1>
-    <img src="rkors.jpg" alt="Flowers in Chania">
-    </div>
-  );
-  }
-}
 class Login extends React.Component {
   render() {
     return (
 
       <div className="menu">
+      <h1 className="h1">Velkommen</h1>
+      <img className="img" src={'src/img/rkors.jpg'} />
       <form>
         <label htmlFor="username">Username</label>
         <input className="input" ref="username" placeholder="Type your username"></input><br/>
@@ -73,8 +64,14 @@ class Login extends React.Component {
     }
   }
 }
+
+// LOCALSTORAGE SØK LAGRE LOGGON
+
+
 class Registration extends React.Component {
  render() {
+
+
    return (
      <div className="menu">
      <form>
@@ -92,6 +89,10 @@ class Registration extends React.Component {
      </div>
    );
  }
+ nextPath(path) {
+     this.props.history.push(path);
+   }
+
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
    userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newCity.value, this.refs.newAddress.value, Number(this.refs.newPost.value),
@@ -105,6 +106,7 @@ class Registration extends React.Component {
                          this.refs.newEmail.value = ""
                          this.refs.newUsername.value = "";
                          this.refs.newPassword.value = "";
+                         this.nextPath('/login');
 
                        });
                      }
@@ -121,12 +123,28 @@ class NewPassword extends React.Component {
       </div>
     );
   }
+
+  nextPath(path) {
+  this.props.history.push(path);
+  }
+
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
     userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
-
+      this.nextPath('/passwordsendt')
     });
     }
+  }
+}
+
+class newPasswordSendt extends React.Component {
+  render() {
+    return (
+      <div>
+      Ditt nye passord har nå blitt sendt til din email adresse.
+      <Link to="/login">Tilbake til login</Link>
+      </div>
+    )
   }
 }
 
@@ -218,10 +236,10 @@ ReactDOM.render((
     <div>
       <Menu />
       <Switch>
-        <Route exact path='/frontPage' component={FrontPage} />
         <Route exact path='/registration' component={Registration} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/newPassword' component={NewPassword} />
+        <Route exact path='/passwordsendt' component={newPasswordSendt} />
       </Switch>
     </div>
   </HashRouter>
