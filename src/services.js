@@ -101,7 +101,7 @@ class UserService {
   };
 
   unConfirmedUsers(callback) {
-      connection.query('SELECT * FROM Users WHERE confirmed=?', [false], (error, result) => {
+      connection.query('SELECT id, firstName, lastName, phone, email FROM Users WHERE confirmed=?', [false], (error, result) => {
         if (error) throw error;
         console.log(result);
         callback(result);

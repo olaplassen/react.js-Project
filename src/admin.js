@@ -29,19 +29,20 @@ export class ConfirmUsers extends React.Component {
   render() {
     let unConfirmedList = [];
     for(let unConfirmed of this.allUnConformed ) {
-      unConfirmedList.push(<li key={unConfirmed.id}>{unConfirmed.firstName}<button onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button></li>)
+      unConfirmedList.push(<li key={unConfirmed.id}>{unConfirmed.firstName + " " + unConfirmed.lastName + " " +  unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
     }
+
     return (
       <div className="menu">
-      Ikke godkjent:
-      <ul>{unConfirmedList}</ul>
+      <h3> Ikke godkjent brukere: </h3>
+      <ul> {unConfirmedList} </ul>
       </div>
     );
   }
   componentDidMount() {
     userService.unConfirmedUsers((result) => {
       this.allUnConformed = result;
-      console.log(this.allUnConformed)
+
       this.forceUpdate();
     });
   }
