@@ -99,6 +99,23 @@ class UserService {
 
     });
   };
+
+  unConfirmedUsers(callback) {
+      connection.query('SELECT * FROM Users WHERE confirmed=?', [false], (error, result) => {
+        if (error) throw error;
+        console.log(result);
+        callback(result);
+      });
+    }
+    confirmUser(id, callback) {
+      connection.query('UPDATE Users SET confirmed=? WHERE id=?', [true, id], (error, result) => {
+        if(error) throw error;
+        console.log(result);
+        callback(result);
+      })
+    }
+//concat slår sammen kolonner
+
 }
 
 let userService = new UserService();
