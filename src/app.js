@@ -16,6 +16,7 @@ import { NewPasswordSendt } from './outlogged';
 import {UserMenu} from './user';
 import {UserHome} from './user';
 import {MyPage} from './user';
+import {ChangeUser} from './user';
 
 
 //henter classene fra admin.js
@@ -49,8 +50,9 @@ ReactDOM.render((
     <div>
       <UserMenu userId={user.userId} />
       <Switch>
-          <Route exact path='/userhome/:userId' component={UserHome} />
-           <Route exact path='/mypage/:userId' component={MyPage} />
+      <Route exact path='/userhome/:userId' component={UserHome} />
+      <Route exact path='/changeUser/:userId' component={ChangeUser} />
+      <Route exact path='/mypage/:userId' component={MyPage} />
 
       </Switch>
     </div>
