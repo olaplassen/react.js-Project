@@ -6,7 +6,7 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
-
+//test
 // class for navigasjons meny
 export class StartMenu extends React.Component {
  render() {
