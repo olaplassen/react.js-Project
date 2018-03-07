@@ -24,7 +24,6 @@ import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 
-
 ReactDOM.render((
   <HashRouter>
     <div>
@@ -66,9 +65,11 @@ export function checkLogInAdmin(admin) {
     <div>
       <AdminMenu />
       <Switch>
+
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
            <AdminHome />
+
       </Switch>
     </div>
   </HashRouter>
