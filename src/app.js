@@ -23,8 +23,7 @@ import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 
-// 1. ReactDOM som kjører ved oppstart.
-// Kjører StartMenu classen og viser forskjellige routes til andre komponenter
+
 ReactDOM.render((
   <HashRouter>
     <div>
