@@ -9,7 +9,6 @@ import { Form, Text, Radio, TextArea, Checkbox } from 'react-form';
 
 
 
-
 class Menu extends React.Component {
  render() {
 
@@ -94,17 +93,24 @@ class Registration extends React.Component {
  }
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
-   userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newCity.value, this.refs.newAddress.value, Number(this.refs.newPost.value),
-                       Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value, (result) => {
-                         this.refs.newFname.value = "";
-                         this.refs.newLname.value = "";
-                         this.refs.newCity.value = "";
-                         this.refs.newAddress.value = "";
-                         this.refs.newPost.value = "";
-                         this.refs.newTlf.value = "";
-                         this.refs.newEmail.value = ""
-                         this.refs.newUsername.value = "";
-                         this.refs.newPassword.value = "";
+   userService.addUser(this.refs.newFname.value,
+                       this.refs.newLname.value,
+                       this.refs.newCity.value,
+                       this.refs.newAddress.value,
+                        Number(this.refs.newPost.value),
+                         Number(this.refs.newTlf.value),
+                          this.refs.newEmail.value,
+                          this.refs.newUsername.value,
+                          this.refs.newPassword.value, (result) => {
+                           this.refs.newFname.value = "";
+                           this.refs.newLname.value = "";
+                           this.refs.newCity.value = "";
+                           this.refs.newAddress.value = "";
+                           this.refs.newPost.value = "";
+                           this.refs.newTlf.value = "";
+                           this.refs.newEmail.value = ""
+                           this.refs.newUsername.value = "";
+                           this.refs.newPassword.value = "";
 
                        });
                      }
@@ -124,7 +130,6 @@ class NewPassword extends React.Component {
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
     userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
-
     });
     }
   }
@@ -181,26 +186,122 @@ class MyPage extends React.Component {
 
   this.user = {};
   this.id = props.match.params.userId;
-
+  console.log(this.id)
   }
 
+  render() {
 
+    return (
 
-      <h1>Test</h1>
+      <div>
+        <div>
+
+        </div>
+        <div>
+          <h2> {this.user.firstName} {this.user.lastName}</h2>
+          <div> Adresse: {this.user.address}, {this.user.city} {this.user.postalNumber} </div>
+          <div> Epost: {this.user.email} </div>
+          <div> Mobilnummer: {this.user.phone} </div>
+          <div> Fødselsdato: Lorem ipsum</div>
+          <div> Medlem siden: Lorem ipsum</div>
+          <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
+          <div> Brukernavn: {this.user.userName}</div>
+          <div> Passord: ********</div>
+          <button> Endre passord </button>
+          <input></input>
+        </div>
+
+        <div>
+
+        </div>
       </div>
     );
   }
-  // componentDidMount() {
-  //   userService.getUsers(this.id, (result) => {
-  //     // this.user = result;
-  //     this.firstName = result.firstName.value;
-  //
-  //
-  //     this.forceUpdate();
-  //     console.log(this.user);
-  //
-  //   })
-  // }
+  componentDidMount() {
+    userService.getUsers(this.id, (result) => {
+      console.log(result);
+      this.user = result;
+      console.log(this.user);
+      this.forceUpdate();
+    }
+  );
+  }
+}
+
+  class ChangeUser extends React.Component {
+    constructor(props) {
+    super(props);
+    this.user = {};
+    this.id = props.match.params.userId;
+    }
+    render() {
+
+      return (
+        <div>
+          <div>
+            <input type='text' ref='changefirstName' /><br/>
+            <input type='text' ref='changelastName' /><br/>
+            <input type='text' ref='changeaddress' /><br/>
+            <input type='text' ref='changecity' /><br/>
+            <input type='number' ref='changepostalNumber' /><br/>
+            <input type='number' ref='changephone' /><br/>
+            <input type='text' ref='changeemail' /><br/>
+            <button ref='changeUserButton'>Lagre</button>
+          </div>
+        </div>
+      );
+    }
+
+
+  componentDidMount() {
+    userService.getUsers(this.id, (result) => {
+      console.log(result);
+      this.user = result;
+        console.log(this.id)
+      this.refs.changedfirstName.value = this.user.firstName;
+        console.log(result)
+      this.refs.changedlastName.value = this.user.lastName;
+      this.refs.changedaddress.value = this.user.address;
+      this.refs.changedcity.value = this.user.city;
+      this.refs.changedpostalNumber.value = this.user.postalNumber;
+      this.refs.changedphone.value = this.user.phone;
+      this.refs.changedemail.value = this.user.email;
+
+      console.log(this.user);
+      this.forceUpdate();
+    });
+
+    this.refs.changeUserButton.onclick = () => {
+      userService.changeUsers(this.refs.changedfirstName.value,
+                                 this.refs.changedlastName.value,
+                                 this.refs.changedaddress.value,
+                                 this.refs.changedcity.value,
+                                 this.refs.changedpostalNumber.value,
+                                 this.refs.changedphone.value,
+                                 this.refs.changedemail.value,
+                                 this.id, (result) => {
+        this.refs.changedfirstName.value = '';
+        this.refs.changedlastName.value = '';
+        this.refs.changedaddress.value = '';
+        this.refs.changedCity.value = '';
+        this.refs.changedpostalNumber.value = '';
+        this.refs.changedphone.value = '';
+        this.refs.changedemail.value = '';
+
+        userService.getUsers(this.id, (result) => {
+          this.user = result;
+          this.refs.changedfirstName.value = this.user.firstName;
+          this.refs.changedlastName.value = this.user.lastName;
+          this.refs.changedaddress.value = this.user.address;
+          this.refs.changedcity.value = this.user.city;
+          this.refs.changedpostalNumber.value = this.user.postalNumber;
+          this.refs.changedphone.value = this.user.phone;
+          this.refs.changedemail.value = this.user.email;
+          this.forceUpdate(); // Rerender component with updated data
+        });
+      });
+    };
+  }
 }
 
 // The Route-elements define the different pages of the application
@@ -230,7 +331,7 @@ function checkLogIn(user) {
       <LoggedInMenu userId={user.userId} />
       <Switch>
           <Route exact path='/lhome/:userId' component={LoggedInHome} />
-         // <Route exact path='/arrangement' component={Login} />
+           <Route exact path='/changeUser/:userId' component={ChangeUser} />
            <Route exact path='/mypage/:userId' component={MyPage} />
       </Switch>
     </div>
