@@ -21,6 +21,7 @@ import {MyPage} from './user';
 //henter classene fra admin.js
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
+import {AdminHome} from './admin';
 
 // 1. ReactDOM som kjører ved oppstart.
 // Kjører StartMenu classen og viser forskjellige routes til andre komponenter
@@ -60,9 +61,9 @@ export function checkLogInAdmin(admin) {
     <div>
       <AdminMenu />
       <Switch>
-          <Route exact path='/adminhome' component={UserHome} />
+          <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
-           // <Route exact path='/mypage/:userId' component={MyPage} />
+           <AdminHome />
       </Switch>
     </div>
   </HashRouter>

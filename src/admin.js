@@ -12,13 +12,23 @@ export class AdminMenu extends React.Component {
     return (
       <div className="menu">
        <ul className="ul">
-        <li className="li"><Link to ={'/confirmUsers'} className="link">Hjem</Link></li>
+        <li className="li"><Link to ={'/hjem'} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/søk'} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
        </ul>
        </div>
     );
   }
+ }
+
+ export class AdminHome extends React.Component {
+   render() {
+     return (
+       <div className="menu">
+       Admin hjemmeside
+       </div>
+     )
+   }
  }
 
 export class ConfirmUsers extends React.Component {
