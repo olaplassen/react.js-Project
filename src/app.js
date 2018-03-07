@@ -28,18 +28,22 @@ import {AdminHome} from './admin';
 ReactDOM.render((
   <HashRouter>
     <div>
+      {/* Definerer hvilken komponent som alltid skal vises! */}
       <StartMenu  />
       <Switch>
+        {/* Routes som definerer hvilken komponent som bruker skal sendes */}
+        {/* til når bestemte paths blir referert til */}
         <Route exact path='/registration' component={Registration} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/newPassword' component={NewPassword} />
         <Route exact path='/passwordsendt' component={NewPasswordSendt} />
-        <Login />
+        <Login /> {/* Definerer hvilken komponent som skal vises på 1. render */}
       </Switch>
     </div>
   </HashRouter>
 ), document.getElementById('root'));
 
+//ny ReactDOM som kjøres når user logger inn.
  export function checkLogInUser(user) {
   ReactDOM.render((
   <HashRouter>
@@ -54,7 +58,7 @@ ReactDOM.render((
   </HashRouter>
 ), document.getElementById('root'))
 };
-
+//ny ReactDOM som kjøres når user admin inn.
 export function checkLogInAdmin(admin) {
   ReactDOM.render((
   <HashRouter>
