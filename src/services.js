@@ -49,8 +49,8 @@ class UserService {
     });
   }
 
-  changeUser(firstName, lastName, city, id, callback) {
-    connection.query('UPDATE Users SET firstName=?, lastName=?, city=? WHERE id=?', [firstName, lastName, city, id], (error, result) => {
+  changeUser(firstName, lastName, address, city, postalNumber, phone, email, id, callback) {
+    connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, city=?, postalNumber=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, city, postalNumber, phone, email, id], (error, result) => {
       if (error) throw error;
 
       callback(result);

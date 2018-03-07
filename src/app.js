@@ -199,7 +199,6 @@ class MyPage extends React.Component {
         </div>
         <div>
           <h2> {this.user.firstName} {this.user.lastName}</h2>
-          <div> Adresse: {this.user.address}, {this.user.city} {this.user.postalNumber} </div>
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
           <div> Fødselsdato: Lorem ipsum</div>
@@ -208,7 +207,6 @@ class MyPage extends React.Component {
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
           <button> Endre passord </button>
-          <input></input>
         </div>
 
         <div>
@@ -239,13 +237,13 @@ class MyPage extends React.Component {
       return (
         <div>
           <div>
-            <input type='text' ref='changefirstName' /><br/>
-            <input type='text' ref='changelastName' /><br/>
-            <input type='text' ref='changeaddress' /><br/>
-            <input type='text' ref='changecity' /><br/>
-            <input type='number' ref='changepostalNumber' /><br/>
-            <input type='number' ref='changephone' /><br/>
-            <input type='text' ref='changeemail' /><br/>
+            Fornavn: <input type='text' ref='changefirstName' /><br/>
+            Etternavn: <input type='text' ref='changelastName' /><br/>
+            Adresse: <input type='text' ref='changeaddress' /><br/>
+            By: <input type='text' ref='changecity' /><br/>
+            Postnummer: <input type='number' ref='changepostalNumber' /><br/>
+            Telefon: <input type='number' ref='changephone' /><br/>
+            Mail: <input type='text' ref='changeemail' /><br/>
             <button ref='changeUserButton'>Lagre</button>
           </div>
         </div>
@@ -255,48 +253,36 @@ class MyPage extends React.Component {
 
   componentDidMount() {
     userService.getUsers(this.id, (result) => {
-      console.log(result);
       this.user = result;
-        console.log(this.id)
-      this.refs.changedfirstName.value = this.user.firstName;
-        console.log(result)
-      this.refs.changedlastName.value = this.user.lastName;
-      this.refs.changedaddress.value = this.user.address;
-      this.refs.changedcity.value = this.user.city;
-      this.refs.changedpostalNumber.value = this.user.postalNumber;
-      this.refs.changedphone.value = this.user.phone;
-      this.refs.changedemail.value = this.user.email;
-
-      console.log(this.user);
+      this.refs.changefirstName.value = this.user.firstName;
+      this.refs.changelastName.value = this.user.lastName;
+      this.refs.changeaddress.value = this.user.address;
+      this.refs.changecity.value = this.user.city;
+      this.refs.changepostalNumber.value = this.user.postalNumber;
+      this.refs.changephone.value = this.user.phone;
+      this.refs.changeemail.value = this.user.email;
       this.forceUpdate();
     });
 
     this.refs.changeUserButton.onclick = () => {
-      userService.changeUsers(this.refs.changedfirstName.value,
-                                 this.refs.changedlastName.value,
-                                 this.refs.changedaddress.value,
-                                 this.refs.changedcity.value,
-                                 this.refs.changedpostalNumber.value,
-                                 this.refs.changedphone.value,
-                                 this.refs.changedemail.value,
+      userService.changeUser(this.refs.changefirstName.value,
+                                 this.refs.changelastName.value,
+                                 this.refs.changeaddress.value,
+                                 this.refs.changecity.value,
+                                 this.refs.changepostalNumber.value,
+                                 this.refs.changephone.value,
+                                 this.refs.changeemail.value,
                                  this.id, (result) => {
-        this.refs.changedfirstName.value = '';
-        this.refs.changedlastName.value = '';
-        this.refs.changedaddress.value = '';
-        this.refs.changedCity.value = '';
-        this.refs.changedpostalNumber.value = '';
-        this.refs.changedphone.value = '';
-        this.refs.changedemail.value = '';
-
         userService.getUsers(this.id, (result) => {
           this.user = result;
-          this.refs.changedfirstName.value = this.user.firstName;
-          this.refs.changedlastName.value = this.user.lastName;
-          this.refs.changedaddress.value = this.user.address;
-          this.refs.changedcity.value = this.user.city;
-          this.refs.changedpostalNumber.value = this.user.postalNumber;
-          this.refs.changedphone.value = this.user.phone;
-          this.refs.changedemail.value = this.user.email;
+          this.refs.changefirstName.value = this.user.firstName;
+          console.log(this.user)
+          this.refs.changelastName.value = this.user.lastName;
+          this.refs.changeaddress.value = this.user.address;
+          this.refs.changecity.value = this.user.city;
+          this.refs.changepostalNumber.value = this.user.postalNumber;
+          this.refs.changephone.value = this.user.phone;
+          this.refs.changeemail.value = this.user.email;
           this.forceUpdate(); // Rerender component with updated data
         });
       });
