@@ -7,7 +7,7 @@ import { userService } from './services';
 import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
 
-
+// class for navigasjons meny
 export class StartMenu extends React.Component {
  render() {
 
@@ -22,7 +22,7 @@ export class StartMenu extends React.Component {
    );
  }
 }
-
+//
 export class Login extends React.Component {
   render() {
     return (
@@ -42,15 +42,18 @@ export class Login extends React.Component {
     );
   }
   componentDidMount() {
+    //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
         console.log(result)
 
         if (result== undefined) {
-          return (<div> Feil passord</div>);
+          return;
         }
         else {
+          // oppretter array for user med id slik at verdien kan sendes til den nye
+          // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
           let user = {
             userId: result.id
 
@@ -63,12 +66,13 @@ export class Login extends React.Component {
 
       userService.loginAdmin(this.refs.username.value, this.refs.password.value, (result) => {
 
-        
+
 
         if (result== undefined) {
-          return (<div> Feil passord</div>);
+          return;
         }
         else {
+
           let admin = {
             adminId: result.id
 
@@ -81,13 +85,11 @@ export class Login extends React.Component {
 }
 }
 
-// LOCALSTORAGE SØK LAGRE LOGGON
-
 
 export class Registration extends React.Component {
  render() {
 
-
+// registrerings skjemaet som skrives ut under registrerings komponenten
    return (
      <div className="menu">
      <form>
@@ -105,14 +107,16 @@ export class Registration extends React.Component {
      </div>
    );
  }
+ //funksjon for oprette path historie for å sende bruker til ny side
  nextPath(path) {
      this.props.history.push(path);
    }
-
+//rendrer på nytt og lagrer dataen bruker har ført inn i databasen
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
    userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newCity.value, this.refs.newAddress.value, Number(this.refs.newPost.value),
                        Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value, (result) => {
+
                          this.refs.newFname.value = "";
                          this.refs.newLname.value = "";
                          this.refs.newCity.value = "";
@@ -122,7 +126,7 @@ export class Registration extends React.Component {
                          this.refs.newEmail.value = ""
                          this.refs.newUsername.value = "";
                          this.refs.newPassword.value = "";
-                         this.nextPath('/login');
+                         this.nextPath('/login'); // sender user til login page etter registrering
 
                        });
                      }
@@ -140,7 +144,7 @@ export class NewPassword extends React.Component {
       </div>
     );
   }
-
+//sender bruker til ny komponent etter at brukeren har spurt etter nytt passord
   nextPath(path) {
   this.props.history.push(path);
   }
@@ -148,6 +152,8 @@ export class NewPassword extends React.Component {
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
     userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
+      //når username og email matcher med en user i databsen og resultatet ikke er null
+      // sendes bruker til ny komponent
       if(result != null) {
       this.nextPath('/passwordsendt')
     }
