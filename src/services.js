@@ -49,13 +49,13 @@ class UserService {
     });
   }
   //funkjson for å endre bruker
-  changeUser(firstName, lastName, city, id, callback) {
-    connection.query('UPDATE Users SET firstName=?, lastName=?, city=? WHERE id=?', [firstName, lastName, city, id], (error, result) => {
-      if (error) throw error;
+  changeUser(firstName, lastName, address, city, postalNumber, phone, email, id, callback) {
+   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, city=?, postalNumber=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, city, postalNumber, phone, email, id], (error, result) => {
+     if (error) throw error;
 
-      callback(result);
-    });
-  }
+     callback(result);
+   });
+ }
   // funkjson for å matche login verdier med bruker i databasen
   loginUser(username, password, callback) {
     connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
