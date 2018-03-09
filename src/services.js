@@ -121,6 +121,14 @@ class UserService {
         callback(result);
       })
     }
+    addEvent(name, ....) {
+      connection.query('INSERT INTO Events (name, , , , , , , , ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [, , , , , , , , ], (error, result) => {
+        if (error) throw error;
+        else console.log("Event added")
+        console.log(result);
+        callback();
+    })
+  }
 //concat slår sammen kolonner
 
 }
