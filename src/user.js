@@ -218,6 +218,3 @@ export class SearchUser extends React.Component {
 
     }
   }
-  /*
-  endring av koden. Dette kan fjernes
-  */
