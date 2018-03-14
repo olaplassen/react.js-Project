@@ -23,6 +23,7 @@ console.log(this.id);
        {/* sender id'en vidre til linkene */}
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
+        <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
        </ul>
        </div>
 
@@ -171,3 +172,49 @@ export class ChangeUser extends React.Component {
     };
   }
 }
+
+export class SearchUser extends React.Component {
+    constructor(props) {
+      super(props);
+      this.allUsers = [];
+
+      this.state = {value: ''};
+      this.handleChange = this.handleChange.bind(this);
+    }
+    render() {
+      let userList = [];
+
+      for(let user of this.allUsers) {
+        userList.push(<li key={user.id}>{user.firstName}</li>)
+      }
+
+      return (
+        <div className="menu">
+         <input type="text" value={this.state.value} onChange={this.handleChange} />
+
+        <ul> {userList} </ul>
+        </div>
+      )
+    }
+
+    handleChange(event) {
+      if (event.target.value != undefined ) {
+      this.setState({value: event.target.value.toUpperCase()});
+      console.log(event.target.value);
+      userService.searchList(event.target.value, (result) => {
+        console.log(result);
+        this.allUsers = result;
+        this.forceUpdate();
+        });
+      }
+
+    }
+    componentDidMount() {
+        userService.userList((result) => {
+          console.log(result);
+          this.allUsers = result;
+          this.forceUpdate();
+        });
+
+    }
+  }
