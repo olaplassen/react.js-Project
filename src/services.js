@@ -59,6 +59,9 @@ class UserService {
  }
   // funkjson for å matche login verdier med bruker i databasen
   loginUser(username, password, callback) {
+    connection.query('SELECT * FROM Users WHERE admin=?', [false], (error, result) => {
+      if(result != undefined) {
+
     connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
 
       if (error) throw error;
@@ -66,18 +69,42 @@ class UserService {
       console.log(result[0]);
 
       callback(result[0]);
-    });
+        });
+        }
+        else {
+          connection.query('SELECT * FROM Users WHERE (userName =? AND password=? AND admin=?)', [username, password, true], (error, result) => {
+            if (error) throw error;
+
+            console.log(result[0]);
+
+            callback(result[0]);
+          });
+
+        }
+          localStorage.setItem('signedInUser', JSON.stringify(result[0]));
+      });
+  }
+  signOut(): void {
+    localStorage.clear();
   }
 
-  loginAdmin(username, password, callback) {
-    connection.query('SELECT * FROM Admin WHERE (userName =? AND password=?)', [username, password], (error, result) => {
-      if (error) throw error;
+  getSignedInUser(): ?User {
+    let item = localStorage.getItem('signedInUser'); // Get User-object from browser
+    if(!item) return null;
 
-      console.log(result[0]);
-
-      callback(result[0]);
-    });
+    return JSON.parse(item);
   }
+
+
+  // loginAdmin(username, password, callback) {
+  //   connection.query('SELECT * FROM Users WHERE (userName =? AND password=? AND admin=?)', [username, password, true], (error, result) => {
+  //     if (error) throw error;
+  //
+  //     console.log(result[0]);
+  //
+  //     callback(result[0]);
+  //   });
+  // }
 
   //funksjon for å endre passord og sende mail med det nye passordet.
   resetPassword(username, email, callback) {
@@ -123,6 +150,33 @@ class UserService {
         callback(result);
       })
     }
+
+    userList(callback) {
+      connection.query('SELECT id, firstName, lastName FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
+        if (error) throw error;
+        console.log(result);
+        callback(result);
+      })
+    }
+
+    searchList(input, callback) {
+      connection.query('SELECT id, firstName, lastName FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by firstName', [true, false, '%' + input + '%'], (error, result) => {
+        if(error) throw error;
+        console.log(result);
+        callback(result);
+      })
+    }
+    // searchList(input, callback) {
+    //   connection.query('')
+    // }
+  //   addEvent(name, ....) {
+  //     connection.query('INSERT INTO Events (name, , , , , , , , ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [, , , , , , , , ], (error, result) => {
+  //       if (error) throw error;
+  //       else console.log("Event added")
+  //       console.log(result);
+  //       callback();
+  //   })
+  // }
 //concat slår sammen kolonner
 
 }
