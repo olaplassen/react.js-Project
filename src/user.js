@@ -49,6 +49,7 @@ console.log(this.id);
        <h1>Velkommen {this.user.firstName}</h1>
        </div>
      );
+
    }
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
