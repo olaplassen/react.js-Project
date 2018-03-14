@@ -133,6 +133,10 @@ export class ChangeUser extends React.Component {
       );
     }
 
+    nextPath(path) {
+        this.props.history.push(path);
+      }
+
 
   componentDidMount() {
     userService.getUsers(this.id, (result) => {
@@ -167,6 +171,8 @@ export class ChangeUser extends React.Component {
           this.refs.changephone.value = this.user.phone;
           this.refs.changeemail.value = this.user.email;
           this.forceUpdate(); // Rerender component with updated data
+          this.nextPath('/mypage');
+          console.log(path);
         });
       });
     };
