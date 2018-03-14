@@ -196,14 +196,7 @@ export class SearchUser extends React.Component {
         </div>
       )
     }
-    // mySearch(userinput) {
-    //   let input = userinput;
-    //   userService.searchList(input, (result) => {
-    //     console.log(result);
-    //     this.allUsers = result;
-    //     this.forceUpdate();
-    //   });
-    // }
+
     handleChange(event) {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
@@ -216,8 +209,6 @@ export class SearchUser extends React.Component {
       }
 
     }
-
-
     componentDidMount() {
         userService.userList((result) => {
           console.log(result);

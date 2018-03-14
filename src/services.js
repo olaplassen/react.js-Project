@@ -79,8 +79,20 @@ class UserService {
           });
 
         }
+          localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       });
   }
+  signOut(): void {
+    localStorage.clear();
+  }
+
+  getSignedInUser(): ?User {
+    let item = localStorage.getItem('signedInUser'); // Get User-object from browser
+    if(!item) return null;
+
+    return JSON.parse(item);
+  }
+
 
   // loginAdmin(username, password, callback) {
   //   connection.query('SELECT * FROM Users WHERE (userName =? AND password=? AND admin=?)', [username, password, true], (error, result) => {
