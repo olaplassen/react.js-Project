@@ -17,6 +17,8 @@ import {UserMenu} from './user';
 import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
+import {SearchUser} from './user';
+
 
 
 //henter classene fra admin.js
@@ -54,6 +56,7 @@ ReactDOM.render((
       <Route exact path='/userhome/:userId' component={UserHome} />
       <Route exact path='/changeUser/:userId' component={ChangeUser} />
       <Route exact path='/mypage/:userId' component={MyPage} />
+      <Route exact path='/usersearch' component={SearchUser} />
 
       </Switch>
     </div>
@@ -69,7 +72,7 @@ export function checkLogInAdmin(admin) {
       <Switch>
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
-           <AdminHome />
+
       </Switch>
     </div>
   </HashRouter>

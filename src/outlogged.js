@@ -46,10 +46,16 @@ export class Login extends React.Component {
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
-        console.log(result)
+        console.log(result.admin)
+    // når resultatet fra LoginUser er undefined avsluttes funkjsonen
+    //slik at loginAdmin kjøres
+        if (result.admin == true) {
+          let admin = {
+            adminId: result.id
 
-        if (result== undefined) {
-          return;
+          }
+          console.log(admin.adminId);
+          checkLogInAdmin(admin);
         }
         else {
           // oppretter array for user med id slik at verdien kan sendes til den nye
@@ -64,23 +70,6 @@ export class Login extends React.Component {
 
       });
 
-      userService.loginAdmin(this.refs.username.value, this.refs.password.value, (result) => {
-
-
-
-        if (result== undefined) {
-          return;
-        }
-        else {
-
-          let admin = {
-            adminId: result.id
-
-          }
-          console.log(admin.adminId);
-          checkLogInAdmin(admin);
-        }
-      });
   }
 }
 }
