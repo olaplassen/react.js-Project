@@ -48,6 +48,7 @@ class UserService {
       callback();
     });
   }
+
   //funkjson for å endre bruker
   changeUser(firstName, lastName, address, city, postalNumber, phone, email, id, callback) {
    connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, city=?, postalNumber=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, city, postalNumber, phone, email, id], (error, result) => {
@@ -62,6 +63,7 @@ class UserService {
       if(result != undefined) {
 
     connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
+
       if (error) throw error;
 
       console.log(result[0]);

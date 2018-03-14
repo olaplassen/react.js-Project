@@ -12,7 +12,7 @@
     "npm": "^5.7.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-form": "^3.3.0",
+
     "react-router-dom": "^4.2.2",
     "styled-components": "^3.2.0"
   },
