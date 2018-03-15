@@ -41,16 +41,16 @@ class UserService {
     });
   }
   //funksjon for å legge til bruker i databasen
-  addUser(firstName, lastName, city, address, postalNumber, phone, email, username, password, callback) {
-    connection.query('INSERT INTO Users (firstName, lastName, city, address, postalNumber, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, city, address, postalNumber, phone, email, username, password], (error, result) => {
+  addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password, callback) {
+    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username, password], (error, result) => {
       if (error) throw error;
       else console.log("Registration complete")
       callback();
     });
   }
   //funkjson for å endre bruker
-  changeUser(firstName, lastName, address, city, postalNumber, phone, email, id, callback) {
-   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, city=?, postalNumber=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, city, postalNumber, phone, email, id], (error, result) => {
+  changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id, callback) {
+   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
      if (error) throw error;
 
      callback(result);
@@ -81,28 +81,25 @@ class UserService {
         }
           localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       });
-  }
-  signOut(): void {
-    localStorage.clear();
-  }
-
-  getSignedInUser(): ?User {
-    let item = localStorage.getItem('signedInUser'); // Get User-object from browser
-    if(!item) return null;
-
-    return JSON.parse(item);
-  }
-
-
-  // loginAdmin(username, password, callback) {
-  //   connection.query('SELECT * FROM Users WHERE (userName =? AND password=? AND admin=?)', [username, password, true], (error, result) => {
-  //     if (error) throw error;
-  //
-  //     console.log(result[0]);
-  //
-  //     callback(result[0]);
-  //   });
+}
+  // signOut(): void {
+  //   localStorage.clear();
   // }
+  //
+  // getSignedInUser() {
+  //   let item = localStorage.getItem('signedInUser'); // Get User-object from browser
+  //   if(!item) return null;
+  //
+  //   return JSON.parse(item);
+  // }
+
+  getPoststed(postnr, callback) {
+    connection.query('SELECT poststed FROM poststed WHERE postnr=?', [postnr], (error, result) => {
+      if (error) throw error;
+      console.log(result)
+      callback(result)
+    });
+  }
 
   //funksjon for å endre passord og sende mail med det nye passordet.
   resetPassword(username, email, callback) {

@@ -123,8 +123,8 @@ export class ChangeUser extends React.Component {
             Fornavn: <input type='text' ref='changefirstName' /><br/>
             Etternavn: <input type='text' ref='changelastName' /><br/>
             Adresse: <input type='text' ref='changeaddress' /><br/>
-            By: <input type='text' ref='changecity' /><br/>
             Postnummer: <input type='number' ref='changepostalNumber' /><br/>
+            Poststed: <input type='text' ref='changepoststed' /><br/>
             Telefon: <input type='number' ref='changephone' /><br/>
             Mail: <input type='text' ref='changeemail' /><br/>
             <button ref='changeUserButton'>Lagre</button>
@@ -140,8 +140,9 @@ export class ChangeUser extends React.Component {
       this.refs.changefirstName.value = this.user.firstName;
       this.refs.changelastName.value = this.user.lastName;
       this.refs.changeaddress.value = this.user.address;
-      this.refs.changecity.value = this.user.city;
-      this.refs.changepostalNumber.value = this.user.postalNumber;
+      this.refs.changepostalNumber.value = this.user.postnr;
+      this.refs.changepoststed.value = this.user.poststed;
+
       this.refs.changephone.value = this.user.phone;
       this.refs.changeemail.value = this.user.email;
       this.forceUpdate();
@@ -151,25 +152,40 @@ export class ChangeUser extends React.Component {
       userService.changeUser(this.refs.changefirstName.value,
                                  this.refs.changelastName.value,
                                  this.refs.changeaddress.value,
-                                 this.refs.changecity.value,
                                  this.refs.changepostalNumber.value,
+                                 this.refs.changepoststed.value,
                                  this.refs.changephone.value,
                                  this.refs.changeemail.value,
                                  this.id, (result) => {
         userService.getUsers(this.id, (result) => {
           this.user = result;
-          this.refs.changefirstName.value = this.user.firstName;
           console.log(this.user)
+          this.refs.changefirstName.value = this.user.firstName;
           this.refs.changelastName.value = this.user.lastName;
           this.refs.changeaddress.value = this.user.address;
-          this.refs.changecity.value = this.user.city;
           this.refs.changepostalNumber.value = this.user.postalNumber;
+          this.refs.changepoststed.value = this.user.poststed;
           this.refs.changephone.value = this.user.phone;
           this.refs.changeemail.value = this.user.email;
           this.forceUpdate(); // Rerender component with updated data
         });
       });
     };
+
+    this.refs.changepostalNumber.oninput = () => {
+      userService.getPoststed(this.refs.changepostalNumber.value, (result) => {
+        if(this.refs.changepostalNumber.value < 1) {
+          this.refs.changepoststed.value = "";
+        }
+        else {
+        for(let place of result) {
+            this.refs.changepoststed.value = place.poststed;
+            console.log(place.poststed)
+
+        }
+      }
+      });
+    }
   }
 }
 
