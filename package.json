@@ -23,15 +23,7 @@
     "babel-register": "^6.26.0",
     "electron": "^1.8.3",
     "flow-bin": "^0.68.0"
-  },
-
-  "name": "my-flow-project",
-  "version": "1.0.0",
-  "devDependencies": {
-    "flow-bin": "^0.41.0"
-  },
-  "scripts": {
-    "flow": "flow"
   }
+
 
 }
