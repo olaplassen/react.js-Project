@@ -34,7 +34,7 @@ export class Login extends React.Component {
         <label htmlFor="username">Username</label>
         <input className="input" ref="username" placeholder="Type your username"></input><br/>
         <label htmlFor="password">Password</label>
-        <input className="input" ref="password" placeholder="Type your password"></input><br/><br/>
+        <input className="input" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
         <button className="button" ref="loginBtn">Login</button> <br/>
         <Link to='/newPassword'>Forgot password</Link> <br/>
         </form>
@@ -45,8 +45,9 @@ export class Login extends React.Component {
     //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
-      
-        console.log(result.admin)
+
+        console.log(result)
+        if (result != undefined && result.confirmed == true) {
     // når resultatet fra LoginUser er undefined avsluttes funkjsonen
     //slik at loginAdmin kjøres
         if (result.admin == true) {
@@ -57,7 +58,7 @@ export class Login extends React.Component {
           console.log(admin.adminId);
           checkLogInAdmin(admin);
         }
-        else {
+        else  {
           // oppretter array for user med id slik at verdien kan sendes til den nye
           // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
           let user = {
@@ -67,6 +68,10 @@ export class Login extends React.Component {
           console.log(user.userId);
            checkLogInUser(user);
         }
+      }
+      else {
+        alert("feil passord eller brukernavn")
+      }
 
       });
 
@@ -90,7 +95,7 @@ export class Registration extends React.Component {
      <input className="input" ref="newTlf" placeholder="Type your phonenumber"></input><br/>
      <input className="input" ref="newEmail" placeholder="Type your email"></input><br/>
      <input className="input" ref="newUsername" placeholder="Type your username"></input><br/>
-     <input className="input" ref="newPassword" placeholder="Type your password"></input><br/>
+     <input type="password" className="input" ref="newPassword" placeholder="Type your password"></input><br/>
      <button className="button" ref="newUserbtn">Submit</button>
      </form>
      </div>

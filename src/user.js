@@ -80,7 +80,7 @@ export class MyPage extends React.Component {
         <div>
 
         </div>
-        <div>
+        <div className="input">
           <h2> {this.user.firstName} {this.user.lastName}</h2>
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
@@ -118,15 +118,15 @@ export class ChangeUser extends React.Component {
     render() {
 
       return (
-        <div>
+        <div className="menu">
           <div>
-            Fornavn: <input type='text' ref='changefirstName' /><br/>
-            Etternavn: <input type='text' ref='changelastName' /><br/>
-            Adresse: <input type='text' ref='changeaddress' /><br/>
-            Postnummer: <input type='number' ref='changepostalNumber' /><br/>
-            Poststed: <input type='text' ref='changepoststed' /><br/>
-            Telefon: <input type='number' ref='changephone' /><br/>
-            Mail: <input type='text' ref='changeemail' /><br/>
+            Fornavn: <input className="input" type='text' ref='changefirstName' /><br/>
+            Etternavn: <input className="input" type='text' ref='changelastName' /><br/>
+            Adresse: <input className="input" type='text' ref='changeaddress' /><br/>
+            Postnummer: <input className="input" type='number' ref='changepostalNumber' /><br/>
+            Poststed: <input className="input" type='text' ref='changepoststed' /><br/>
+            Telefon: <input className="input" type='number' ref='changephone' /><br/>
+            Mail: <input className="input" type='text' ref='changeemail' /><br/>
             <button ref='changeUserButton'>Lagre</button>
           </div>
         </div>
