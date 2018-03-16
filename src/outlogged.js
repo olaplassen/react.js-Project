@@ -34,7 +34,7 @@ export class Login extends React.Component {
         <label htmlFor="username">Username</label>
         <input className="input" ref="username" placeholder="Type your username"></input><br/>
         <label htmlFor="password">Password</label>
-        <input className="input" ref="password" placeholder="Type your password"></input><br/><br/>
+        <input className="input" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
         <button className="button" ref="loginBtn">Login</button> <br/>
         <Link to='/newPassword'>Forgot password</Link> <br/>
         </form>
@@ -46,7 +46,8 @@ export class Login extends React.Component {
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
 
-        console.log(result.admin)
+        console.log(result)
+        if (result != undefined && result.confirmed == true) {
     // når resultatet fra LoginUser er undefined avsluttes funkjsonen
     //slik at loginAdmin kjøres
         if (result.admin == true) {
@@ -57,7 +58,7 @@ export class Login extends React.Component {
           console.log(admin.adminId);
           checkLogInAdmin(admin);
         }
-        else {
+        else  {
           // oppretter array for user med id slik at verdien kan sendes til den nye
           // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
           let user = {
@@ -67,6 +68,10 @@ export class Login extends React.Component {
           console.log(user.userId);
            checkLogInUser(user);
         }
+      }
+      else {
+        alert("feil passord eller brukernavn")
+      }
 
       });
 
@@ -84,13 +89,13 @@ export class Registration extends React.Component {
      <form>
      <input className="input" ref="newFname" placeholder="Type your firstname"></input><br/>
      <input className="input" ref="newLname" placeholder="Type your lastname"></input><br/>
-     <input className="input" ref="newCity" placeholder="Type your city"></input><br/>
      <input className="input" ref="newAddress" placeholder="Type your adress"></input><br/>
-     <input className="input" ref="newPost" placeholder="Type your postalnumber"></input><br/>
+     <input className="input" ref="newPostnr" placeholder="Type your postalnumber"></input><br/>
+     <input className="input" ref="newPoststed" placeholder="Type your postalplace"></input><br/>
      <input className="input" ref="newTlf" placeholder="Type your phonenumber"></input><br/>
      <input className="input" ref="newEmail" placeholder="Type your email"></input><br/>
      <input className="input" ref="newUsername" placeholder="Type your username"></input><br/>
-     <input className="input" ref="newPassword" placeholder="Type your password"></input><br/>
+     <input type="password" className="input" ref="newPassword" placeholder="Type your password"></input><br/>
      <button className="button" ref="newUserbtn">Submit</button>
      </form>
      </div>
@@ -103,14 +108,12 @@ export class Registration extends React.Component {
 //rendrer på nytt og lagrer dataen bruker har ført inn i databasen
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
-   userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newCity.value, this.refs.newAddress.value, Number(this.refs.newPost.value),
+   userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newAddress.value, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
                        Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value, (result) => {
 
                          this.refs.newFname.value = "";
                          this.refs.newLname.value = "";
-                         this.refs.newCity.value = "";
                          this.refs.newAddress.value = "";
-                         this.refs.newPost.value = "";
                          this.refs.newTlf.value = "";
                          this.refs.newEmail.value = ""
                          this.refs.newUsername.value = "";
@@ -119,8 +122,22 @@ export class Registration extends React.Component {
 
                        });
                      }
-                  }
-                }
+    this.refs.newPostnr.oninput = () => {
+      userService.getPoststed(this.refs.newPostnr.value, (result) => {
+        if(this.refs.newPostnr.value.length < 1) {
+          this.refs.newPoststed.value = "";
+        }
+        else {
+        for(let place of result) {
+            this.refs.newPoststed.value = place.poststed;
+            console.log(place.poststed)
+
+        }
+      }
+      });
+    }
+  }
+}
 
 export class NewPassword extends React.Component {
   render() {
