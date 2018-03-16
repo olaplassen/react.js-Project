@@ -55,7 +55,8 @@ ReactDOM.render((
       <Route exact path='/changeUser/:userId' component={ChangeUser} />
       <Route exact path='/mypage/:userId' component={MyPage} />
       <Route exact path='/usersearch' component={SearchUser} />
-    
+      <Dette er for å pushe i ggutoidos>
+
       </Switch>
     </div>
   </HashRouter>

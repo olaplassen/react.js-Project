@@ -70,7 +70,7 @@ export class Login extends React.Component {
         }
       }
       else {
-        alert("feil passord eller brukernavn")
+        alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
       }
 
       });
