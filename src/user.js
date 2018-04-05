@@ -158,6 +158,7 @@ export class ChangeUser extends React.Component {
 
 
   componentDidMount() {
+
     userService.getUsers(this.id).then((result) => {
 
       this.user = result;
