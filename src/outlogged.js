@@ -44,7 +44,7 @@ export class Login extends React.Component {
   componentDidMount() {
     //
     this.refs.loginBtn.onclick = () => {
-      userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
+      userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
 
         console.log(result)
         if (result != undefined && result.confirmed == true) {
@@ -109,7 +109,11 @@ export class Registration extends React.Component {
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
    userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newAddress.value, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
+<<<<<<< HEAD
                        Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value, (result) => {
+=======
+                       Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value).then((result) => {
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 
                          this.refs.newFname.value = "";
                          this.refs.newLname.value = "";
@@ -123,7 +127,11 @@ export class Registration extends React.Component {
                        });
                      }
     this.refs.newPostnr.oninput = () => {
+<<<<<<< HEAD
       userService.getPoststed(this.refs.newPostnr.value, (result) => {
+=======
+      userService.getPoststed(this.refs.newPostnr.value).then((result) => {
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
         if(this.refs.newPostnr.value.length < 1) {
           this.refs.newPoststed.value = "";
         }
@@ -157,7 +165,7 @@ export class NewPassword extends React.Component {
 
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
-    userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
+    userService.resetPassword(this.refs.username.value, this.refs.email.value).then((result) => {
       //når username og email matcher med en user i databsen og resultatet ikke er null
       // sendes bruker til ny komponent
       if(result != null) {

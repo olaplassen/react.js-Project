@@ -18,6 +18,10 @@ import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
+<<<<<<< HEAD
+=======
+import {SignOut} from './user';
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 
 
 
@@ -25,6 +29,10 @@ import {SearchUser} from './user';
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
+<<<<<<< HEAD
+=======
+import {NewArrangement} from './admin';
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 
 ReactDOM.render((
   <HashRouter>
@@ -55,6 +63,10 @@ ReactDOM.render((
       <Route exact path='/changeUser/:userId' component={ChangeUser} />
       <Route exact path='/mypage/:userId' component={MyPage} />
       <Route exact path='/usersearch' component={SearchUser} />
+<<<<<<< HEAD
+=======
+      <Route exact path='/signout' component={SignOut} />
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 
       </Switch>
     </div>
@@ -71,6 +83,10 @@ export function checkLogInAdmin(admin) {
 
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
+<<<<<<< HEAD
+=======
+         <Route exact path='/newarrangement' component={NewArrangement} />
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 
       </Switch>
     </div>

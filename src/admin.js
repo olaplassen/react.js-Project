@@ -15,6 +15,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/hjem'} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/søk'} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
+        <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
        </ul>
        </div>
     );
@@ -27,6 +28,7 @@ export class AdminMenu extends React.Component {
        <div className="menu">
        Admin hjemmeside
        </div>
+       
      )
    }
  }
@@ -37,7 +39,7 @@ export class ConfirmUsers extends React.Component {
     this.allUnConformed = [];
   }
   render() {
-    let unConfirmedList = []; // array for å skrive ut alle brukere som ikke er goskjent
+    let unConfirmedList = []; // array for å skrive ut alle brukere som ikke er godkjent
     //her pushes alle ikke godkjente brukere inn i arrayen.
     for(let unConfirmed of this.allUnConformed ) {
       unConfirmedList.push(<li key={unConfirmed.id}>{unConfirmed.firstName + " " + unConfirmed.lastName + " " +  unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
@@ -48,14 +50,16 @@ export class ConfirmUsers extends React.Component {
       <div className="menu">
       <h3> Ikke godkjent brukere: </h3>
       <ul> {unConfirmedList} </ul>
+
       </div>
+
     );
   }
   //henter listen fra en sql spørring
   componentDidMount() {
-    userService.unConfirmedUsers((result) => {
+    userService.unConfirmedUsers().then((result) => {
       this.allUnConformed = result;
-
+     console.log(result)
       this.forceUpdate();
     });
   }
@@ -64,11 +68,11 @@ export class ConfirmUsers extends React.Component {
   confirmUser(id) {
     this.id = id;
     console.log(this.id);
-    userService.confirmUser(this.id, (result) => {
-      console.log(result);
+    userService.confirmUser(this.id).then((result) => {
+      console.log( result);
       this.forceUpdate();
 
-      userService.unConfirmedUsers((result) => {
+      userService.unConfirmedUsers().then((result) => {
         this.allUnConformed = result;
         console.log(this.allUnConformed)
         this.forceUpdate();
@@ -78,7 +82,53 @@ export class ConfirmUsers extends React.Component {
     });
   }
 }
+<<<<<<< HEAD
 // 
+=======
+
+export class NewArrangement extends React.Component {
+ render() {
+
+// registrerings skjemaet som skrives ut under registrerings komponenten
+   return (
+     <div className="menu">
+     <form>
+     <input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input><br/>
+     <input className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></input><br/>
+     <input className="input" ref="arrMeetingLocation" placeholder="Skriv inn møtelokasjon"></input><br/>
+     <input className="input" ref="arrContactPerson" placeholder="Skriv inn ekstern kontaktperson"></input><br/>
+     <input className="input" ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br/>
+     <input className="input" ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     <input className="input" ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
+
+     <button className="button" ref="newArrButton">Opprett arrangement</button>
+     </form>
+     </div>
+   );
+ }
+
+ componentDidMount() {
+   this.refs.newArrButton.onclick = () =>{
+     userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
+                                 this.refs.arrContactPerson.value, this.refs.arrShowTime.value, this.refs.arrStartTime.value,
+                                 this.refs.arrEndTime.value, this.refs.arrGearList.value).then((result) => {
+
+                                   this.refs.arrName.value ="";
+                                   this.refs.arrDescription.value ="";
+                                   this.refs.arrMeetingLocation.value ="";
+                                   this.refs.arrContactPerson.value ="";
+                                   this.refs.arrShowTime.value ="";
+                                   this.refs.arrStartTime.value ="";
+                                   this.refs.arrEndTime.value ="";
+                                   this.refs.arrGearList.value ="";
+                                   this.nextPath('/hjem');
+                                 });
+   }
+ }
+}
+//
+>>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 // export class EventPlanner extends React.component{
 //   render() {
 //     return(
