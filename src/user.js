@@ -24,7 +24,9 @@ console.log(this.id);
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
+
         <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
+
        </ul>
        </div>
 
@@ -118,7 +120,9 @@ export class MyPage extends React.Component {
     );
   }
   componentDidMount() {
+
     userService.getUsers(this.id).then((result) => {
+
       console.log(result);
       this.user = result;
       console.log(this.user);
@@ -154,7 +158,9 @@ export class ChangeUser extends React.Component {
 
 
   componentDidMount() {
+
     userService.getUsers(this.id).then((result) => {
+
       this.user = result;
       this.refs.changefirstName.value = this.user.firstName;
       this.refs.changelastName.value = this.user.lastName;
@@ -175,8 +181,10 @@ export class ChangeUser extends React.Component {
                                  this.refs.changepoststed.value,
                                  this.refs.changephone.value,
                                  this.refs.changeemail.value,
+
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
+
           this.user = result;
           console.log(this.user)
           this.refs.changefirstName.value = this.user.firstName;
@@ -192,7 +200,9 @@ export class ChangeUser extends React.Component {
     };
 
     this.refs.changepostalNumber.oninput = () => {
+
       userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
+
         if(this.refs.changepostalNumber.value < 1) {
           this.refs.changepoststed.value = "";
         }
@@ -236,7 +246,9 @@ export class SearchUser extends React.Component {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
       console.log(event.target.value);
+
       userService.searchList(event.target.value).then ((result) => {
+
         console.log(result);
         this.allUsers = result;
         this.forceUpdate();
