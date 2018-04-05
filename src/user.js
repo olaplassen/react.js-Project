@@ -24,13 +24,9 @@ console.log(this.id);
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
-<<<<<<< HEAD
-        <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
-=======
 
         <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
        </ul>
        </div>
 
@@ -124,13 +120,9 @@ export class MyPage extends React.Component {
     );
   }
   componentDidMount() {
-<<<<<<< HEAD
-    userService.getUsers(this.id).then((result) => {
-=======
 
     userService.getUsers(this.id).then((result) => {
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
       console.log(result);
       this.user = result;
       console.log(this.user);
@@ -166,13 +158,8 @@ export class ChangeUser extends React.Component {
 
 
   componentDidMount() {
-<<<<<<< HEAD
-    userService.getUsers(this.id).then((result) => {
-=======
-
     userService.getUsers(this.id).then((result) => {
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
       this.user = result;
       this.refs.changefirstName.value = this.user.firstName;
       this.refs.changelastName.value = this.user.lastName;
@@ -193,15 +180,10 @@ export class ChangeUser extends React.Component {
                                  this.refs.changepoststed.value,
                                  this.refs.changephone.value,
                                  this.refs.changeemail.value,
-<<<<<<< HEAD
-                                 this.id).then((result) => {
-        userService.getUsers(this.id).then((result) => {
-=======
 
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
           this.user = result;
           console.log(this.user)
           this.refs.changefirstName.value = this.user.firstName;
@@ -217,13 +199,9 @@ export class ChangeUser extends React.Component {
     };
 
     this.refs.changepostalNumber.oninput = () => {
-<<<<<<< HEAD
-      userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
-=======
 
       userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
         if(this.refs.changepostalNumber.value < 1) {
           this.refs.changepoststed.value = "";
         }
@@ -267,13 +245,9 @@ export class SearchUser extends React.Component {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
       console.log(event.target.value);
-<<<<<<< HEAD
-      userService.searchList(event.target.value).then ((result) => {
-=======
 
       userService.searchList(event.target.value).then ((result) => {
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
         console.log(result);
         this.allUsers = result;
         this.forceUpdate();

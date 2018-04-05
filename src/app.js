@@ -18,13 +18,10 @@ import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
-<<<<<<< HEAD
-import {SignOut} from './user';
-=======
 
 import {SignOut} from './user';
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
+
 
 
 
@@ -81,10 +78,7 @@ export function checkLogInAdmin(admin) {
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
-<<<<<<< HEAD
-=======
 
->>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
 
       </Switch>
     </div>
