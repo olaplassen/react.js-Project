@@ -22,10 +22,6 @@ import {SearchUser} from './user';
 import {SignOut} from './user';
 
 
-
-
-
-
 //henter classene fra admin.js
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
