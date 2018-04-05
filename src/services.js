@@ -43,12 +43,8 @@ class UserService {
   });
   }
   //funksjon for å legge til bruker i databasen
-<<<<<<< HEAD
-  addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password, callback) {
-=======
   addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,): Promise <user[]> {
     return new Promise ((resolve, reject) => {
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username, password], (error, result) => {
       if (error) throw error;
       else console.log("Registration complete")
@@ -56,19 +52,6 @@ class UserService {
     });
   });
   }
-<<<<<<< HEAD
-
-  //funkjson for å endre bruker
-  changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id, callback) {
-   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
-     if (error) throw error;
-
-     callback(result);
-   });
- }
-  // funkjson for å matche login verdier med bruker i databasen
-  loginUser(username, password, callback) {
-=======
 
   addArrangement(name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList,): Promise {
     return new Promise ((resolve, reject) => {
@@ -93,7 +76,6 @@ class UserService {
   // funkjson for å matche login verdier med bruker i databasen
   loginUser(username, password, callback): Promise<void> {
     return new Promise ((resolve, reject) => {
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
     connection.query('SELECT * FROM Users WHERE admin=?', [false], (error, result) => {
       if(result != undefined) {
 
@@ -103,44 +85,12 @@ class UserService {
 
       console.log(result[0]);
 
-<<<<<<< HEAD
-      callback(result[0]);
-=======
       resolve(result[0]);
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
         });
         }
         else {
           connection.query('SELECT * FROM Users WHERE (userName =? AND password=? AND admin=?)', [username, password, true], (error, result) => {
             if (error) throw error;
-<<<<<<< HEAD
-
-            console.log(result[0]);
-
-            callback(result[0]);
-          });
-
-        }
-          localStorage.setItem('signedInUser', JSON.stringify(result[0]));
-      });
-}
-  // signOut(): void {
-  //   localStorage.clear();
-  // }
-  //
-  // getSignedInUser() {
-  //   let item = localStorage.getItem('signedInUser'); // Get User-object from browser
-  //   if(!item) return null;
-  //
-  //   return JSON.parse(item);
-  // }
-
-  getPoststed(postnr, callback) {
-    connection.query('SELECT poststed FROM poststed WHERE postnr=?', [postnr], (error, result) => {
-      if (error) throw error;
-      console.log(result)
-      callback(result)
-=======
 
             console.log(result[0]);
 
@@ -169,7 +119,6 @@ class UserService {
       if (error) throw error;
       console.log(result)
       resolve(result)
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
     });
   });
   }
@@ -245,25 +194,6 @@ class UserService {
       })
     });
     }
-<<<<<<< HEAD
-
-    userList(callback) {
-      connection.query('SELECT id, firstName, lastName FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
-        if (error) throw error;
-        console.log(result);
-        callback(result);
-      })
-    }
-
-    searchList(input, callback) {
-      connection.query('SELECT id, firstName, lastName FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by firstName', [true, false, '%' + input + '%'], (error, result) => {
-        if(error) throw error;
-        console.log(result);
-        callback(result);
-      })
-    }
-=======
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
     // searchList(input, callback) {
     //   connection.query('')
     // }

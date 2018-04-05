@@ -28,7 +28,7 @@ export class AdminMenu extends React.Component {
        <div className="menu">
        Admin hjemmeside
        </div>
-       
+
      )
    }
  }
@@ -82,9 +82,6 @@ export class ConfirmUsers extends React.Component {
     });
   }
 }
-<<<<<<< HEAD
-// 
-=======
 
 export class NewArrangement extends React.Component {
  render() {
@@ -128,7 +125,6 @@ export class NewArrangement extends React.Component {
  }
 }
 //
->>>>>>> 0dcdf2fa16e788bf673d8b807eab899e80eedf93
 // export class EventPlanner extends React.component{
 //   render() {
 //     return(
