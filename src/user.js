@@ -24,12 +24,36 @@ console.log(this.id);
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
+<<<<<<< HEAD
+        <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
+=======
+
+        <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
        </ul>
        </div>
 
     );
   }
  }
+
+  export class SignOut extends React.Component<{}> {
+  render() {
+    return (
+
+<div>
+
+<p>Date: <input type="text" id="datepicker"></input></p>
+
+
+</div>
+
+    )
+  }
+
+}
+
  export class UserHome extends React.Component {
     constructor(props) {
    super(props);
@@ -49,11 +73,12 @@ console.log(this.id);
        <h1>Velkommen {this.user.firstName}</h1>
        </div>
      );
+
    }
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
-     userService.getUsers(this.id, (result) => {
-       console.log(result);
+     userService.getUsers(this.id).then((result) => {
+       console.log(this.id);
        //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
        this.user = result;
        console.log(this.user);
@@ -99,7 +124,13 @@ export class MyPage extends React.Component {
     );
   }
   componentDidMount() {
-    userService.getUsers(this.id, (result) => {
+<<<<<<< HEAD
+    userService.getUsers(this.id).then((result) => {
+=======
+
+    userService.getUsers(this.id).then((result) => {
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
       console.log(result);
       this.user = result;
       console.log(this.user);
@@ -135,7 +166,13 @@ export class ChangeUser extends React.Component {
 
 
   componentDidMount() {
-    userService.getUsers(this.id, (result) => {
+<<<<<<< HEAD
+    userService.getUsers(this.id).then((result) => {
+=======
+
+    userService.getUsers(this.id).then((result) => {
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
       this.user = result;
       this.refs.changefirstName.value = this.user.firstName;
       this.refs.changelastName.value = this.user.lastName;
@@ -156,8 +193,15 @@ export class ChangeUser extends React.Component {
                                  this.refs.changepoststed.value,
                                  this.refs.changephone.value,
                                  this.refs.changeemail.value,
-                                 this.id, (result) => {
-        userService.getUsers(this.id, (result) => {
+<<<<<<< HEAD
+                                 this.id).then((result) => {
+        userService.getUsers(this.id).then((result) => {
+=======
+
+                                 this.id).then((result) => {
+        userService.getUsers(this.id).then((result) => {
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
           this.user = result;
           console.log(this.user)
           this.refs.changefirstName.value = this.user.firstName;
@@ -173,7 +217,13 @@ export class ChangeUser extends React.Component {
     };
 
     this.refs.changepostalNumber.oninput = () => {
-      userService.getPoststed(this.refs.changepostalNumber.value, (result) => {
+<<<<<<< HEAD
+      userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
+=======
+
+      userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
         if(this.refs.changepostalNumber.value < 1) {
           this.refs.changepoststed.value = "";
         }
@@ -217,7 +267,13 @@ export class SearchUser extends React.Component {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
       console.log(event.target.value);
-      userService.searchList(event.target.value, (result) => {
+<<<<<<< HEAD
+      userService.searchList(event.target.value).then ((result) => {
+=======
+
+      userService.searchList(event.target.value).then ((result) => {
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
         console.log(result);
         this.allUsers = result;
         this.forceUpdate();

@@ -44,7 +44,7 @@ export class Login extends React.Component {
   componentDidMount() {
     //
     this.refs.loginBtn.onclick = () => {
-      userService.loginUser(this.refs.username.value, this.refs.password.value, (result) => {
+      userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
 
         console.log(result)
         if (result != undefined && result.confirmed == true) {
@@ -70,7 +70,11 @@ export class Login extends React.Component {
         }
       }
       else {
-        alert("feil passord eller brukernavn")
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
+        alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
       }
 
       });
@@ -109,7 +113,11 @@ export class Registration extends React.Component {
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
    userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newAddress.value, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
-                       Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value, (result) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
+                       Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value).then((result) => {
 
                          this.refs.newFname.value = "";
                          this.refs.newLname.value = "";
@@ -123,7 +131,11 @@ export class Registration extends React.Component {
                        });
                      }
     this.refs.newPostnr.oninput = () => {
-      userService.getPoststed(this.refs.newPostnr.value, (result) => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
+      userService.getPoststed(this.refs.newPostnr.value).then((result) => {
         if(this.refs.newPostnr.value.length < 1) {
           this.refs.newPoststed.value = "";
         }
@@ -157,7 +169,7 @@ export class NewPassword extends React.Component {
 
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
-    userService.resetPassword(this.refs.username.value, this.refs.email.value, (result) => {
+    userService.resetPassword(this.refs.username.value, this.refs.email.value).then((result) => {
       //når username og email matcher med en user i databsen og resultatet ikke er null
       // sendes bruker til ny komponent
       if(result != null) {
