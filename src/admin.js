@@ -83,6 +83,10 @@ export class ConfirmUsers extends React.Component {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
 export class NewArrangement extends React.Component {
  render() {
 
@@ -142,4 +146,8 @@ export class NewArrangement extends React.Component {
 //       </div>
 //     )
 //   }
+<<<<<<< HEAD
 // }
+=======
+// }
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc

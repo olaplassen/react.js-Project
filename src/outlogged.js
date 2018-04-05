@@ -70,6 +70,10 @@ export class Login extends React.Component {
         }
       }
       else {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
         alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
       }
 
@@ -109,6 +113,10 @@ export class Registration extends React.Component {
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
    userService.addUser(this.refs.newFname.value, this.refs.newLname.value, this.refs.newAddress.value, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
                        Number(this.refs.newTlf.value), this.refs.newEmail.value, this.refs.newUsername.value, this.refs.newPassword.value).then((result) => {
 
                          this.refs.newFname.value = "";
@@ -123,6 +131,10 @@ export class Registration extends React.Component {
                        });
                      }
     this.refs.newPostnr.oninput = () => {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5e7d248212dbd45d69a6fd0f7a30c8b3cc2e5abc
       userService.getPoststed(this.refs.newPostnr.value).then((result) => {
         if(this.refs.newPostnr.value.length < 1) {
           this.refs.newPoststed.value = "";
