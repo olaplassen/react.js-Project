@@ -21,12 +21,12 @@ import {SearchUser} from './user';
 
 import {SignOut} from './user';
 
-
 //henter classene fra admin.js
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
+
 
 ReactDOM.render((
   <HashRouter>
