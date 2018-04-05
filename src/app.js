@@ -31,6 +31,54 @@ import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 
+
+export class Menu extends React.Component {
+ render()
+   let signedInUser = userService.getSignedInUser();
+   let signedInAdmin = userService.getSignedInAdmin();
+
+   
+    if(signedInUser) {
+   return (
+     <div className="menu">
+      <ul className="ul">
+      {/* sender id'en vidre til linkene */}
+       <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
+       <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
+       <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
+
+       <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
+
+      </ul>
+      </div>
+      );
+    }
+    if(signedinAdmin) {
+      return (
+        <div className="menu">
+         <ul className="ul">
+          <li className="li"><Link to ={'/hjem'} className="link">Hjem</Link></li>
+          <li className="li"><Link to ={'/søk'} className="link">Min side</Link></li>
+          <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
+          <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
+         </ul>
+         </div>
+
+      );
+    }
+    return (
+      <div className="menu">
+       <ul className="ul">
+        <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
+        <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
+       </ul>
+       </div>
+    );
+
+
+ }
+
+
 ReactDOM.render((
   <HashRouter>
     <div>
