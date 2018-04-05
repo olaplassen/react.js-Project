@@ -16,13 +16,17 @@ import { NewPasswordSendt } from './outlogged';
 import {UserMenu} from './user';
 import {UserHome} from './user';
 import {MyPage} from './user';
+import {ChangeUser} from './user';
+import {SearchUser} from './user';
+import {SignOut} from './user';
+
 
 
 //henter classene fra admin.js
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
-
+import {NewArrangement} from './admin';
 
 ReactDOM.render((
   <HashRouter>
@@ -49,8 +53,11 @@ ReactDOM.render((
     <div>
       <UserMenu userId={user.userId} />
       <Switch>
-          <Route exact path='/userhome/:userId' component={UserHome} />
-           <Route exact path='/mypage/:userId' component={MyPage} />
+      <Route exact path='/userhome/:userId' component={UserHome} />
+      <Route exact path='/changeUser/:userId' component={ChangeUser} />
+      <Route exact path='/mypage/:userId' component={MyPage} />
+      <Route exact path='/usersearch' component={SearchUser} />
+      <Route exact path='/signout' component={SignOut} />
 
       </Switch>
     </div>
@@ -64,9 +71,11 @@ export function checkLogInAdmin(admin) {
     <div>
       <AdminMenu />
       <Switch>
+
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
-           <AdminHome />
+         <Route exact path='/newarrangement' component={NewArrangement} />
+
       </Switch>
     </div>
   </HashRouter>
