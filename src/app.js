@@ -18,9 +18,8 @@ import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
+
 import {SignOut} from './user';
-
-
 
 
 //henter classene fra admin.js
@@ -29,6 +28,7 @@ import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 import {Arrangement} from './admin';
+
 
 
 ReactDOM.render((
@@ -80,6 +80,7 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
+
 
       </Switch>
     </div>
