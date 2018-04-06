@@ -25,11 +25,14 @@ import {SearchUser} from './user';
 
 import {SignOut} from './user';
 
+
 //henter classene fra admin.js
 import {AdminMenu} from './admin';
 import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
+import {Arrangement} from './admin';
+
 
 
 
@@ -66,6 +69,7 @@ ReactDOM.render((
       <Route exact path='/mypage/:userId' component={MyPage} />
       <Route exact path='/usersearch' component={SearchUser} />
       <Route exact path='/signout' component={SignOut} />
+      <Route exact path='/arrangementer' component={Arrangement} />
 
       </Switch>
     </div>
@@ -83,6 +87,7 @@ export function checkLogInAdmin(admin) {
           <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
+         <Route exact path='/arrangementer' component={Arrangement} />
 
 
       </Switch>

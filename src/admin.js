@@ -16,6 +16,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/søk'} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
+        <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
        </ul>
        </div>
     );
@@ -23,6 +24,13 @@ export class AdminMenu extends React.Component {
  }
 
  export class AdminHome extends React.Component {
+constructor(props){
+  super(props);
+
+  this.arrangement = {};
+  this.id = props.match.params.arrangementId;
+  console.log()
+}
    render() {
      return (
        <div className="menu">
@@ -31,6 +39,42 @@ export class AdminMenu extends React.Component {
 
      )
    }
+ }
+
+ export class Arrangement extends React.Component {
+   constructor(){
+     super();
+     this.allArrangement = [];
+   }
+   render() {
+     let arrangementList = [];
+
+
+     for (let arrangement of this.allArrangement) {
+       arrangementList.push(<li key={arrangement.id}><Link to={'/hjem'}> {arrangement.description}</Link> <button className="interesseButton">Meld Interesse</button></li>)
+     }
+
+console.log(arrangementList)
+return (
+
+  <div className ="menu">
+
+  <h3> Arrangement: </h3>
+
+  <ul> {arrangementList} </ul>
+
+  </div>
+);
+   }
+componentDidMount(){
+  userService.getArrangement().then((result) => {
+    this.allArrangement = result;
+    this.forceUpdate();
+console.log(result)
+  });
+}
+
+
  }
 // komponent for å godkjenne brukere
 export class ConfirmUsers extends React.Component {
