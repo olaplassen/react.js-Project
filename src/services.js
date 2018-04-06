@@ -64,6 +64,17 @@ class UserService {
     });
   }
 
+  getArrangement() {
+     return new Promise ((resolve, reject) => {
+      connection.query('SELECT id, name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList FROM Arrangement', [false], (error, result) => {
+        if (error) throw error;
+        console.log(result);
+
+          resolve(result)
+      });
+    });
+    }
+
   //funkjson for å endre bruker
   changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id,): Promise<user[]> {
     return new Promise ((resolve, reject) => {
@@ -75,7 +86,7 @@ class UserService {
  });
  }
   // funkjson for å matche login verdier med bruker i databasen
-  loginUser(username, password, callback): Promise<void> {
+  loginUser(username, password,): Promise<void> {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE admin=?', [false], (error, result) => {
       if(result != undefined) {
@@ -155,7 +166,7 @@ class UserService {
   });
   };
   // funksjon for å hente alle brukere som har comfirmed = 0(false) i databsen
-  unConfirmedUsers(callback) {
+  unConfirmedUsers() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName, phone, email FROM Users WHERE confirmed=?', [false], (error, result) => {
         if (error) throw error;

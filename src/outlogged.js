@@ -7,6 +7,9 @@ import { userService } from './services';
 import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
 
+
+
+
 // class for navigasjons meny
 
 //
