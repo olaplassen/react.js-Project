@@ -65,7 +65,7 @@ class UserService {
   }
 
   //funkjson for å endre bruker
-  changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id,): Promise<user[]> {
+  changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id): Promise<user[]> {
     return new Promise ((resolve, reject) => {
    connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
      if (error) throw error;
@@ -74,6 +74,16 @@ class UserService {
    });
  });
  }
+
+ changePassword(password, id): Promise<user[]> {
+   return new Promise ((resolve, reject) => {
+  connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
+    if (error) throw error;
+    console.log("endring fullført")
+    resolve(result);
+  });
+});
+}
   // funkjson for å matche login verdier med bruker i databasen
   loginUser(username, password, callback): Promise<void> {
     return new Promise ((resolve, reject) => {

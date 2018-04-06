@@ -12,12 +12,16 @@ import { Registration } from './outlogged';
 import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
+import { ErrorMessage } from './outlogged';
+
 //henter classene fra users.js
 import {UserMenu} from './user';
 import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
+
+
 
 import {SignOut} from './user';
 
@@ -28,9 +32,12 @@ import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 
 
+
+
 ReactDOM.render((
   <HashRouter>
     <div>
+
       {/* Definerer hvilken komponent som alltid skal vises! */}
       <StartMenu  />
       <Switch>
@@ -51,6 +58,7 @@ ReactDOM.render((
   ReactDOM.render((
   <HashRouter>
     <div>
+
       <UserMenu userId={user.userId} />
       <Switch>
       <Route exact path='/userhome/:userId' component={UserHome} />

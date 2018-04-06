@@ -110,7 +110,10 @@ export class MyPage extends React.Component {
           <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
-          <button> Endre passord </button>
+          <input ref="newpassword" type="password" /> <br />
+          <input ref="verifypassword" type="password" /> <br />
+          <button ref="changepasswordbtn"> Endre passord </button>
+
         </div>
 
         <div>
@@ -127,9 +130,24 @@ export class MyPage extends React.Component {
       this.user = result;
       console.log(this.user);
       this.forceUpdate();
+    });
+
+    this.refs.changepasswordbtn.onclick = () => {
+
+      if (this.refs.newpassword.value == this.refs.verifypassword.value) {
+      userService.changePassword(this.refs.newpassword.value, this.id).then((result) => {
+
+        this.refs.newpassword.value = "";
+        this.refs.verifypassword.value = "";
+         this.forceUpdate(); // Rerender component with updated data
+      });
     }
-  );
-  }
+    else {
+      this.refs.newpassword.type = "text";
+      this.refs.newpassword.value = "Passordene matcher ikke";
+    }
+   }
+}
 }
 
 export class ChangeUser extends React.Component {
@@ -156,7 +174,9 @@ export class ChangeUser extends React.Component {
       );
     }
 
-
+    nextPath(path) {
+        this.props.history.push(path);
+      }
   componentDidMount() {
 
     userService.getUsers(this.id).then((result) => {
@@ -185,16 +205,7 @@ export class ChangeUser extends React.Component {
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
 
-          this.user = result;
-          console.log(this.user)
-          this.refs.changefirstName.value = this.user.firstName;
-          this.refs.changelastName.value = this.user.lastName;
-          this.refs.changeaddress.value = this.user.address;
-          this.refs.changepostalNumber.value = this.user.postalNumber;
-          this.refs.changepoststed.value = this.user.poststed;
-          this.refs.changephone.value = this.user.phone;
-          this.refs.changeemail.value = this.user.email;
-          this.forceUpdate(); // Rerender component with updated data
+         this.forceUpdate(); // Rerender component with updated data
         });
       });
     };
