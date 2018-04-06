@@ -25,6 +25,7 @@ console.log(this.id);
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
         <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
+        <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
        </ul>
        </div>
 
@@ -53,10 +54,11 @@ console.log(this.id);
    super(props);
 
    this.user = {};
+   
    //henter id fra usermenyen og matcher den med this.id
    this.id = props.match.params.userId;
    console.log(this.id)
-   }
+;   }
 
    render() {
 
