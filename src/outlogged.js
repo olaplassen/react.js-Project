@@ -8,11 +8,8 @@ import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
 
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> 0c12259d263c6fd57515821cb3a85b6637093e21
 // class for navigasjons meny
 export class StartMenu extends React.Component {
  render() {
