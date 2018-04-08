@@ -45,6 +45,7 @@ export class Login extends React.Component {
     );
   }
   componentDidMount() {
+    
     //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {

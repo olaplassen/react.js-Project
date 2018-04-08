@@ -216,17 +216,16 @@ class UserService {
       })
     });
     }
-    // searchList(input, callback) {
-    //   connection.query('')
-    // }
-  //   addEvent(name, ....) {
-  //     connection.query('INSERT INTO Events (name, , , , , , , , ) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [, , , , , , , , ], (error, result) => {
-  //       if (error) throw error;
-  //       else console.log("Event added")
-  //       console.log(result);
-  //       callback();
-  //   })
-  // }
+    getAllArrangement() {
+       return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Arrangement', (error, result) => {
+          if (error) throw error;
+          console.log(result);
+
+            resolve(result)
+        });
+      });
+      }
 //concat slår sammen kolonner
 
 }

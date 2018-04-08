@@ -5,6 +5,11 @@ import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 import { userService } from './services';
 
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment'
+
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+
 
 
 export class UserMenu extends React.Component {
@@ -57,20 +62,42 @@ console.log(this.id);
    super(props);
 
    this.user = {};
-   
+   this.allEvents = [];
+
    //henter id fra usermenyen og matcher den med this.id
    this.id = props.match.params.userId;
    console.log(this.id)
 ;   }
 
    render() {
+     let startTimeList = [];
+     let endTimeList = [];
 
+
+     for (let startTime of this.allEvents) {
+       startTimeList.push(<li key={startTime.id}>{startTime.startTime}</li>)
+     }
+     for (let endTime of this.allEvents) {
+       endTimeList.push(<li key={endTime.id}>{endTime.endTime}</li>)
+     }
+
+     console.log(startTimeList)
+     console.log(endTimeList)
+     // console.log(allArrangementList[2].[0]);
      return (
 
-       <div>
+       <div style={{height: 400}}>
+           <BigCalendar
+             events={this.allEvents}
+             startAccessor='startTime'
+             endAccessor='endTime'
+             showMultiDayTimes
+             defaultDate={new Date(2018, 2, 1)}
+             selectAble ={true}
 
-       <h1>Velkommen {this.user.firstName}</h1>
-       </div>
+             />
+         </div>
+
      );
 
    }
@@ -82,8 +109,15 @@ console.log(this.id);
        this.user = result;
        console.log(this.user);
        this.forceUpdate();
-     }
-   );
+     });
+     userService.getAllArrangement().then((result) => {
+       console.log(result)
+       this.allEvents = result;
+       console.log(this.allEvents);
+       console.log(this.allEvents.startTime)
+       this.forceUpdate();
+
+     });
    }
  }
 
