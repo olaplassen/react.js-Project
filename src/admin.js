@@ -27,19 +27,66 @@ export class AdminMenu extends React.Component {
 constructor(props){
   super(props);
 
-  this.arrangement = {};
-  this.id = props.match.params.arrangementId;
-  console.log()
+this.arrangement = {};
+this.id = props.match.params.arrangementId
+
 }
    render() {
+
      return (
        <div className="menu">
-       Admin hjemmeside
+       <h2> {this.arrangement.description}</h2>
        </div>
 
-     )
+     );
    }
+   componentDidMount(){
+
+  userService.getArrangement().then((result) => {
+   this.arrangement = result;
+   this.forceUpdate();
+   console.log(this.arrangement)
+
+}
+);
  }
+   }
+
+
+export class ArrangementData extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showArrangementData: false
+    }
+    this.updateShowState = this.updateShowState.bind(this);
+    console.log(props);
+  }
+  updateShowState() {
+    this.setState({ showArrangementData: !this.state.showArrangementData });
+  }
+  render() {
+
+    return(
+      <div>
+      Les mer om <button type="button" onClick={this.updateShowState}>{this.props.data.description}</button>
+      { this.state.showArrangementData ?
+        <div>
+          <ul>
+            <li>Id: { this.props.data.id }</li>
+            <li>Navn: { this.props.data.title }</li>
+            <li>Tidspunkt: { this.props.data.end.toString() }</li>
+            <li>Beskrivelse: { this.props.data.description }</li>
+            <li>Utstyrliste: { this.props.data.gearList }</li>
+          </ul>
+        </div>
+        :
+        null
+      }
+      </div>
+    );
+  }
+}
 
  export class Arrangement extends React.Component {
    constructor(){
@@ -47,30 +94,23 @@ constructor(props){
      this.allArrangement = [];
    }
    render() {
-     let arrangementList = [];
-
-
+    var array = [];
      for (let arrangement of this.allArrangement) {
-       arrangementList.push(<li key={arrangement.id}><Link to={'/hjem'}> {arrangement.description}</Link> <button className="interesseButton">Meld Interesse</button></li>)
+       array.push(<ArrangementData data={arrangement} />);
      }
 
-console.log(arrangementList)
-return (
+      return (
 
-  <div className ="menu">
-
-  <h3> Arrangement: </h3>
-
-  <ul> {arrangementList} </ul>
-
-  </div>
-);
+        <div className ="menu">
+          {array}
+        </div>
+      );
    }
 componentDidMount(){
   userService.getArrangement().then((result) => {
     this.allArrangement = result;
     this.forceUpdate();
-console.log(result)
+
   });
 }
 
