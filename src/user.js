@@ -57,10 +57,10 @@ console.log(this.id);
    super(props);
 
    this.user = {};
-   
+
    //henter id fra usermenyen og matcher den med this.id
    this.id = props.match.params.userId;
-   console.log(this.id)
+   console.log(this.user)
 ;   }
 
    render() {
@@ -89,11 +89,11 @@ console.log(this.id);
 
 export class MyPage extends React.Component {
   constructor(props) {
-  super(props);
-
-  this.user = {};
-  this.id = props.match.params.userId;
-  console.log(this.id)
+    super(props);
+    this.state = {
+      id: props.match.params.userId,
+      user: {}
+    }
   }
 
   render() {
@@ -105,13 +105,13 @@ export class MyPage extends React.Component {
 
         </div>
         <div className="input">
-          <h2> {this.user.firstName} {this.user.lastName}</h2>
-          <div> Epost: {this.user.email} </div>
-          <div> Mobilnummer: {this.user.phone} </div>
+          <h2> {this.state.user.firstName} {this.state.user.lastName}</h2>
+          <div> Epost: {this.state.user.email} </div>
+          <div> Mobilnummer: {this.state.user.phone} </div>
           <div> Fødselsdato: Lorem ipsum</div>
           <div> Medlem siden: Lorem ipsum</div>
-          <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
-          <div> Brukernavn: {this.user.userName}</div>
+          <Link to={'/changeUser/' + this.state.id}>Endre opplysninger</Link>
+          <div> Brukernavn: {this.state.user.userName}</div>
           <div> Passord: ********</div>
           <button> Endre passord </button>
         </div>
@@ -127,8 +127,8 @@ export class MyPage extends React.Component {
     userService.getUsers(this.id).then((result) => {
 
       console.log(result);
-      this.user = result;
-      console.log(this.user);
+      this.state.user = result;
+      console.log(this.state.user);
       this.forceUpdate();
     }
   );

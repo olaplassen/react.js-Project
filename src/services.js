@@ -56,7 +56,7 @@ class UserService {
 
   addArrangement(name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList,): Promise {
     return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO Arrangement (name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
+      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
         if (error) throw error;
         else
         resolve();
@@ -66,7 +66,7 @@ class UserService {
 
   getArrangement() {
      return new Promise ((resolve, reject) => {
-      connection.query('SELECT id, name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList FROM Arrangement', [false], (error, result) => {
+      connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {
         if (error) throw error;
         console.log(result);
 
