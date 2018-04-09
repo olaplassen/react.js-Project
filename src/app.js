@@ -5,6 +5,7 @@ import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
+
 //henter classene fra outlogged.js
 import { StartMenu } from './outlogged'
 import { Login } from './outlogged';
@@ -20,6 +21,7 @@ import {UserHome} from './user';
 import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
+import {EventInfo} from './user';
 
 
 
@@ -70,6 +72,7 @@ ReactDOM.render((
       <Route exact path='/usersearch' component={SearchUser} />
       <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
+      <Route exact path='/eventInfo/:id' component={EventInfo} />
 
       </Switch>
     </div>

@@ -61,42 +61,35 @@ console.log(this.id);
     constructor(props) {
    super(props);
 
-   this.user = {};
+
    this.allEvents = [];
 
    //henter id fra usermenyen og matcher den med this.id
    this.id = props.match.params.userId;
    console.log(this.id)
-;   }
+    }
+    nextPath(path) {
+        this.props.history.push(path);
+      }
 
    render() {
-     let startTimeList = [];
-     let endTimeList = [];
 
-
-     for (let startTime of this.allEvents) {
-       startTimeList.push(<li key={startTime.id}>{startTime.startTime}</li>)
-     }
-     for (let endTime of this.allEvents) {
-       endTimeList.push(<li key={endTime.id}>{endTime.endTime}</li>)
-     }
-
-     console.log(startTimeList)
-     console.log(endTimeList)
-     // console.log(allArrangementList[2].[0]);
      return (
+
 
        <div style={{height: 400}}>
            <BigCalendar
              events={this.allEvents}
-             startAccessor='startTime'
-             endAccessor='endTime'
              showMultiDayTimes
              defaultDate={new Date(2018, 2, 1)}
              selectAble ={true}
 
+             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)
+       }
+
              />
          </div>
+
 
      );
 
@@ -104,22 +97,47 @@ console.log(this.id);
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
      userService.getUsers(this.id).then((result) => {
-       console.log(this.id);
        //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
        this.user = result;
        console.log(this.user);
        this.forceUpdate();
      });
      userService.getAllArrangement().then((result) => {
-       console.log(result)
        this.allEvents = result;
        console.log(this.allEvents);
-       console.log(this.allEvents.startTime)
+
        this.forceUpdate();
 
      });
    }
  }
+
+export class EventInfo extends React.Component {
+  constructor(props) {
+ super(props);
+
+ this.arrangement = {};
+
+ //henter id fra usermenyen og matcher den med this.id
+ this.id = props.match.params.id;
+ console.log(this.id)
+  }
+  render() {
+    return(
+      <div>
+      {this.arrangement.title}
+      
+      </div>
+    )
+  }
+  componentDidMount() {
+    userService.getArrangementInfo(this.id).then((result) => {
+      this.arrangement = result;
+
+      this.forceUpdate();
+    })
+  }
+}
 
 export class MyPage extends React.Component {
   constructor(props) {

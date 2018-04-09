@@ -226,6 +226,17 @@ class UserService {
         });
       });
       }
+    getArrangementInfo(id) {
+      return new Promise ((resolve, reject) => {
+       connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
+         if (error) throw error;
+         console.log(result);
+
+           resolve(result[0])
+       });
+     });
+     }
+    
 //concat slår sammen kolonner
 
 }
