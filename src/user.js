@@ -107,7 +107,6 @@ export class UserHome extends React.Component {
 export class EventInfo extends React.Component {
   constructor(props) {
  super(props);
- let dateTime;
  this.arrangement = {};
 
  //henter id fra usermenyen og matcher den med this.id
@@ -117,7 +116,22 @@ export class EventInfo extends React.Component {
   render() {
     return(
       <div className="menu">
-      Informasjon 
+      <div>
+      <h1>{this.arrangement.title} informasjon side.</h1> <br />
+      {this.start} <br />
+      </div> <br />
+      <div>
+      Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
+      Oppmøte tidspunkt: {this.show}
+      </div> <br />
+      <div style={{width: 300}}>
+      Beskrivelse: <br />
+      {this.arrangement.description}
+      </div> <br />
+
+      Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
+
+
       </div>
 
     )
@@ -125,9 +139,27 @@ export class EventInfo extends React.Component {
   componentDidMount() {
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
-
+      this.start = this.fixDate(this.arrangement.start);
+      this.end = this.fixDate(this.arrangement.end)
+      this.show = this.fixDate(this.arrangement.showTime)
       this.forceUpdate();
     })
+  }
+  fixDate(date) {
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    if (hours < 10) {
+      hours = '0' + hours;
+    }
+    let mins = date.getMinutes();
+    if (mins < 10) {
+      mins = '0' + mins;
+    }
+
+    let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
+    return(dateTime);
   }
 }
 

@@ -54,7 +54,7 @@ class UserService {
   });
   }
 
-  addArrangement(name, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList,): Promise {
+  addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList,): Promise {
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
         if (error) throw error;
@@ -236,7 +236,7 @@ class UserService {
        });
      });
      }
-    
+
 //concat slår sammen kolonner
 
 }
