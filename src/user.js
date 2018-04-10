@@ -59,17 +59,16 @@ console.log(this.id);
 
  export class UserHome extends React.Component {
     constructor(props) {
-   super(props);
-   this.user = {}
-   this.allEvents = [];
+      super(props);
+      this.user = {}
+      this.allEvents = [];
 
-   //henter id fra usermenyen og matcher den med this.id
-   this.id = props.match.params.userId;
-   console.log(this.id)
+      //henter id fra usermenyen og matcher den med this.id
+      this.id = props.match.params.userId;
     }
     nextPath(path) {
         this.props.history.push(path);
-      }
+    }
 
 
    render() {
@@ -123,6 +122,7 @@ export class EventInfo extends React.Component {
     return(
       <div>
       {this.arrangement.title}
+
 
       </div>
     )
@@ -255,8 +255,8 @@ export class ChangeUser extends React.Component {
 
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
-
-         this.forceUpdate(); // Rerender component with updated data
+          this.props.history.push('/mypage/' + this.id)
+          this.forceUpdate(); // Rerender component with updated data
         });
       });
     };
