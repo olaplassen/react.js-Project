@@ -6,17 +6,10 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 
 import BigCalendar from 'react-big-calendar'
-import moment from 'moment'
-<<<<<<< HEAD
-=======
+import moment from 'moment';
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
->>>>>>> f0a697f4cfe40a6a5159fd8ef4e9359fd78d8303
-
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
-
-//sdflnsdfjsdpfj
 
 export class UserMenu extends React.Component {
 //props for å hente verdien fra brukeren som logget inn

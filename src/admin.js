@@ -17,7 +17,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
-        <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/interessedusers'} className="link">Interesserte brukere</Link></li>
        </ul>
        </div>
     );
@@ -70,7 +70,7 @@ export class ArrangementData extends React.Component {
 
     return(
       <div>
-      Les mer om <button type="button" onClick={this.updateShowState}>{this.props.data.description}</button>
+    {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id)}>Interessert</button>
       { this.state.showArrangementData ?
         <div>
           <ul>
@@ -86,6 +86,16 @@ export class ArrangementData extends React.Component {
       }
       </div>
     );
+  }
+  getInteressed(arrangementId, userId){
+    userId = 21;
+    console.log(userId)
+    this.props.data.id = arrangementId;
+    console.log(this.props.data.id)
+    userService.getInteressed(arrangementId, userId).then((result) => {
+    console.log(result)
+      this.forceUpdate();
+    })
   }
 }
 
@@ -115,7 +125,33 @@ componentDidMount(){
   });
 }
 
+}
 
+ export class ConfirmInteressedUsers extends React.Component {
+   constructor(props) {
+     super(props);
+     this.allInteressed = [];
+   }
+   render() {
+     let interessedList = [];
+
+     for(let interessed of this.allInteressed) {
+       interessedList.push(<li key={interessed.userId}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button className="confirmnutton">Godkjenn</button> </li>)
+     }
+return (
+  <div className="menu">
+  <h3> Interesserte brukere: </h3>
+  <ul> {interessedList} </ul>
+  </div>
+);
+   }
+componentDidMount(){
+  userService.interessedUsers().then((result) => {
+    this.allInteressed = result;
+    console.log(result)
+    this.forceUpdate();
+  });
+}
  }
 // komponent for å godkjenne brukere
 export class ConfirmUsers extends React.Component {

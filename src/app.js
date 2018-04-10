@@ -34,6 +34,7 @@ import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 import {Arrangement} from './admin';
+import {ConfirmInteressedUsers} from './admin';
 
 
 
@@ -73,7 +74,7 @@ ReactDOM.render((
       <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventInfo/:id' component={EventInfo} />
-      
+
       </Switch>
     </div>
   </HashRouter>
@@ -91,7 +92,7 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
-
+         <Route exact path='/interessedusers' component={ConfirmInteressedUsers} />
 
       </Switch>
     </div>

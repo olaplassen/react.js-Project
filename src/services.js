@@ -197,6 +197,27 @@ class UserService {
     });
     }
 
+    getInteressed(arrangementId, userId) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
+          if (error) throw error;
+console.log(result)
+          resolve(result)
+        });
+      });
+    }
+
+    interessedUsers(firstName,lastName, title) {
+      return new Promise ((resolve, reject) => {
+      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId', [firstName, lastName, title], (error, result) => {
+        if(error) throw error;
+        console.log(result);
+        resolve(result);
+      })
+    });
+    }
+
+
     userList(callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
@@ -236,7 +257,7 @@ class UserService {
        });
      });
      }
-    
+
 //concat slår sammen kolonner
 
 }
