@@ -7,26 +7,19 @@ import { userService } from './services';
 
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
-<<<<<<< HEAD
-=======
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
->>>>>>> f0a697f4cfe40a6a5159fd8ef4e9359fd78d8303
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
 //sdflnsdfjsdpfj
-
 export class UserMenu extends React.Component {
-//props for å hente verdien fra brukeren som logget inn
-constructor(props) {
-super(props);
-
-//setter this.id lik verdien som ble sendt fra login.
-this.id = props.userId;
-console.log(this.id);
-}
+  //props for å hente verdien fra brukeren som logget inn
+  constructor(props) {
+    super(props);
+    //setter this.id lik verdien som ble sendt fra login.
+    this.id = props.userId;
+  }
   render() {
     return (
       <div className="menu">
@@ -45,25 +38,22 @@ console.log(this.id);
 
     );
   }
- }
-
-  export class SignOut extends React.Component<{}> {
-  render() {
+}
+export class SignOut extends React.Component<{}> {
+    render() {
     return (
 
-<div>
+      <div>
 
-<p>Date: <input type="text" id="datepicker"></input></p>
+      <p>Date: <input type="text" id="datepicker"></input></p>
 
 
-</div>
+      </div>
 
-    )
-  }
-
+  )};
 }
 
- export class UserHome extends React.Component {
+export class UserHome extends React.Component {
     constructor(props) {
       super(props);
       this.user = {}
@@ -81,7 +71,7 @@ console.log(this.id);
 
      return (
 
-       <div style={{height: 400}} className="menu">
+       <div style={{height: 400, width: 600}} className="menu">
            <BigCalendar
              events={this.allEvents}
              showMultiDayTimes
@@ -117,7 +107,7 @@ console.log(this.id);
 export class EventInfo extends React.Component {
   constructor(props) {
  super(props);
-
+ let dateTime;
  this.arrangement = {};
 
  //henter id fra usermenyen og matcher den med this.id
@@ -126,11 +116,10 @@ export class EventInfo extends React.Component {
   }
   render() {
     return(
-      <div>
-      {this.arrangement.title}
-
-
+      <div className="menu">
+      Informasjon 
       </div>
+
     )
   }
   componentDidMount() {
@@ -147,18 +136,20 @@ export class MyPage extends React.Component {
     super(props);
     this.user = {}
     this.id= props.match.params.userId;
-
+    this.state = {
+      showchangePassword: false
+    }
+    this.updateShowState = this.updateShowState.bind(this);
+    console.log(props);
   }
-
+  updateShowState() {
+    this.setState({ showchangePassword: !this.state.showchangePassword });
+  }
   render() {
-
     return (
 
       <div>
-        <div>
-
-        </div>
-        <div className="input">
+        <div className="menu">
           <h2> {this.user.firstName} {this.user.lastName}</h2>
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
@@ -167,14 +158,18 @@ export class MyPage extends React.Component {
           <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
-          <input ref="newpassword" type="password" /> <br />
-          <input ref="verifypassword" type="password" /> <br />
-          <button ref="changepasswordbtn"> Endre passord </button>
 
-        </div>
 
-        <div>
-
+          <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
+          { this.state.showchangePassword ?
+            <div>
+              <input ref="newpassword" type="password" /> <br />
+              <input ref="verifypassword" type="password" /> <br />
+            </div>
+            :
+            null
+          }
+          <button ref="changepasswordbtn">Lagre</button>
         </div>
       </div>
     );
@@ -204,7 +199,7 @@ export class MyPage extends React.Component {
       this.refs.newpassword.value = "Passordene matcher ikke";
     }
    }
-}
+ }
 }
 
 export class ChangeUser extends React.Component {
