@@ -39,8 +39,23 @@ import {ConfirmInteressedUsers} from './admin';
 
 
 
-
+export function outlogged(){
+  let signedInUser = userService.getSignedInUser();
+  if (signedInUser != undefined && signedInUser.admin == false) {
+    let user = {
+      userId: signedInUser.id
+    }
+    checkLogInUser(user)
+  }
+  else if (signedInUser != undefined && signedInUser.admin == true) {
+    let admin = {
+      adminId: signedInUser.id
+    }
+    checkLogInAdmin(admin)
+  }
+  else {
 ReactDOM.render((
+
   <HashRouter>
     <div>
 
@@ -58,7 +73,8 @@ ReactDOM.render((
     </div>
   </HashRouter>
 ), document.getElementById('root'));
-
+}
+}
 //ny ReactDOM som kjøres når user logger inn.
  export function checkLogInUser(user) {
   ReactDOM.render((
@@ -99,3 +115,4 @@ export function checkLogInAdmin(admin) {
   </HashRouter>
 ), document.getElementById('root'))
 };
+outlogged();

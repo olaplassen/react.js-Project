@@ -5,6 +5,7 @@ import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInAdmin } from './app';
+import { logout } from './user';
 
 //admin meny
 export class AdminMenu extends React.Component {
@@ -17,19 +18,20 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
-        <li className="li"><Link to ={'/interessedusers'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
        </ul>
        </div>
     );
   }
  }
 
- export class AdminHome extends React.Component {
-constructor(props){
+export class AdminHome extends React.Component {
+  constructor(props){
   super(props);
 
-this.arrangement = {};
-this.id = props.match.params.arrangementId
+  this.arrangement = {};
+  this.id = props.match.params.arrangementId
 
 }
    render() {
@@ -216,9 +218,9 @@ export class NewArrangement extends React.Component {
      <input className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></input><br/>
      <input className="input" ref="arrMeetingLocation" placeholder="Skriv inn møtelokasjon"></input><br/>
      <input className="input" ref="arrContactPerson" placeholder="Skriv inn ekstern kontaktperson"></input><br/>
-     <input className="input" ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br/>
-     <input className="input" ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
-     <input className="input" ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     Oppmøte tidspunkt: <input type='datetime-local' ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br/>
+     Start tidspunkt: <input type='datetime-local' ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     Slutt tidspunkt: <input type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
      <button className="button" ref="newArrButton">Opprett arrangement</button>

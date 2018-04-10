@@ -8,18 +8,18 @@ import { userService } from './services';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+import { outlogged } from './app';
+
 
 
 export class UserMenu extends React.Component {
-//props for å hente verdien fra brukeren som logget inn
-constructor(props) {
-super(props);
+  //props for å hente verdien fra brukeren som logget inn
+  constructor(props) {
+    super(props);
+    //setter this.id lik verdien som ble sendt fra login.
+    this.id = props.userId;
 
-//setter this.id lik verdien som ble sendt fra login.
-this.id = props.userId;
-console.log(this.id);
-}
+  }
   render() {
     return (
       <div className="menu">
@@ -28,54 +28,50 @@ console.log(this.id);
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
-
-        <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
-
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
+        <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
 
        </ul>
        </div>
 
     );
   }
- }
+}
+// export class SignOut extends React.Component {
+//     render() {
+//     return null;
+//   }
+//   componentDidMount() {
+//     userService.signOut();
+//     outlogged();
+//   }
+// }
 
-  export class SignOut extends React.Component<{}> {
-  render() {
-    return (
-
-<div>
-
-<p>Date: <input type="text" id="datepicker"></input></p>
-
-
-</div>
-
-    )
+export function logout() {
+  userService.signOut();
+  outlogged();
   }
 
-}
-
- export class UserHome extends React.Component {
+export class UserHome extends React.Component {
     constructor(props) {
-   super(props);
-   this.user = {}
-   this.allEvents = [];
-
-   //henter id fra usermenyen og matcher den med this.id
-   this.id = props.match.params.userId;
-   console.log(this.id)
+      super(props);
+      this.user = {}
+      this.allEvents = [];
+      let signedInUser = userService.getSignedInUser();
+      console.log(signedInUser)
+      //henter id fra usermenyen og matcher den med this.id
+      this.id = props.match.params.userId;
     }
     nextPath(path) {
         this.props.history.push(path);
-      }
+    }
 
 
    render() {
 
      return (
 
-       <div style={{height: 400}} className="menu">
+       <div style={{height: 400, width: 600}} className="menu">
            <BigCalendar
              events={this.allEvents}
              showMultiDayTimes
@@ -92,6 +88,7 @@ console.log(this.id);
    };
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
+
      userService.getUsers(this.id).then((result) => {
        //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
        this.user = result;
@@ -105,13 +102,13 @@ console.log(this.id);
        this.forceUpdate();
 
      });
-   }
+
+  }
  }
 
 export class EventInfo extends React.Component {
   constructor(props) {
  super(props);
-
  this.arrangement = {};
 
  //henter id fra usermenyen og matcher den med this.id
@@ -120,18 +117,51 @@ export class EventInfo extends React.Component {
   }
   render() {
     return(
+      <div className="menu">
       <div>
-      {this.arrangement.title}
+      <h1>{this.arrangement.title} informasjon side.</h1> <br />
+      {this.start} <br />
+      </div> <br />
+      <div>
+      Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
+      Oppmøte tidspunkt: {this.show}
+      </div> <br />
+      <div style={{width: 300}}>
+      Beskrivelse: <br />
+      {this.arrangement.description}
+      </div> <br />
+
+      Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
+
 
       </div>
+
     )
   }
   componentDidMount() {
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
-
+      this.start = this.fixDate(this.arrangement.start);
+      this.end = this.fixDate(this.arrangement.end)
+      this.show = this.fixDate(this.arrangement.showTime)
       this.forceUpdate();
     })
+  }
+  fixDate(date) {
+    let day = date.getDate();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+    let hours = date.getHours();
+    if (hours < 10) {
+      hours = '0' + hours;
+    }
+    let mins = date.getMinutes();
+    if (mins < 10) {
+      mins = '0' + mins;
+    }
+
+    let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
+    return(dateTime);
   }
 }
 
@@ -140,18 +170,20 @@ export class MyPage extends React.Component {
     super(props);
     this.user = {}
     this.id= props.match.params.userId;
-
+    this.state = {
+      showchangePassword: false
+    }
+    this.updateShowState = this.updateShowState.bind(this);
+    console.log(props);
   }
-
+  updateShowState() {
+    this.setState({ showchangePassword: !this.state.showchangePassword });
+  }
   render() {
-
     return (
 
       <div>
-        <div>
-
-        </div>
-        <div className="input">
+        <div className="menu">
           <h2> {this.user.firstName} {this.user.lastName}</h2>
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
@@ -160,14 +192,18 @@ export class MyPage extends React.Component {
           <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
-          <input ref="newpassword" type="password" /> <br />
-          <input ref="verifypassword" type="password" /> <br />
-          <button ref="changepasswordbtn"> Endre passord </button>
 
-        </div>
 
-        <div>
-
+          <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
+          { this.state.showchangePassword ?
+            <div>
+              <input ref="newpassword" type="password" /> <br />
+              <input ref="verifypassword" type="password" /> <br />
+            </div>
+            :
+            null
+          }
+          <button ref="changepasswordbtn">Lagre</button>
         </div>
       </div>
     );
@@ -197,7 +233,7 @@ export class MyPage extends React.Component {
       this.refs.newpassword.value = "Passordene matcher ikke";
     }
    }
-}
+ }
 }
 
 export class ChangeUser extends React.Component {
@@ -254,8 +290,8 @@ export class ChangeUser extends React.Component {
 
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
-
-         this.forceUpdate(); // Rerender component with updated data
+          this.props.history.push('/mypage/' + this.id)
+          this.forceUpdate(); // Rerender component with updated data
         });
       });
     };
