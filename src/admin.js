@@ -5,6 +5,7 @@ import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInAdmin } from './app';
+import { logout } from './user';
 
 //admin meny
 export class AdminMenu extends React.Component {
@@ -18,18 +19,19 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
         <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
        </ul>
        </div>
     );
   }
  }
 
- export class AdminHome extends React.Component {
-constructor(props){
+export class AdminHome extends React.Component {
+  constructor(props){
   super(props);
 
-this.arrangement = {};
-this.id = props.match.params.arrangementId
+  this.arrangement = {};
+  this.id = props.match.params.arrangementId
 
 }
    render() {

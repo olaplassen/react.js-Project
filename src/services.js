@@ -86,15 +86,15 @@ class UserService {
  });
  }
 
- changePassword(password, id): Promise<user[]> {
-   return new Promise ((resolve, reject) => {
-  connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
-    if (error) throw error;
-    console.log("endring fullført")
-    resolve(result);
-  });
-});
-}
+  changePassword(password, id): Promise<user[]> {
+    return new Promise ((resolve, reject) => {
+    connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
+      if (error) throw error;
+      console.log("endring fullført")
+      resolve(result);
+        });
+      });
+    }
   // funkjson for å matche login verdier med bruker i databasen
   loginUser(username, password, callback): Promise<void> {
     return new Promise ((resolve, reject) => {
@@ -106,7 +106,7 @@ class UserService {
       if (error) throw error;
 
       console.log(result[0]);
-
+      localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       resolve(result[0]);
         });
         }
@@ -120,11 +120,11 @@ class UserService {
           });
 
         }
-          localStorage.setItem('signedInUser', JSON.stringify(result[0]));
+
       });
     });
-}
-   signOut(): void {
+  }
+  signOut() {
      localStorage.clear();
   }
 
@@ -187,7 +187,7 @@ class UserService {
     });
     }
     //funksjon for å sette confirmed=1(true) i databasen
-    confirmUser(id, callback): Promise<user[]> {
+  confirmUser(id, callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
       connection.query('UPDATE Users SET confirmed=? WHERE id=?', [true, id], (error, result) => {
         if(error) throw error;
@@ -195,9 +195,9 @@ class UserService {
         resolve(result);
       })
     });
-    }
+  }
 
-    userList(callback): Promise<user[]> {
+  userList(callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
         if (error) throw error;
@@ -205,9 +205,9 @@ class UserService {
         resolve(result);
       })
     });
-    }
+  }
 
-    searchList(input, callback): Promise<user[]> {
+  searchList(input, callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by firstName', [true, false, '%' + input + '%'], (error, result) => {
         if(error) throw error;
@@ -216,7 +216,7 @@ class UserService {
       })
     });
     }
-    getAllArrangement() {
+  getAllArrangement() {
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Arrangement', (error, result) => {
           if (error) throw error;
@@ -226,7 +226,7 @@ class UserService {
         });
       });
       }
-    getArrangementInfo(id) {
+  getArrangementInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
          if (error) throw error;
@@ -236,8 +236,6 @@ class UserService {
        });
      });
      }
-
-//concat slår sammen kolonner
 
 }
 

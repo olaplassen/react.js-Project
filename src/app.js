@@ -38,8 +38,23 @@ import {Arrangement} from './admin';
 
 
 
-
+export function outlogged(){
+  let signedInUser = userService.getSignedInUser();
+  if (signedInUser != undefined && signedInUser.admin == false) {
+    let user = {
+      userId: signedInUser.id
+    }
+    checkLogInUser(user)
+  }
+  else if (signedInUser != undefined && signedInUser.admin == true) {
+    let admin = {
+      adminId: signedInUser.id
+    }
+    checkLogInAdmin(admin)
+  }
+  else {
 ReactDOM.render((
+
   <HashRouter>
     <div>
 
@@ -57,7 +72,8 @@ ReactDOM.render((
     </div>
   </HashRouter>
 ), document.getElementById('root'));
-
+}
+}
 //ny ReactDOM som kjøres når user logger inn.
  export function checkLogInUser(user) {
   ReactDOM.render((
@@ -73,7 +89,7 @@ ReactDOM.render((
       <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventInfo/:id' component={EventInfo} />
-      
+
       </Switch>
     </div>
   </HashRouter>
@@ -98,3 +114,4 @@ export function checkLogInAdmin(admin) {
   </HashRouter>
 ), document.getElementById('root'))
 };
+outlogged();
