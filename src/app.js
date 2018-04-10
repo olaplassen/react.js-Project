@@ -73,7 +73,7 @@ ReactDOM.render((
       <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventInfo/:id' component={EventInfo} />
-
+      
       </Switch>
     </div>
   </HashRouter>

@@ -60,7 +60,7 @@ console.log(this.id);
  export class UserHome extends React.Component {
     constructor(props) {
    super(props);
-
+   this.user = {}
    this.allEvents = [];
 
    //henter id fra usermenyen og matcher den med this.id
@@ -76,24 +76,21 @@ console.log(this.id);
 
      return (
 
-
-       <div style={{height: 400}}>
+       <div style={{height: 400}} className="menu">
            <BigCalendar
              events={this.allEvents}
              showMultiDayTimes
              defaultDate={new Date(2018, 2, 1)}
              selectAble ={true}
 
-             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)
-       }
+             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
 
              />
          </div>
 
 
-     );
-
-   }
+     )
+   };
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
      userService.getUsers(this.id).then((result) => {
@@ -126,7 +123,7 @@ export class EventInfo extends React.Component {
     return(
       <div>
       {this.arrangement.title}
-      
+
       </div>
     )
   }
@@ -142,10 +139,9 @@ export class EventInfo extends React.Component {
 export class MyPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      id: props.match.params.userId,
-      user: {}
-    }
+    this.user = {}
+    this.id= props.match.params.userId;
+
   }
 
   render() {
@@ -157,13 +153,13 @@ export class MyPage extends React.Component {
 
         </div>
         <div className="input">
-          <h2> {this.state.user.firstName} {this.state.user.lastName}</h2>
-          <div> Epost: {this.state.user.email} </div>
-          <div> Mobilnummer: {this.state.user.phone} </div>
+          <h2> {this.user.firstName} {this.user.lastName}</h2>
+          <div> Epost: {this.user.email} </div>
+          <div> Mobilnummer: {this.user.phone} </div>
           <div> Fødselsdato: Lorem ipsum</div>
           <div> Medlem siden: Lorem ipsum</div>
-          <Link to={'/changeUser/' + this.state.id}>Endre opplysninger</Link>
-          <div> Brukernavn: {this.state.user.userName}</div>
+          <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
+          <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
           <input ref="newpassword" type="password" /> <br />
           <input ref="verifypassword" type="password" /> <br />
@@ -182,8 +178,8 @@ export class MyPage extends React.Component {
     userService.getUsers(this.id).then((result) => {
 
       console.log(result);
-      this.state.user = result;
-      console.log(this.state.user);
+      this.user = result;
+      console.log(this.user);
       this.forceUpdate();
     });
 
