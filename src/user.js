@@ -8,6 +8,8 @@ import { userService } from './services';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
 
+import { outlogged } from './app';
+
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
@@ -19,6 +21,7 @@ export class UserMenu extends React.Component {
     super(props);
     //setter this.id lik verdien som ble sendt fra login.
     this.id = props.userId;
+
   }
   render() {
     return (
@@ -28,10 +31,8 @@ export class UserMenu extends React.Component {
         <li className="li"><Link to ={'/userhome/' + this.id} className="link">Hjem</Link></li>
         <li className="li"><Link to ={'/mypage/' + this.id} className="link">Min side</Link></li>
         <li className="li"><Link to ={'/usersearch'} className="link">Søk</Link></li>
-
-        <li className="li"><Link to ={'/signout'} className="link">Logg ut</Link></li>
-
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
+        <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
 
        </ul>
        </div>
@@ -39,26 +40,28 @@ export class UserMenu extends React.Component {
     );
   }
 }
-export class SignOut extends React.Component<{}> {
-    render() {
-    return (
+// export class SignOut extends React.Component {
+//     render() {
+//     return null;
+//   }
+//   componentDidMount() {
+//     userService.signOut();
+//     outlogged();
+//   }
+// }
 
-      <div>
-
-      <p>Date: <input type="text" id="datepicker"></input></p>
-
-
-      </div>
-
-  )};
-}
+export function logout() {
+  userService.signOut();
+  outlogged();
+  }
 
 export class UserHome extends React.Component {
     constructor(props) {
       super(props);
       this.user = {}
       this.allEvents = [];
-
+      let signedInUser = userService.getSignedInUser();
+      console.log(signedInUser)
       //henter id fra usermenyen og matcher den med this.id
       this.id = props.match.params.userId;
     }
@@ -88,6 +91,7 @@ export class UserHome extends React.Component {
    };
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
+
      userService.getUsers(this.id).then((result) => {
        //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
        this.user = result;
@@ -101,7 +105,8 @@ export class UserHome extends React.Component {
        this.forceUpdate();
 
      });
-   }
+
+  }
  }
 
 export class EventInfo extends React.Component {
