@@ -7,6 +7,12 @@ import { userService } from './services';
 
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment'
+<<<<<<< HEAD
+=======
+
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+
+>>>>>>> f0a697f4cfe40a6a5159fd8ef4e9359fd78d8303
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
