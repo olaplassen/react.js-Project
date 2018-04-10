@@ -11,7 +11,20 @@ import { checkLogInAdmin } from './app';
 
 
 // class for navigasjons meny
+export class StartMenu extends React.Component {
+ render() {
 
+   return (
+     <div className="menu">
+      <ul className="ul">
+       <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
+       <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
+      </ul>
+      </div>
+
+   );
+ }
+}
 //
 export class Login extends React.Component {
   render() {
@@ -32,6 +45,7 @@ export class Login extends React.Component {
     );
   }
   componentDidMount() {
+    
     //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
@@ -64,7 +78,7 @@ export class Login extends React.Component {
         alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
       }
 
-      });
+    });
 
   }
 }

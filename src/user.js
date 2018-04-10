@@ -5,7 +5,12 @@ import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 import { userService } from './services';
 
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment'
 
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+
+//sdflnsdfjsdpfj
 
 export class UserMenu extends React.Component {
 //props for å hente verdien fra brukeren som logget inn
@@ -55,45 +60,88 @@ console.log(this.id);
  export class UserHome extends React.Component {
     constructor(props) {
    super(props);
-
-   this.user = {};
+   this.user = {}
+   this.allEvents = [];
 
    //henter id fra usermenyen og matcher den med this.id
    this.id = props.match.params.userId;
-   console.log(this.user)
-;   }
+   console.log(this.id)
+    }
+    nextPath(path) {
+        this.props.history.push(path);
+      }
+
 
    render() {
 
      return (
 
-       <div>
+       <div style={{height: 400}} className="menu">
+           <BigCalendar
+             events={this.allEvents}
+             showMultiDayTimes
+             defaultDate={new Date(2018, 2, 1)}
+             selectAble ={true}
 
-       <h1>Velkommen {this.user.firstName}</h1>
-       </div>
-     );
+             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
 
-   }
+             />
+         </div>
+
+
+     )
+   };
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
      userService.getUsers(this.id).then((result) => {
-       console.log(this.id);
        //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
        this.user = result;
        console.log(this.user);
        this.forceUpdate();
-     }
-   );
+     });
+     userService.getAllArrangement().then((result) => {
+       this.allEvents = result;
+       console.log(this.allEvents);
+
+       this.forceUpdate();
+
+     });
    }
  }
+
+export class EventInfo extends React.Component {
+  constructor(props) {
+ super(props);
+
+ this.arrangement = {};
+
+ //henter id fra usermenyen og matcher den med this.id
+ this.id = props.match.params.id;
+ console.log(this.id)
+  }
+  render() {
+    return(
+      <div>
+      {this.arrangement.title}
+
+      </div>
+    )
+  }
+  componentDidMount() {
+    userService.getArrangementInfo(this.id).then((result) => {
+      this.arrangement = result;
+
+      this.forceUpdate();
+    })
+  }
+}
 
 export class MyPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      id: props.match.params.userId,
-      user: {}
-    }
+    this.user = {}
+    this.id= props.match.params.userId;
+
   }
 
   render() {
@@ -105,15 +153,18 @@ export class MyPage extends React.Component {
 
         </div>
         <div className="input">
-          <h2> {this.state.user.firstName} {this.state.user.lastName}</h2>
-          <div> Epost: {this.state.user.email} </div>
-          <div> Mobilnummer: {this.state.user.phone} </div>
+          <h2> {this.user.firstName} {this.user.lastName}</h2>
+          <div> Epost: {this.user.email} </div>
+          <div> Mobilnummer: {this.user.phone} </div>
           <div> Fødselsdato: Lorem ipsum</div>
           <div> Medlem siden: Lorem ipsum</div>
-          <Link to={'/changeUser/' + this.state.id}>Endre opplysninger</Link>
-          <div> Brukernavn: {this.state.user.userName}</div>
+          <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
+          <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
-          <button> Endre passord </button>
+          <input ref="newpassword" type="password" /> <br />
+          <input ref="verifypassword" type="password" /> <br />
+          <button ref="changepasswordbtn"> Endre passord </button>
+
         </div>
 
         <div>
@@ -127,12 +178,27 @@ export class MyPage extends React.Component {
     userService.getUsers(this.id).then((result) => {
 
       console.log(result);
-      this.state.user = result;
-      console.log(this.state.user);
+      this.user = result;
+      console.log(this.user);
       this.forceUpdate();
+    });
+
+    this.refs.changepasswordbtn.onclick = () => {
+
+      if (this.refs.newpassword.value == this.refs.verifypassword.value) {
+      userService.changePassword(this.refs.newpassword.value, this.id).then((result) => {
+
+        this.refs.newpassword.value = "";
+        this.refs.verifypassword.value = "";
+         this.forceUpdate(); // Rerender component with updated data
+      });
     }
-  );
-  }
+    else {
+      this.refs.newpassword.type = "text";
+      this.refs.newpassword.value = "Passordene matcher ikke";
+    }
+   }
+}
 }
 
 export class ChangeUser extends React.Component {
@@ -159,7 +225,9 @@ export class ChangeUser extends React.Component {
       );
     }
 
-
+    nextPath(path) {
+        this.props.history.push(path);
+      }
   componentDidMount() {
 
     userService.getUsers(this.id).then((result) => {
@@ -188,16 +256,7 @@ export class ChangeUser extends React.Component {
                                  this.id).then((result) => {
         userService.getUsers(this.id).then((result) => {
 
-          this.user = result;
-          console.log(this.user)
-          this.refs.changefirstName.value = this.user.firstName;
-          this.refs.changelastName.value = this.user.lastName;
-          this.refs.changeaddress.value = this.user.address;
-          this.refs.changepostalNumber.value = this.user.postalNumber;
-          this.refs.changepoststed.value = this.user.poststed;
-          this.refs.changephone.value = this.user.phone;
-          this.refs.changeemail.value = this.user.email;
-          this.forceUpdate(); // Rerender component with updated data
+         this.forceUpdate(); // Rerender component with updated data
         });
       });
     };

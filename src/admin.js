@@ -17,6 +17,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
+        <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
        </ul>
        </div>
     );
@@ -94,15 +95,15 @@ export class ArrangementData extends React.Component {
      this.allArrangement = [];
    }
    render() {
-    var array = [];
+    let arrangementDetails = [];
      for (let arrangement of this.allArrangement) {
-       array.push(<ArrangementData data={arrangement} />);
+       arrangementDetails.push(<ArrangementData data={arrangement} />);
      }
 
       return (
 
         <div className ="menu">
-          {array}
+          {arrangementDetails}
         </div>
       );
    }
