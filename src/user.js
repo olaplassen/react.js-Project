@@ -40,15 +40,7 @@ export class UserMenu extends React.Component {
     );
   }
 }
-// export class SignOut extends React.Component {
-//     render() {
-//     return null;
-//   }
-//   componentDidMount() {
-//     userService.signOut();
-//     outlogged();
-//   }
-// }
+
 
 export function logout() {
   userService.signOut();
@@ -330,18 +322,25 @@ export class SearchUser extends React.Component {
       let userList = [];
 
       for(let user of this.allUsers) {
-        userList.push(<li key={user.id}>{user.firstName}</li>)
+        userList.push(<li key={user.id}>{user.firstName}{user.phone}</li>)
       }
 
       return (
         <div className="menu">
+        Søk på navn for å få frem tlf og epost. <br />
          <input type="text" value={this.state.value} onChange={this.handleChange} />
 
         <ul> {userList} </ul>
         </div>
       )
     }
-
+    componentDidMount() {
+        userService.userList((result) => {
+          console.log(result);
+          this.allUsers = result;
+          this.forceUpdate();
+        });
+    }
     handleChange(event) {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
@@ -356,12 +355,5 @@ export class SearchUser extends React.Component {
       }
 
     }
-    componentDidMount() {
-        userService.userList((result) => {
-          console.log(result);
-          this.allUsers = result;
-          this.forceUpdate();
-        });
 
-    }
   }
