@@ -176,7 +176,7 @@ export class MyPage extends React.Component {
 
     this.allSkills = [];
     this.yourSkills = [];
-    this.values = [];
+  
   }
   updateShowState() {
     this.setState({ showchangePassword: !this.state.showchangePassword });

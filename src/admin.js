@@ -212,21 +212,3 @@ export class NewArrangement extends React.Component {
    }
  }
 }
-//
-// export class EventPlanner extends React.component{
-//   render() {
-//     return(
-//       <div className="menu">
-//       <h2>Side for oppretting av arrangementer</h2>
-//
-//       <form>
-//         <label htmlFor="name">Navn</label>
-//         <input className="input" ref="" placeholder=""></input><br/>
-//         <label htmlFor="">Password</label>
-//         <input className="input" ref="" placeholder=""></input><br/><br/>
-//         <button className="button" ref="">Login</button> <br/>
-//
-//         </form>
-//       </div>
-//     )
-//   }
