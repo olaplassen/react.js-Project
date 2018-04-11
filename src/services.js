@@ -197,9 +197,18 @@ class UserService {
     });
   }
 
-    getInteressed(arrangementId, userId) {
+    confirmInteressed(arrangementId, userId) {
+      return new Promise((resolve, reject) => {
+        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
+          if(error) throw error;
+          resolve(result);
+        })
+      });
+    }
+
+    getInteressed(arrangementId, userId, interessed) {
       return new Promise ((resolve, reject) => {
-        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId, interessed) VALUES (?, ?, 1)', [arrangementId, userId, interessed], (error, result) => {
           if (error) throw error;
 console.log(result)
           resolve(result)
@@ -209,7 +218,7 @@ console.log(result)
 
     interessedUsers(firstName,lastName, title) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId', [firstName, lastName, title], (error, result) => {
+      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [firstName, lastName, title], (error, result) => {
         if(error) throw error;
         console.log(result);
         resolve(result);
