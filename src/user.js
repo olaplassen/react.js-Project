@@ -10,6 +10,9 @@ import moment from 'moment'
 
 import { outlogged } from './app';
 
+// Then import the virtualized Select HOC
+import VirtualizedSelect from 'react-virtualized-select'
+
 
 
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
@@ -170,11 +173,34 @@ export class MyPage extends React.Component {
     }
     this.updateShowState = this.updateShowState.bind(this);
     console.log(props);
+
+    this.allSkills = [];
+    this.yourSkills = [];
+    this.values = [];
   }
   updateShowState() {
     this.setState({ showchangePassword: !this.state.showchangePassword });
   }
+
   render() {
+    let skillList = [];
+    let yourSkillList = [];
+
+     for (let skill of this.allSkills) {
+      userService.checkUserSkill(this.user.id, skill.skillid).then((result) => {
+        if (result == undefined) {
+          skillList.push({ value: skill.skillid, label: skill.title},);
+        }
+      });
+    }
+
+    for (let yourskill of this.yourSkills) {
+         yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}</li>);
+   }
+
+
+    const {selectValue } = this.state;
+
     return (
 
       <div>
@@ -200,8 +226,47 @@ export class MyPage extends React.Component {
           }
           <button ref="changepasswordbtn">Lagre</button>
         </div>
+
+
+      <div className="menu">
+      <h1> Mine Kompetanser og kurs </h1> <br />
+      <h3> Legg til dine kurs </h3>
+
+      <VirtualizedSelect
+        autoFocus
+        clearable={true}
+        removeSelected={true}
+        multi={true}
+        options={skillList}
+        onChange={(selectValue) => this.setState({ selectValue })}
+
+        value={selectValue}
+
+
+      />
+      <button onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+
+
+      <h2>Dine Kurs</h2>
+      {yourSkillList}
+      </div>
       </div>
     );
+  }
+  registerSkills(selectValue) {
+    this.values = selectValue;
+    for (let skill of selectValue) {
+      console.log(skill.value);
+
+      userService.addSkills(skill.value, this.user.id).then((result) => {
+        userService.getYourSkills(this.user.id).then((result) => {
+          this.setState({selectValue:null})
+          this.yourSkills = result;
+          this.forceUpdate();
+        });
+      });
+    }
+
   }
   componentDidMount() {
 
@@ -211,6 +276,15 @@ export class MyPage extends React.Component {
       this.user = result;
       console.log(this.user);
       this.forceUpdate();
+    });
+    userService.getAllSkills(this.user.id).then((result) => {
+      this.allSkills = result;
+      this.forceUpdate();
+      userService.getYourSkills(this.user.id).then((result) => {
+
+        this.yourSkills = result;
+        this.forceUpdate();
+      })
     });
 
     this.refs.changepasswordbtn.onclick = () => {
@@ -228,6 +302,8 @@ export class MyPage extends React.Component {
       this.refs.newpassword.value = "Passordene matcher ikke";
     }
    }
+
+
  }
 }
 
