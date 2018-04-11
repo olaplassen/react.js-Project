@@ -10,6 +10,9 @@ import moment from 'moment';
 
 import { outlogged } from './app';
 
+// Then import the virtualized Select HOC
+import VirtualizedSelect from 'react-virtualized-select'
+
 
 
 export class UserMenu extends React.Component {
@@ -37,15 +40,7 @@ export class UserMenu extends React.Component {
     );
   }
 }
-// export class SignOut extends React.Component {
-//     render() {
-//     return null;
-//   }
-//   componentDidMount() {
-//     userService.signOut();
-//     outlogged();
-//   }
-// }
+
 
 export function logout() {
   userService.signOut();
@@ -175,11 +170,34 @@ export class MyPage extends React.Component {
     }
     this.updateShowState = this.updateShowState.bind(this);
     console.log(props);
+
+    this.allSkills = [];
+    this.yourSkills = [];
+    this.values = [];
   }
   updateShowState() {
     this.setState({ showchangePassword: !this.state.showchangePassword });
   }
+
   render() {
+    let skillList = [];
+    let yourSkillList = [];
+
+     for (let skill of this.allSkills) {
+      userService.checkUserSkill(this.user.id, skill.skillid).then((result) => {
+        if (result == undefined) {
+          skillList.push({ value: skill.skillid, label: skill.title},);
+        }
+      });
+    }
+
+    for (let yourskill of this.yourSkills) {
+         yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}</li>);
+   }
+
+
+    const {selectValue } = this.state;
+
     return (
 
       <div>
@@ -205,8 +223,47 @@ export class MyPage extends React.Component {
           }
           <button ref="changepasswordbtn">Lagre</button>
         </div>
+
+
+      <div className="menu">
+      <h1> Mine Kompetanser og kurs </h1> <br />
+      <h3> Legg til dine kurs </h3>
+
+      <VirtualizedSelect
+        autoFocus
+        clearable={true}
+        removeSelected={true}
+        multi={true}
+        options={skillList}
+        onChange={(selectValue) => this.setState({ selectValue })}
+
+        value={selectValue}
+
+
+      />
+      <button onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+
+
+      <h2>Dine Kurs</h2>
+      {yourSkillList}
+      </div>
       </div>
     );
+  }
+  registerSkills(selectValue) {
+    this.values = selectValue;
+    for (let skill of selectValue) {
+      console.log(skill.value);
+
+      userService.addSkills(skill.value, this.user.id).then((result) => {
+        userService.getYourSkills(this.user.id).then((result) => {
+          this.setState({selectValue:null})
+          this.yourSkills = result;
+          this.forceUpdate();
+        });
+      });
+    }
+
   }
   componentDidMount() {
 
@@ -216,6 +273,15 @@ export class MyPage extends React.Component {
       this.user = result;
       console.log(this.user);
       this.forceUpdate();
+    });
+    userService.getAllSkills(this.user.id).then((result) => {
+      this.allSkills = result;
+      this.forceUpdate();
+      userService.getYourSkills(this.user.id).then((result) => {
+
+        this.yourSkills = result;
+        this.forceUpdate();
+      })
     });
 
     this.refs.changepasswordbtn.onclick = () => {
@@ -233,6 +299,8 @@ export class MyPage extends React.Component {
       this.refs.newpassword.value = "Passordene matcher ikke";
     }
    }
+
+
  }
 }
 
@@ -327,18 +395,25 @@ export class SearchUser extends React.Component {
       let userList = [];
 
       for(let user of this.allUsers) {
-        userList.push(<li key={user.id}>{user.firstName}</li>)
+        userList.push(<li key={user.id}>{user.firstName}{user.phone}</li>)
       }
 
       return (
         <div className="menu">
+        Søk på navn for å få frem tlf og epost. <br />
          <input type="text" value={this.state.value} onChange={this.handleChange} />
 
         <ul> {userList} </ul>
         </div>
       )
     }
-
+    componentDidMount() {
+        userService.userList((result) => {
+          console.log(result);
+          this.allUsers = result;
+          this.forceUpdate();
+        });
+    }
     handleChange(event) {
       if (event.target.value != undefined ) {
       this.setState({value: event.target.value.toUpperCase()});
@@ -353,12 +428,5 @@ export class SearchUser extends React.Component {
       }
 
     }
-    componentDidMount() {
-        userService.userList((result) => {
-          console.log(result);
-          this.allUsers = result;
-          this.forceUpdate();
-        });
 
-    }
   }

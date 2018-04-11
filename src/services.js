@@ -245,7 +245,7 @@ console.log(result)
         resolve(result);
       })
     });
-    }
+  }
   getAllArrangement() {
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Arrangement', (error, result) => {
@@ -255,7 +255,7 @@ console.log(result)
             resolve(result)
         });
       });
-      }
+    }
   getArrangementInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
@@ -265,11 +265,52 @@ console.log(result)
            resolve(result[0])
        });
      });
-     }
+    }
+  getAllSkills(userid) {
+     return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Kompentanse', (error, result) => {
+        if (error) throw error;
 
+<<<<<<< HEAD
 //concat slår sammen kolonner
 
 }
+=======
+
+          resolve(result)
+        });
+      });
+    }
+  checkUserSkill(userid, skillid, callback) {
+      return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
+          if (error) throw error;
+
+          resolve(result[0])
+      });
+    });
+  }
+  addSkills(newSkills, userid) {
+    return new Promise ((resolve, reject) => {
+      connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
+        if(error) throw error;
+        resolve();
+      })
+    })
+
+  }
+  getYourSkills(userid, callback) {
+      return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
+          if (error) throw error;
+
+          resolve(result)
+      });
+    });
+  }
+  }
+// SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
+>>>>>>> 4b6d3020f6749cb6914b970822019228a123955f
 
 let userService = new UserService();
 export { userService };

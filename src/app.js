@@ -13,7 +13,7 @@ import { Registration } from './outlogged';
 import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
-import { ErrorMessage } from './outlogged';
+
 
 //henter classene fra users.js
 import {UserMenu} from './user';
