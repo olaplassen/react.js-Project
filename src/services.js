@@ -271,11 +271,6 @@ console.log(result)
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
 
-<<<<<<< HEAD
-//concat slår sammen kolonner
-
-}
-=======
 
           resolve(result)
         });
@@ -338,8 +333,7 @@ console.log(result)
     });
   }
 }
-// SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
->>>>>>> 4b6d3020f6749cb6914b970822019228a123955f
+
 
 let userService = new UserService();
 export { userService };
