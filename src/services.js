@@ -197,7 +197,37 @@ class UserService {
     });
   }
 
-  userList(callback): Promise<user[]> {
+    confirmInteressed(arrangementId, userId) {
+      return new Promise((resolve, reject) => {
+        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
+          if(error) throw error;
+          resolve(result);
+        })
+      });
+    }
+
+    getInteressed(arrangementId, userId, interessed) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId, interessed) VALUES (?, ?, 1)', [arrangementId, userId, interessed], (error, result) => {
+          if (error) throw error;
+console.log(result)
+          resolve(result)
+        });
+      });
+    }
+
+    interessedUsers(firstName,lastName, title) {
+      return new Promise ((resolve, reject) => {
+      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [firstName, lastName, title], (error, result) => {
+        if(error) throw error;
+        console.log(result);
+        resolve(result);
+      })
+    });
+    }
+
+
+    userList(callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
       connection.query('SELECT id, firstName, lastName FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
         if (error) throw error;
@@ -241,6 +271,11 @@ class UserService {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
 
+<<<<<<< HEAD
+//concat slår sammen kolonner
+
+}
+=======
 
           resolve(result)
         });
@@ -304,6 +339,7 @@ class UserService {
   }
 }
 // SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
+>>>>>>> 4b6d3020f6749cb6914b970822019228a123955f
 
 let userService = new UserService();
 export { userService };

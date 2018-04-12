@@ -6,7 +6,7 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 
 import BigCalendar from 'react-big-calendar'
-import moment from 'moment'
+import moment from 'moment';
 
 import { outlogged } from './app';
 
@@ -15,9 +15,6 @@ import VirtualizedSelect from 'react-virtualized-select'
 
 
 
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
-
-//sdflnsdfjsdpfj
 export class UserMenu extends React.Component {
   //props for å hente verdien fra brukeren som logget inn
   constructor(props) {

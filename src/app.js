@@ -34,6 +34,7 @@ import {ConfirmUsers} from './admin';
 import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 import {Arrangement} from './admin';
+import {ConfirmInteressedUsers} from './admin';
 
 
 
@@ -107,7 +108,7 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
-
+         <Route exact path='/interesserte' component={ConfirmInteressedUsers} />
 
       </Switch>
     </div>
