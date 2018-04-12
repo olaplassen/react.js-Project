@@ -236,7 +236,7 @@ class UserService {
        });
      });
     }
-  getAllSkills(userid) {
+  getAllSkills() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
@@ -246,6 +246,17 @@ class UserService {
         });
       });
     }
+
+    getSkill(skillid) {
+       return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
+          if (error) throw error;
+
+
+            resolve(result[0])
+          });
+        });
+      }
   checkUserSkill(userid, skillid, callback) {
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
@@ -254,6 +265,15 @@ class UserService {
           resolve(result[0])
       });
     });
+  }
+  addSkillswithDate(newSkills, userid, date) {
+    return new Promise ((resolve, reject) => {
+      connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
+        if(error) throw error;
+        resolve();
+      })
+    })
+
   }
   addSkills(newSkills, userid) {
     return new Promise ((resolve, reject) => {
@@ -273,7 +293,16 @@ class UserService {
       });
     });
   }
+  getSkillInfo(skillid, callback) {
+    return new Promise ((resolve, callback) => {
+      connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
+        if(error) throw error;
+
+        resolve(result[0])
+      });
+    });
   }
+}
 // SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
 
 let userService = new UserService();
