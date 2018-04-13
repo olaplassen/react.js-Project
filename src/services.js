@@ -317,7 +317,7 @@ console.log(result)
     });
   }
   }
-// SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
+
 
 
 let userService = new UserService();
