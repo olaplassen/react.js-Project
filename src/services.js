@@ -38,7 +38,7 @@ class UserService {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
       if (error) throw error;
-
+     console.log(result)
       resolve(result[0]);
     });
   });
@@ -131,7 +131,7 @@ class UserService {
    getSignedInUser() {
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
-
+     console.log(item)
      return JSON.parse(item);
    }
 
@@ -216,16 +216,24 @@ console.log(result)
       });
     }
 
-    interessedUsers(firstName,lastName, title) {
+    interessedUsers(userId, arrangementId,firstName,lastName, title) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [firstName, lastName, title], (error, result) => {
+      connection.query('SELECT Users.id, Arrangement.id, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
         if(error) throw error;
         console.log(result);
         resolve(result);
       })
     });
     }
-
+   getInteressedUsers (userId, arrangementId){
+     return new Promise ((resolve, reject) => {
+       connection.query('SELECT userId, arrangementId FROM Interessert WHERE interessed="1"', [userId, arrangementId],(error, result) => {
+        if(error) throw error;
+        console.log(result)
+        resolve(result)
+       })
+     });
+   }
 
     userList(callback): Promise<user[]> {
       return new Promise ((resolve, reject) => {
@@ -271,11 +279,11 @@ console.log(result)
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
 
-<<<<<<< HEAD
+
 //concat slår sammen kolonner
 
-}
-=======
+
+
 
           resolve(result)
         });
@@ -310,7 +318,7 @@ console.log(result)
   }
   }
 // SELECT * FROM Skills, user_skills WHERE user_skills.skillid = Skills.skillid AND user_skills.userid = ?
->>>>>>> 4b6d3020f6749cb6914b970822019228a123955f
+
 
 let userService = new UserService();
 export { userService };

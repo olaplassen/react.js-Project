@@ -12,7 +12,7 @@ import { outlogged } from './app';
 
 // Then import the virtualized Select HOC
 import VirtualizedSelect from 'react-virtualized-select'
-
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
 
 export class UserMenu extends React.Component {
