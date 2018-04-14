@@ -263,15 +263,17 @@ getArrangementInfo(id) {
          });
        });
     }
-     });
-    }
-  getAllSkills(userid) {
+
+getAllSkills(userid) {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
 
+        resolve(result)
+      });
+    });
+ }
 
-//concat slår sammen kolonner
 
 getSkill(skillid) {
        return new Promise ((resolve, reject) => {
@@ -320,6 +322,7 @@ getSkillInfo(skillid, callback) {
       });
     });
   }
+}
 
 
 
