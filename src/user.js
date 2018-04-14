@@ -310,7 +310,7 @@ export class MyPage extends React.Component {
 
 
       if(this.dateRef.value != undefined && this.testSkill.duration != 0) {
-      userService.addSkills(skill.value, this.user.id, this.dateRef.value).then((result) => {
+      userService.addSkillswithDate(skill.value, this.user.id, this.dateRef.value).then((result) => {
 
         userService.getYourSkills(this.user.id).then((result) => {
           this.setState({selectValue:null})
