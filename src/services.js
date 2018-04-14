@@ -259,7 +259,7 @@ console.log(result)
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Arrangement', (error, result) => {
           if (error) throw error;
-          
+
 
             resolve(result)
         });
