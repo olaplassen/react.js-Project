@@ -203,16 +203,13 @@ export class MyPage extends React.Component {
         else {
           ref ++;
           this.dateRef = ref;
-          this.dateInputList.push(<tr key={ skill.value} ><td> { skill.label }, Legg til utløpsdato: </td><td><input ref={(ref) => this.dateRef = ref} type='date' /></td></tr>);
+          this.dateInputList.push(<tr key={ skill.value} ><td> { skill.label } </td><td>, Legg til utløpsdato:<input ref={(ref) => this.dateRef = ref} type='date' /></td></tr>);
 
         }
-
-
         this.forceUpdate()
-      });
-
+        });
+      }
     }
-  }
 
   render() {
     let skillList = [];
@@ -345,7 +342,7 @@ export class MyPage extends React.Component {
       this.user = result;
       console.log(this.user);
       this.forceUpdate();
-    });
+      });
     userService.getAllSkills().then((result) => {
       this.allSkills = result;
       this.forceUpdate();
@@ -364,16 +361,14 @@ export class MyPage extends React.Component {
         this.refs.newpassword.value = "";
         this.refs.verifypassword.value = "";
          this.forceUpdate(); // Rerender component with updated data
-      });
-    }
+       });
+     }
     else {
       this.refs.newpassword.type = "text";
       this.refs.newpassword.value = "Passordene matcher ikke";
+      }
     }
-   }
-
-
- }
+  }
 }
 
 export class ChangeUser extends React.Component {
@@ -465,26 +460,61 @@ export class SearchUser extends React.Component {
     }
     render() {
       let userList = [];
-
+      let signedInUser = userService.getSignedInUser();
+      console.log(signedInUser.admin)
+      if(signedInUser.admin == 0) {
       for(let user of this.allUsers) {
-        userList.push(<li key={user.id}>{user.firstName}{user.phone}</li>)
-      }
+        userList.push(<tr key={user.id}><td>{user.firstName} {user.lastName}</td> <td>{user.phone}</td> <td>{user.email}</td></tr>)
 
+        }
+      }
+      else if(signedInUser.admin = 1) {
+        for(let user of this.allUsers) {
+          userList.push(<tr key={user.id}><td>{user.id}</td> <td><Link to={'/mypage/' + user.id }>{user.firstName} {user.lastName}</Link></td> <td>{user.address}</td> <td>{user.phone}</td> <td>Epost: {user.email}</td></tr>)
+
+          }
+      }
+      if (signedInUser.admin == 1) {
       return (
+
+
+
         <div className="menu">
         Søk på navn for å få frem tlf og epost. <br />
          <input type="text" value={this.state.value} onChange={this.handleChange} />
 
-        <ul> {userList} </ul>
+         <table>
+               <tbody>
+                <tr><th>Medlemsnummer</th><th>Navn</th><th>Adresse</th><th>Telfon</th><th>Email</th></tr>
+                 {userList}
+               </tbody>
+         </table>
         </div>
+        )
+        }
+        else {
+          return (
+          <div className="menu">
+          Søk på navn for å få frem tlf og epost. <br />
+           <input type="text" value={this.state.value} onChange={this.handleChange} />
+
+           <table>
+                 <tbody>
+                  <tr><th>Navn</th><th>Telfon</th><th>Email</th></tr>
+                   {userList}
+                 </tbody>
+           </table>
+          </div>
+
       )
     }
+    }
     componentDidMount() {
-        userService.userList((result) => {
-          console.log(result);
-          this.allUsers = result;
-          this.forceUpdate();
-        });
+      userService.userList().then((result) => {
+
+        this.allUsers = result;
+        this.forceUpdate();
+      });
     }
     handleChange(event) {
       if (event.target.value != undefined ) {
@@ -493,7 +523,7 @@ export class SearchUser extends React.Component {
 
       userService.searchList(event.target.value).then ((result) => {
 
-        console.log(result);
+
         this.allUsers = result;
         this.forceUpdate();
         });

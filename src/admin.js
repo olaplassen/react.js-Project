@@ -7,6 +7,7 @@ import { userService } from './services';
 import { checkLogInAdmin } from './app';
 import { logout } from './user';
 
+
 //admin meny
 export class AdminMenu extends React.Component {
   render() {
@@ -19,6 +20,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
         <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/adminsearch'} className="link">BrukerSøk</Link></li>
         <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
        </ul>
        </div>
@@ -299,21 +301,3 @@ export class NewArrangement extends React.Component {
    }
  }
 }
-//
-// export class EventPlanner extends React.component{
-//   render() {
-//     return(
-//       <div className="menu">
-//       <h2>Side for oppretting av arrangementer</h2>
-//
-//       <form>
-//         <label htmlFor="name">Navn</label>
-//         <input className="input" ref="" placeholder=""></input><br/>
-//         <label htmlFor="">Password</label>
-//         <input className="input" ref="" placeholder=""></input><br/><br/>
-//         <button className="button" ref="">Login</button> <br/>
-//
-//         </form>
-//       </div>
-//     )
-//   }
