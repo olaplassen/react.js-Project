@@ -131,7 +131,7 @@ class UserService {
  getSignedInUser() {
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
-     console.log(item)
+
      return JSON.parse(item);
    }
 
@@ -259,7 +259,7 @@ console.log(result)
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Arrangement', (error, result) => {
           if (error) throw error;
-          console.log(result);
+          
 
             resolve(result)
         });
