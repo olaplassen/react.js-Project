@@ -128,12 +128,13 @@ class UserService {
      localStorage.clear();
   }
 
-   getSignedInUser() {
+ getSignedInUser() {
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
      console.log(item)
      return JSON.parse(item);
    }
+
 
   getPoststed(postnr, callback): Promise<user[]> {
     return new Promise ((resolve, reject) => {
@@ -218,7 +219,7 @@ console.log(result)
 
     interessedUsers(userId, arrangementId,firstName,lastName, title) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT Users.id, Arrangement.id, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
+      connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
         if(error) throw error;
         console.log(result);
         resolve(result);

@@ -161,7 +161,8 @@ console.log(this.state.currentArrangementId)
      let interessedList = [];
 
      for(let interessed of this.allInteressed) {
-       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(this.state.currentUserId, this.state.currentArrangementId)}>Godkjenn</button> </li>)
+       console.log("Alle interesserte: " + interessed.userId);
+       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(interessed.arrangementId, interessed.userId)}>Godkjenn</button> </li>)
      }
 return (
   <div className="menu">
@@ -172,15 +173,11 @@ return (
    }
 
    confirmInteressed(arrangementId, userId){
-       userService.getInteressedUsers().arrangementId,
-       userService.getInteressedUsers().userId
-       this.state.currentArrangementId = arrangementId;
-       this.state.currentUserId = userId;
-       console.log(this.state.currentArrangementId)
-       console.log(this.state.currentUserId)
-
-       userService.confirmInteressed(arrangementId, userId).then((result) => {
-
+    this.state.arrangementId = arrangementId;
+    this.state.userId = userId;
+    console.log(userId)
+    console.log(arrangementId)
+     userService.confirmInteressed(arrangementId, userId).then((result) => {
        this.forceUpdate();
      })
    }
@@ -188,14 +185,18 @@ return (
 componentDidMount(){
     userService.interessedUsers().then((result) => {
     this.allInteressed = result;
-    console.log(result)
     this.forceUpdate();
   });
+  userService.getInteressedUsers().then((result => {
+    let userId = result[0].userId;
+    let arrangementId = result[0].arrangementId;
+
   this.setState({
-    currentArrangementId: userService.getInteressedUsers().arrangementId,
-    currentUserId: userService.getInteressedUsers().userId
+    currentArrangementId: arrangementId,
+    currentUserId: userId
 
   });
+}));
  userService.getInteressedUsers().then((result) => {
 
    this.forceUpdate();
