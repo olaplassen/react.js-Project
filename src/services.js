@@ -38,7 +38,7 @@ getUsers(id, callback): Promise<user[]> {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
       if (error) throw error;
-
+     console.log(result)
       resolve(result[0]);
     });
   });
@@ -118,7 +118,7 @@ signOut() {
 getSignedInUser() {
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
-
+     console.log(item)
      return JSON.parse(item);
    }
 
@@ -204,15 +204,24 @@ getInteressed(arrangementId, userId, interessed) {
       });
     }
 
-interessedUsers(firstName,lastName, title) {
+interessedUsers(userId, arrangementId,firstName,lastName, title) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [firstName, lastName, title], (error, result) => {
+      connection.query('SELECT Users.id, Arrangement.id, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
         if(error) throw error;
         console.log(result);
         resolve(result);
-          })
-        });
-      }
+      })
+    });
+    }
+getInteressedUsers (userId, arrangementId){
+     return new Promise ((resolve, reject) => {
+       connection.query('SELECT userId, arrangementId FROM Interessert WHERE interessed="1"', [userId, arrangementId],(error, result) => {
+        if(error) throw error;
+        console.log(result)
+        resolve(result)
+       })
+     });
+   }
 
 userList(callback) {
       return new Promise ((resolve, reject) => {
@@ -253,31 +262,27 @@ getArrangementInfo(id) {
            resolve(result[0])
          });
        });
-      }
-
-getAllSkills() {
+    }
+     });
+    }
+  getAllSkills(userid) {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
 
 
-          resolve(result)
-        });
-      });
-    }
+//concat slår sammen kolonner
 
 getSkill(skillid) {
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
           if (error) throw error;
 
-
-            resolve(result[0])
-          });
+          resolve(result)
         });
-      }
-
-checkUserSkill(userid, skillid, callback) {
+      });
+    }
+  checkUserSkill(userid, skillid, callback) {
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
           if (error) throw error;
@@ -286,18 +291,7 @@ checkUserSkill(userid, skillid, callback) {
       });
     });
   }
-
-addSkillswithDate(newSkills, userid, date) {
-    return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
-        if(error) throw error;
-        resolve();
-      })
-    })
-
-  }
-
-addSkills(newSkills, userid) {
+  addSkills(newSkills, userid) {
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
         if(error) throw error;
@@ -326,7 +320,7 @@ getSkillInfo(skillid, callback) {
       });
     });
   }
-}
+
 
 
 let userService = new UserService();

@@ -63,10 +63,11 @@ export class ArrangementData extends React.Component {
     super(props);
 
     this.state = {
-      showArrangementData: false
+      showArrangementData: false,
+      activeUser: null
     }
     this.updateShowState = this.updateShowState.bind(this);
-    console.log(props);
+    console.log(this.state.activeUser);
   }
   updateShowState() {
     this.setState({ showArrangementData: !this.state.showArrangementData });
@@ -75,7 +76,7 @@ export class ArrangementData extends React.Component {
 
     return(
       <div>
-    {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id)}>Interessert</button>
+    {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
       { this.state.showArrangementData ?
         <div>
           <ul>
@@ -92,14 +93,19 @@ export class ArrangementData extends React.Component {
       </div>
     );
   }
-  getInteressed(arrangementId, userId, interessed){
-    userId = 21;
-    interessed = 1;
-    console.log(userId)
-    this.props.data.id = arrangementId;
-    console.log(this.props.data.id)
+  componentDidMount(){
+    this.setState({
+      activeUser: userService.getSignedInUser()["id"]
+    });
+
+  }
+
+
+  getInteressed(arrangementId, userId){
+    this.state.activeUser = userId;
+    console.log(this.state.activeUser)
     userService.getInteressed(arrangementId, userId).then((result) => {
-    console.log(result)
+
       this.forceUpdate();
     })
   }
@@ -115,7 +121,7 @@ export class ArrangementData extends React.Component {
     let arrangementDetails = [];
 
     for (let arrangement of this.allArrangement) {
-       arrangementDetails.push(<ArrangementData data={arrangement} />);
+       arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
      }
 
       return (
@@ -145,13 +151,19 @@ componentDidMount(){
      super(props);
      this.allInteressed = [];
      console.log(props)
+     this.state = {
+       currentUserId: null,
+       currentArrangementId: null
+     }
+console.log(this.state.currentUserId)
+console.log(this.state.currentArrangementId)
    }
 
    render() {
      let interessedList = [];
 
      for(let interessed of this.allInteressed) {
-       interessedList.push(<li key={interessed.userId}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed()}>Godkjenn</button> </li>)
+       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(this.state.currentUserId, this.state.currentArrangementId)}>Godkjenn</button> </li>)
      }
 return (
   <div className="menu">
@@ -160,22 +172,40 @@ return (
   </div>
 );
    }
+
    confirmInteressed(arrangementId, userId){
-      interessed.userId = userId;
-     arrangementId = 9;
-     console.log(userId)
-     userService.confirmInteressed(arrangementId, userId).then((result) => {
+       userService.getInteressedUsers().arrangementId,
+       userService.getInteressedUsers().userId
+       this.state.currentArrangementId = arrangementId;
+       this.state.currentUserId = userId;
+       console.log(this.state.currentArrangementId)
+       console.log(this.state.currentUserId)
+
+       userService.confirmInteressed(arrangementId, userId).then((result) => {
+
        this.forceUpdate();
      })
    }
 
 componentDidMount(){
-  userService.interessedUsers().then((result) => {
+    userService.interessedUsers().then((result) => {
     this.allInteressed = result;
     console.log(result)
     this.forceUpdate();
   });
-}
+  this.setState({
+    currentArrangementId: userService.getInteressedUsers().arrangementId,
+    currentUserId: userService.getInteressedUsers().userId
+
+  });
+ userService.getInteressedUsers().then((result) => {
+
+   this.forceUpdate();
+ });
+
+  }
+
+
  }
 // komponent for å godkjenne brukere
 export class ConfirmUsers extends React.Component {
