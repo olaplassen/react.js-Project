@@ -302,15 +302,23 @@ getSkill(skillid) {
       });
     });
   }
-  addSkills(newSkills, userid) {
+addSkills(newSkills, userid) {
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
         if(error) throw error;
         resolve();
-      })
-    })
-
+      });
+    });
   }
+
+  addSkillswithDate(newSkills, userid, date) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
+          if(error) throw error;
+          resolve();
+        });
+      });
+    }
 
 getYourSkills(userid, callback) {
       return new Promise ((resolve, reject) => {
