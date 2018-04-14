@@ -108,6 +108,9 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/arrangementer' component={Arrangement} />
          <Route exact path='/interesserte' component={ConfirmInteressedUsers} />
          <Route exact path='/adminsearch' component={SearchUser} />
+         <Route exact path='/mypage/:userId' component={MyPage} />
+         <Route exact path='/changeUser/:userId' component={ChangeUser} />
+         <Route exact path='/eventInfo/:id' component={EventInfo} />
 
       </Switch>
     </div>

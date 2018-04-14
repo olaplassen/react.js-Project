@@ -6,8 +6,14 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInAdmin } from './app';
 import { logout } from './user';
+import { EventInfo } from './user';
 
 
+import BigCalendar from 'react-big-calendar'
+import moment from 'moment';
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+
+import VirtualizedSelect from 'react-virtualized-select'
 //admin meny
 export class AdminMenu extends React.Component {
   render() {
@@ -31,31 +37,37 @@ export class AdminMenu extends React.Component {
 export class AdminHome extends React.Component {
   constructor(props){
   super(props);
-
+  this.allEvents = [];
   this.arrangement = {};
   this.id = props.match.params.arrangementId
-
-}
+  }
    render() {
 
      return (
-       <div className="menu">
-       <h2> {this.arrangement.description}</h2>
-       </div>
+       <div style={{height: 400, width: 600}} className="menu">
+           <BigCalendar
+             events={this.allEvents}
+             showMultiDayTimes
+             defaultDate={new Date(2018, 2, 1)}
+             selectAble ={true}
+
+             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
+
+             />
+         </div>
 
      );
    }
    componentDidMount(){
+     userService.getAllArrangement().then((result) => {
+       this.allEvents = result;
+       console.log(this.allEvents);
 
-  userService.getArrangement().then((result) => {
-   this.arrangement = result;
-   this.forceUpdate();
-   console.log(this.arrangement)
+       this.forceUpdate();
 
+     });
+  }
 }
-);
- }
-   }
 
 
 export class ArrangementData extends React.Component {
@@ -111,7 +123,7 @@ export class ArrangementData extends React.Component {
   }
 }
 
- export class Arrangement extends React.Component {
+export class Arrangement extends React.Component {
    constructor(){
      super();
      this.allArrangement = [];
@@ -131,22 +143,20 @@ export class ArrangementData extends React.Component {
         </div>
       );
    }
-componentDidMount(){
-  userService.getArrangement().then((result) => {
-    this.allArrangement = result;
-    this.forceUpdate();
-
-  });
-  userService.interessedUsers().then((result) => {
-    this.allInteressed = result;
-    console.log(result)
-    this.forceUpdate();
-  });
+   componentDidMount(){
+     userService.getArrangement().then((result) => {
+       this.allArrangement = result;
+       this.forceUpdate();
+     });
+     userService.interessedUsers().then((result) => {
+       this.allInteressed = result;
+       console.log(result)
+       this.forceUpdate();
+     });
+   }
 }
 
-}
-
- export class ConfirmInteressedUsers extends React.Component {
+export class ConfirmInteressedUsers extends React.Component {
    constructor(props) {
      super(props);
      this.allInteressed = [];
@@ -155,8 +165,6 @@ componentDidMount(){
        currentUserId: null,
        currentArrangementId: null
      }
-console.log(this.state.currentUserId)
-console.log(this.state.currentArrangementId)
    }
 
    render() {
@@ -165,12 +173,12 @@ console.log(this.state.currentArrangementId)
      for(let interessed of this.allInteressed) {
        interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(this.state.currentUserId, this.state.currentArrangementId)}>Godkjenn</button> </li>)
      }
-return (
-  <div className="menu">
-  <h3> Interesserte brukere: </h3>
-  <ul> {interessedList} </ul>
-  </div>
-);
+     return (
+       <div className="menu">
+       <h3> Interesserte brukere: </h3>
+       <ul> {interessedList} </ul>
+       </div>
+     );
    }
 
    confirmInteressed(arrangementId, userId){
@@ -187,26 +195,23 @@ return (
      })
    }
 
-componentDidMount(){
+   componentDidMount(){
     userService.interessedUsers().then((result) => {
     this.allInteressed = result;
     console.log(result)
     this.forceUpdate();
-  });
-  this.setState({
-    currentArrangementId: userService.getInteressedUsers().arrangementId,
-    currentUserId: userService.getInteressedUsers().userId
+    });
+    this.setState({
+      currentArrangementId: userService.getInteressedUsers().arrangementId,
+      currentUserId: userService.getInteressedUsers().userId
 
-  });
- userService.getInteressedUsers().then((result) => {
+    });
+    userService.getInteressedUsers().then((result) => {
 
-   this.forceUpdate();
- });
-
+      this.forceUpdate();
+    });
   }
-
-
- }
+}
 // komponent for å godkjenne brukere
 export class ConfirmUsers extends React.Component {
   constructor() {
@@ -214,10 +219,12 @@ export class ConfirmUsers extends React.Component {
     this.allUnConformed = [];
   }
   render() {
+    let signedInUser = userService.getSignedInUser()
+    console.log(signedInUser.admin)
     let unConfirmedList = []; // array for å skrive ut alle brukere som ikke er godkjent
     //her pushes alle ikke godkjente brukere inn i arrayen.
     for(let unConfirmed of this.allUnConformed ) {
-      unConfirmedList.push(<li key={unConfirmed.id}>{unConfirmed.firstName + " " + unConfirmed.lastName + " " +  unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
+      unConfirmedList.push(<li key={unConfirmed.id}><Link to={'/mypage/' + unConfirmed.id }>{unConfirmed.firstName} {unConfirmed.lastName}</Link> {unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
     }
 
     return (
@@ -260,10 +267,21 @@ export class ConfirmUsers extends React.Component {
 
 
 export class NewArrangement extends React.Component {
- render() {
+  constructor(props){
+    super(props);
+    this.state = {};
+    this.allMals = [];
+    this.lastArr = [];
+  }
+  render() {
+    let vaktmalList = [];
 
-// registrerings skjemaet som skrives ut under registrerings komponenten
-   return (
+    for (let vaktmal of this.allMals) {
+         vaktmalList.push({ value: vaktmal.vaktmalId, label: vaktmal.vaktmalTittel},);
+       }
+    const {selectValue } = this.state;
+
+    return (
      <div className="menu">
      <form>
      <input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input><br/>
@@ -273,30 +291,54 @@ export class NewArrangement extends React.Component {
      Oppmøte tidspunkt: <input type='datetime-local' ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br/>
      Start tidspunkt: <input type='datetime-local' ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
      Slutt tidspunkt: <input type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     <VirtualizedSelect
+       autoFocus
+       clearable={true}
+       removeSelected={false}
+       multi={false}
+       options={vaktmalList}
+       onChange={(selectValue) => this.setState({ selectValue })}
+
+       value={selectValue}
+
+
+     />
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
-     <button className="button" ref="newArrButton">Opprett arrangement</button>
+     <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue)}>Opprett arrangement</button>
      </form>
      </div>
    );
  }
+ registerArrangement(selectValue) {
+   let selectedMal = selectValue;
+   userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
+                               this.refs.arrContactPerson.value, this.refs.arrShowTime.value, this.refs.arrStartTime.value,
+                               this.refs.arrEndTime.value, this.refs.arrGearList.value, selectValue.value).then((result) => {
+
+                                 this.refs.arrName.value ="";
+                                 this.refs.arrDescription.value ="";
+                                 this.refs.arrMeetingLocation.value ="";
+                                 this.refs.arrContactPerson.value ="";
+                                 this.refs.arrShowTime.value ="";
+                                 this.refs.arrStartTime.value ="";
+                                 this.refs.arrEndTime.value ="";
+                                 this.refs.arrGearList.value ="";
+
+                               });
+    userService.getLastArrangement().then((result) => {
+      this.lastArr = result;
+      this.props.history.push('/eventinfo/' + this.lastArr.id);
+      this.forceUpdate();
+
+    })
+ }
 
  componentDidMount() {
-   this.refs.newArrButton.onclick = () =>{
-     userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
-                                 this.refs.arrContactPerson.value, this.refs.arrShowTime.value, this.refs.arrStartTime.value,
-                                 this.refs.arrEndTime.value, this.refs.arrGearList.value).then((result) => {
-
-                                   this.refs.arrName.value ="";
-                                   this.refs.arrDescription.value ="";
-                                   this.refs.arrMeetingLocation.value ="";
-                                   this.refs.arrContactPerson.value ="";
-                                   this.refs.arrShowTime.value ="";
-                                   this.refs.arrStartTime.value ="";
-                                   this.refs.arrEndTime.value ="";
-                                   this.refs.arrGearList.value ="";
-                                   this.nextPath('/hjem');
-                                 });
-   }
- }
+  userService.getVaktmal().then((result) => {
+    this.allMals = result;
+    console.log(result)
+    this.forceUpdate();
+  });
+  }
 }
