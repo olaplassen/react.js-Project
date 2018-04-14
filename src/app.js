@@ -22,9 +22,6 @@ import {MyPage} from './user';
 import {ChangeUser} from './user';
 import {SearchUser} from './user';
 import {EventInfo} from './user';
-
-
-
 import {SignOut} from './user';
 
 
@@ -35,6 +32,7 @@ import {AdminHome} from './admin';
 import {NewArrangement} from './admin';
 import {Arrangement} from './admin';
 import {ConfirmInteressedUsers} from './admin';
+
 
 
 
@@ -109,6 +107,7 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
          <Route exact path='/interesserte' component={ConfirmInteressedUsers} />
+         <Route exact path='/adminsearch' component={SearchUser} />
 
       </Switch>
     </div>
