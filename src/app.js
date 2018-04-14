@@ -111,7 +111,7 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />
          <Route exact path='/eventInfo/:id' component={EventInfo} />
-
+        
       </Switch>
     </div>
   </HashRouter>

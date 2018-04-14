@@ -372,15 +372,7 @@ getRolesForMal(vaktmalid, callback) {
     })
   })
 }
-getRoleInfo(roleid, callback) {
-    return new Promise ((resolve, callback) => {
-      connection.query('SELECT * FROM Role WHERE roleid = ?', [roleid], (error, result) => {
-        if(error) throw error;
 
-        resolve(result)
-      });
-    });
-  }
 
 }
 

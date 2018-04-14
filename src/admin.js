@@ -298,10 +298,7 @@ export class NewArrangement extends React.Component {
        multi={false}
        options={vaktmalList}
        onChange={(selectValue) => this.setState({ selectValue })}
-
        value={selectValue}
-
-
      />
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
