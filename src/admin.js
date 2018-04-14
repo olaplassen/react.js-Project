@@ -7,6 +7,7 @@ import { userService } from './services';
 import { checkLogInAdmin } from './app';
 import { logout } from './user';
 
+
 //admin meny
 export class AdminMenu extends React.Component {
   render() {
@@ -19,6 +20,7 @@ export class AdminMenu extends React.Component {
         <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
         <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
         <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
+        <li className="li"><Link to ={'/adminsearch'} className="link">BrukerSøk</Link></li>
         <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
        </ul>
        </div>
@@ -59,11 +61,13 @@ export class AdminHome extends React.Component {
 export class ArrangementData extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      showArrangementData: false
+      showArrangementData: false,
+      activeUser: null
     }
     this.updateShowState = this.updateShowState.bind(this);
-    console.log(props);
+    console.log(this.state.activeUser);
   }
   updateShowState() {
     this.setState({ showArrangementData: !this.state.showArrangementData });
@@ -72,7 +76,7 @@ export class ArrangementData extends React.Component {
 
     return(
       <div>
-      Les mer om <button type="button" onClick={this.updateShowState}>{this.props.data.description}</button>
+    {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
       { this.state.showArrangementData ?
         <div>
           <ul>
@@ -89,17 +93,35 @@ export class ArrangementData extends React.Component {
       </div>
     );
   }
+  componentDidMount(){
+    this.setState({
+      activeUser: userService.getSignedInUser()["id"]
+    });
+
+  }
+
+
+  getInteressed(arrangementId, userId){
+    this.state.activeUser = userId;
+    console.log(this.state.activeUser)
+    userService.getInteressed(arrangementId, userId).then((result) => {
+
+      this.forceUpdate();
+    })
+  }
 }
 
  export class Arrangement extends React.Component {
    constructor(){
      super();
      this.allArrangement = [];
+
    }
    render() {
     let arrangementDetails = [];
-     for (let arrangement of this.allArrangement) {
-       arrangementDetails.push(<ArrangementData data={arrangement} />);
+
+    for (let arrangement of this.allArrangement) {
+       arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
      }
 
       return (
@@ -115,7 +137,73 @@ componentDidMount(){
     this.forceUpdate();
 
   });
+  userService.interessedUsers().then((result) => {
+    this.allInteressed = result;
+    console.log(result)
+    this.forceUpdate();
+  });
 }
+
+}
+
+ export class ConfirmInteressedUsers extends React.Component {
+   constructor(props) {
+     super(props);
+     this.allInteressed = [];
+     console.log(props)
+     this.state = {
+       currentUserId: null,
+       currentArrangementId: null
+     }
+console.log(this.state.currentUserId)
+console.log(this.state.currentArrangementId)
+   }
+
+   render() {
+     let interessedList = [];
+
+     for(let interessed of this.allInteressed) {
+       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(this.state.currentUserId, this.state.currentArrangementId)}>Godkjenn</button> </li>)
+     }
+return (
+  <div className="menu">
+  <h3> Interesserte brukere: </h3>
+  <ul> {interessedList} </ul>
+  </div>
+);
+   }
+
+   confirmInteressed(arrangementId, userId){
+       userService.getInteressedUsers().arrangementId,
+       userService.getInteressedUsers().userId
+       this.state.currentArrangementId = arrangementId;
+       this.state.currentUserId = userId;
+       console.log(this.state.currentArrangementId)
+       console.log(this.state.currentUserId)
+
+       userService.confirmInteressed(arrangementId, userId).then((result) => {
+
+       this.forceUpdate();
+     })
+   }
+
+componentDidMount(){
+    userService.interessedUsers().then((result) => {
+    this.allInteressed = result;
+    console.log(result)
+    this.forceUpdate();
+  });
+  this.setState({
+    currentArrangementId: userService.getInteressedUsers().arrangementId,
+    currentUserId: userService.getInteressedUsers().userId
+
+  });
+ userService.getInteressedUsers().then((result) => {
+
+   this.forceUpdate();
+ });
+
+  }
 
 
  }
