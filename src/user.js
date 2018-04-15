@@ -82,19 +82,10 @@ export class UserHome extends React.Component {
    };
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
-
-     userService.getUsers(this.id).then((result) => {
-       //setter resultate fra spørringen lik this.user slik at vi får all informasjon om brukeren
-       this.user = result;
-       console.log(this.user);
-       this.forceUpdate();
-     });
      userService.getAllArrangement().then((result) => {
        this.allEvents = result;
        console.log(this.allEvents);
-
        this.forceUpdate();
-
      });
 
   }

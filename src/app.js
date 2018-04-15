@@ -87,7 +87,7 @@ ReactDOM.render((
       <Route exact path='/usersearch' component={SearchUser} />
       <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
-      <Route exact path='/eventInfo/:id' component={EventInfo} />
+      <Route exact path='/eventinfo/:id' component={EventInfo} />
       <UserHome userId={user.userId} />
       </Switch>
     </div>
@@ -110,8 +110,8 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/adminsearch' component={SearchUser} />
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />
-         <Route exact path='/eventInfo/:id' component={EventInfo} />
-        
+         <Route exact path='/eventinfo/:id' component={EventInfo} />
+
       </Switch>
     </div>
   </HashRouter>
