@@ -6,7 +6,11 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInAdmin } from './app';
 import { logout } from './user';
+
+import VirtualizedSelect from 'react-virtualized-select';
+
 import { EventInfo } from './user';
+
 
 
 import BigCalendar from 'react-big-calendar'
@@ -16,25 +20,26 @@ BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 import VirtualizedSelect from 'react-virtualized-select'
 //admin meny
 export class AdminMenu extends React.Component {
-  render() {
-    return (
-      <div className="menu">
-       <ul className="ul">
-        <li className="li"><Link to ={'/hjem'} className="link">Hjem</Link></li>
-        <li className="li"><Link to ={'/søk'} className="link">Min side</Link></li>
-        <li className="li"><Link to ={'/confirmusers'} className="link">Godkjenning</Link></li>
-        <li className="li"><Link to ={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
-        <li className="li"><Link to ={'/arrangementer'} className="link">Arrangement</Link></li>
-        <li className="li"><Link to ={'/interesserte'} className="link">Interesserte brukere</Link></li>
-        <li className="li"><Link to ={'/adminsearch'} className="link">BrukerSøk</Link></li>
-        <li className="li"><Link to ={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
-       </ul>
-       </div>
-    );
-  }
- }
+    render() {
+        return (
+            <div className="menu">
+                <ul className="ul">
+                    <li className="li"><Link to={'/hjem'} className="link">Hjem</Link></li>
+                    <li className="li"><Link to={'/søk'} className="link">Min side</Link></li>
+                    <li className="li"><Link to={'/confirmusers'} className="link">Godkjenning</Link></li>
+                    <li className="li"><Link to={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
+                    <li className="li"><Link to={'/arrangementer'} className="link">Arrangement</Link></li>
+                    <li className="li"><Link to={'/interesserte'} className="link">Interesserte brukere</Link></li>
+                    <li className="li"><Link to={'/adminsearch'} className="link">BrukerSøk</Link></li>
+                    <li className="li"><Link to={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
+                </ul>
+            </div>
+        );
+    }
+}
 
 export class AdminHome extends React.Component {
+
   constructor(props){
   super(props);
   this.allEvents = [];
@@ -67,60 +72,61 @@ export class AdminHome extends React.Component {
 
      });
   }
+
 }
 
 
 export class ArrangementData extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      showArrangementData: false,
-      activeUser: null
+        this.state = {
+            showArrangementData: false,
+            activeUser: null
+        }
+        this.updateShowState = this.updateShowState.bind(this);
+        console.log(this.state.activeUser);
     }
-    this.updateShowState = this.updateShowState.bind(this);
-    console.log(this.state.activeUser);
-  }
-  updateShowState() {
-    this.setState({ showArrangementData: !this.state.showArrangementData });
-  }
-  render() {
+    updateShowState() {
+        this.setState({ showArrangementData: !this.state.showArrangementData });
+    }
+    render() {
 
-    return(
-      <div>
-    {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
-      { this.state.showArrangementData ?
-        <div>
-          <ul>
-            <li>Id: { this.props.data.id }</li>
-            <li>Navn: { this.props.data.title }</li>
-            <li>Tidspunkt: { this.props.data.end.toString() }</li>
-            <li>Beskrivelse: { this.props.data.description }</li>
-            <li>Utstyrliste: { this.props.data.gearList }</li>
-          </ul>
-        </div>
-        :
-        null
-      }
-      </div>
-    );
-  }
-  componentDidMount(){
-    this.setState({
-      activeUser: userService.getSignedInUser()["id"]
-    });
+        return (
+            <div>
+                {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
+                {this.state.showArrangementData ?
+                    <div>
+                        <ul>
+                            <li>Id: {this.props.data.id}</li>
+                            <li>Navn: {this.props.data.title}</li>
+                            <li>Tidspunkt: {this.props.data.end.toString()}</li>
+                            <li>Beskrivelse: {this.props.data.description}</li>
+                            <li>Utstyrliste: {this.props.data.gearList}</li>
+                        </ul>
+                    </div>
+                    :
+                    null
+                }
+            </div>
+        );
+    }
+    componentDidMount() {
+        this.setState({
+            activeUser: userService.getSignedInUser()["id"]
+        });
 
-  }
+    }
 
 
-  getInteressed(arrangementId, userId){
-    this.state.activeUser = userId;
-    console.log(this.state.activeUser)
-    userService.getInteressed(arrangementId, userId).then((result) => {
+    getInteressed(arrangementId, userId) {
+        this.state.activeUser = userId;
+        console.log(this.state.activeUser)
+        userService.getInteressed(arrangementId, userId).then((result) => {
 
-      this.forceUpdate();
-    })
-  }
+            this.forceUpdate();
+        })
+    }
 }
 
 export class Arrangement extends React.Component {
@@ -225,20 +231,23 @@ export class ConfirmUsers extends React.Component {
     //her pushes alle ikke godkjente brukere inn i arrayen.
     for(let unConfirmed of this.allUnConformed ) {
       unConfirmedList.push(<li key={unConfirmed.id}><Link to={'/mypage/' + unConfirmed.id }>{unConfirmed.firstName} {unConfirmed.lastName}</Link> {unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
+
     }
+    render() {
+        let arrangementDetails = [];
 
-    return (
-      /* skriver ut unConfirmedList på siden */
-      <div className="menu">
-      <h3> Ikke godkjent brukere: </h3>
-      <ul> {unConfirmedList} </ul>
+        for (let arrangement of this.allArrangement) {
+            arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
+        }
 
-      </div>
+        return (
 
-    );
-  }
-  //henter listen fra en sql spørring
-  componentDidMount() {
+            <div className="menu">
+                {arrangementDetails}
+            </div>
+        );
+    }
+      componentDidMount() {
     userService.unConfirmedUsers().then((result) => {
       this.allUnConformed = result;
      console.log(result)
@@ -259,8 +268,6 @@ export class ConfirmUsers extends React.Component {
         console.log(this.allUnConformed)
         this.forceUpdate();
       });
-
-
     });
   }
 }
@@ -269,11 +276,21 @@ export class ConfirmUsers extends React.Component {
 export class NewArrangement extends React.Component {
   constructor(props){
     super(props);
-    this.state = {};
+    this.state = {
+            allRoles: [],
+            roles: [],
+            selectedRoles: [],
+            selectedValue: null
+        }
     this.allMals = [];
     this.lastArr = [];
+    this.getSelectedValue = this.getSelectedValue.bind(this);
   }
   render() {
+    
+    this.state.roles = [];
+    this.state.allRoles.map((result) => {this.state.roles.push(<option key={result.title} value={result.title}>{result.title}</option>)});
+    
     let vaktmalList = [];
 
     for (let vaktmal of this.allMals) {
@@ -300,6 +317,14 @@ export class NewArrangement extends React.Component {
        onChange={(selectValue) => this.setState({ selectValue })}
        value={selectValue}
      />
+       <select id="selected-role" className="selected-roles" onChange={this.getSelectedValue}>
+             <option key="default">-- Velg rolle --</option>
+             {this.state.roles}
+       </select>
+       <ul>
+                        
+              {this.state.selectedRoles}
+       </ul>
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
      <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue)}>Opprett arrangement</button>
@@ -307,6 +332,17 @@ export class NewArrangement extends React.Component {
      </div>
    );
  }
+      
+   getSelectedValue() {
+        var key = 0;    
+        var selectedValue = document.getElementById("selected-role").value;
+        this.state.selectedRoles.push(<li key={key++}>{selectedValue}</li>);
+        document.getElementById("selected-role").selectedIndex = 0;
+        this.forceUpdate();
+    }
+     
+      
+ 
  registerArrangement(selectValue) {
    let selectedMal = selectValue;
    userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
@@ -338,4 +374,10 @@ export class NewArrangement extends React.Component {
     this.forceUpdate();
   });
   }
+  userService.getRole().then((result) => {
+            this.setState({
+                allRoles: result
+            });
+        });    
+
 }

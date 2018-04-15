@@ -72,6 +72,15 @@ addArrangement(title, description, meetingLocation, contactPerson, showTime, sta
     });
   }
 
+  getRole() {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT title FROM Role', (error, result) => {
+        if(error) throw error;
+        resolve(result);
+      });
+    });
+  }
+
 getArrangement() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {

@@ -220,7 +220,7 @@ export class MyPage extends React.Component {
     this.inputList = [];
     this.dateInputList = [];
     for (let skill of selectValue) {
-      userService.getSkillInfo(skill.value).then((result) => {
+      userService.getYourSkills(skill.value).then((result) => {
 
         if (result.duration === 0) {
 
@@ -419,7 +419,7 @@ export class MyPage extends React.Component {
     this.dateInputList = [];
 
     for (let skill of selectValue) {
-    userService.getSkill(skill.value).then((result) => {
+    userService.getAllSkills(skill.value).then((result) => {
       this.testSkill = result;
 
 
