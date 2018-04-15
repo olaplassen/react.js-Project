@@ -21,7 +21,7 @@ export class UserMenu extends React.Component {
     super(props);
     //setter this.id lik verdien som ble sendt fra login.
     this.id = props.userId;
-
+//
   }
   render() {
     return (
