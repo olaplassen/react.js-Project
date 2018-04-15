@@ -41,7 +41,6 @@ export class UserMenu extends React.Component {
   }
 }
 
-
 export function logout() {
   userService.signOut();
   outlogged();
@@ -53,7 +52,7 @@ export class UserHome extends React.Component {
       this.user = {}
       this.allEvents = [];
       let signedInUser = userService.getSignedInUser();
-      console.log(signedInUser)
+
       //henter id fra usermenyen og matcher den med this.id
       this.id = props.userId;
     }
@@ -105,12 +104,22 @@ export class EventInfo extends React.Component {
   constructor(props) {
  super(props);
  this.arrangement = {};
+ this.vaktmal = [];
+ this.AllRoles = [];
+
 
  //henter id fra usermenyen og matcher den med this.id
  this.id = props.match.params.id;
- console.log(this.id)
+
   }
   render() {
+    let roleList = [];
+
+
+    for (let role of this.AllRoles) {
+      roleList.push(<tr key={role.rolevaktmalid} ><td> { role.title } </td></tr>);
+   }
+
     return(
       <div className="menu">
       <div>
@@ -123,7 +132,18 @@ export class EventInfo extends React.Component {
       </div> <br />
       <div style={{width: 300}}>
       Beskrivelse: <br />
-      {this.arrangement.description}
+      {this.arrangement.description} <br />
+      <div><h4>Vaktmal:</h4>
+      {this.vaktmal.vaktmalTittel}</div>
+      <br />
+      <div>
+      <h4>Roller som kreves for dette arrangementet:</h4> <br />
+      <table>
+            <tbody>
+              {roleList}
+            </tbody>
+      </table>
+      </div>
       </div> <br />
 
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
@@ -132,6 +152,7 @@ export class EventInfo extends React.Component {
       </div>
 
     )
+
   }
   componentDidMount() {
     userService.getArrangementInfo(this.id).then((result) => {
@@ -139,7 +160,15 @@ export class EventInfo extends React.Component {
       this.start = this.fixDate(this.arrangement.start);
       this.end = this.fixDate(this.arrangement.end)
       this.show = this.fixDate(this.arrangement.showTime)
-      this.forceUpdate();
+
+        userService.getThisVaktmal(this.arrangement.vaktmalid).then((result) => {
+          this.vaktmal= result;
+          userService.getRolesForMal(this.arrangement.vaktmalid).then((result) => {
+            this.AllRoles = result;
+            console.log(result);
+            this.forceUpdate();
+          })
+        })
     })
   }
   fixDate(date) {
@@ -166,7 +195,8 @@ export class MyPage extends React.Component {
     this.user = {}
     this.id= props.match.params.userId;
     this.state = {
-      showchangePassword: false
+      showchangePassword: false,
+      showDeactivateText: false
     }
     this.updateShowState = this.updateShowState.bind(this);
     console.log(props);
@@ -174,11 +204,13 @@ export class MyPage extends React.Component {
     this.allSkills = [];
     this.yourSkills = [];
     this.values = [];
-    this.inputList = [];
+
     this.testSkill = [];
+
   }
   updateShowState() {
     this.setState({ showchangePassword: !this.state.showchangePassword });
+    this.setState({ showDeactivateText: !this.state.showDeactivateText });
   }
 
   changeHandler(selectValue) {
@@ -192,7 +224,7 @@ export class MyPage extends React.Component {
 
         if (result.duration === 0) {
 
-          this.inputList.push(<tr key={skill.value}><td> { skill.label } </td><td>Varer evig</td></tr>);
+          this.inputList.push(<tr key={skill.value}><td> { skill.label } </td><td>Dette kurset har ingen utløpsdato</td></tr>);
 
         }
         else if (result.duration != 0 && this.dateInputList.length > 0) {
@@ -212,6 +244,8 @@ export class MyPage extends React.Component {
     }
 
   render() {
+    let signedInUser = userService.getSignedInUser();
+
     let skillList = [];
     let yourSkillList = [];
 
@@ -224,6 +258,7 @@ export class MyPage extends React.Component {
     }
 
     for (let yourskill of this.yourSkills) {
+
         if(yourskill.validTo != null) {
          yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}, Utløpsdato: {yourskill.validTo.toDateString()}</li>);
        }
@@ -231,10 +266,11 @@ export class MyPage extends React.Component {
          yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}</li>);
        }
    }
-
+   console.log(yourSkillList)
 
     const {selectValue } = this.state;
-
+    if(signedInUser.admin == 0) {
+      console.log(signedInUser)
     return (
 
       <div>
@@ -242,8 +278,7 @@ export class MyPage extends React.Component {
           <h2> {this.user.firstName} {this.user.lastName}</h2>
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
-          <div> Fødselsdato: Lorem ipsum</div>
-          <div> Medlem siden: Lorem ipsum</div>
+          <div> Adresse: {this.user.address} </div>
           <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
@@ -265,7 +300,7 @@ export class MyPage extends React.Component {
       <div className="menu">
       <h1> Mine Kompetanser og kurs </h1> <br />
       <h3> Legg til dine kurs </h3> <br />
-      OBSOBS du kan ikke legge til flere en et kurs med utløpsdato om gangen. <br />
+      OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen. <br />
 
       <VirtualizedSelect
         autoFocus
@@ -299,6 +334,85 @@ export class MyPage extends React.Component {
       </div>
       </div>
     );
+    }
+
+    else if (signedInUser.admin == 1) {
+
+      return (
+
+        <div>
+
+          <div className="menu">
+          <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver</button>
+          { this.state.showDeactivateText ?
+            <div>
+              <h2>{this.user.firstName} {this.user.lastName} er deaktiver.</h2>
+            </div>
+            :
+            null
+          }
+            <h2>Dette er personalia siden for {this.user.firstName} {this.user.lastName}</h2>
+            <div> Epost: {this.user.email} </div>
+            <div> Mobilnummer: {this.user.phone} </div>
+            <div> Adresse: {this.user.address} </div>
+
+            <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
+            <div> Brukernavn: {this.user.userName}</div>
+            <div> Passord: ********</div>
+
+
+            <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
+            { this.state.showchangePassword ?
+              <div>
+                <input ref="newpassword" type="password" /> <br />
+                <input ref="verifypassword" type="password" /> <br />
+              </div>
+              :
+              null
+            }
+            <button ref="changepasswordbtn">Lagre</button>
+          </div>
+
+          <div className="menu">
+          <h1> Oversikt over kurs og kompetanser for {this.user.firstName} {this.user.lastName} </h1> <br />
+          <h3> Legg til kurs </h3> <br />
+          OBSOBS du kan ikke legge til flere en et kurs med utløpsdato om gangen. <br />
+
+          <VirtualizedSelect
+            autoFocus
+            clearable={true}
+            removeSelected={true}
+            multi={true}
+            options={skillList}
+            onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler( selectValue ))}
+
+            value={selectValue}
+
+
+          />
+          <table>
+                <tbody>
+                  {this.inputList}
+                </tbody>
+          </table>
+          <table>
+                <tbody>
+                  {this.dateInputList}
+                </tbody>
+          </table>
+          <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+
+
+          <h2>Deres Kurs</h2> <br />
+
+
+          {yourSkillList}
+          </div>
+          </div>
+
+      )
+
+    }
   }
   registerSkills(selectValue) {
     this.inputList = [];
@@ -320,27 +434,25 @@ export class MyPage extends React.Component {
       });
     }
 
-  else {
-    userService.addSkills(skill.value, this.user.id).then((result) => {
-      userService.getYourSkills(this.user.id).then((result) => {
-        this.setState({selectValue:null})
-        this.yourSkills = result;
-        this.forceUpdate();
+    else {
+      userService.addSkills(skill.value, this.user.id).then((result) => {
+        userService.getYourSkills(this.user.id).then((result) => {
+          this.setState({selectValue:null})
+          this.yourSkills = result;
+          this.forceUpdate();
+          });
         });
-      });
-    }
+      }
     });
+    }
   }
 
-}
-
   componentDidMount() {
-
+    let signedInUser = userService.getSignedInUser();
     userService.getUsers(this.id).then((result) => {
-
-      console.log(result);
       this.user = result;
-      console.log(this.user);
+      console.log(result)
+      console.log(this.user.confirmed)
       this.forceUpdate();
       });
     userService.getAllSkills().then((result) => {
@@ -350,8 +462,8 @@ export class MyPage extends React.Component {
 
         this.yourSkills = result;
         this.forceUpdate();
-      })
-    });
+        })
+      });
 
     this.refs.changepasswordbtn.onclick = () => {
 
@@ -366,6 +478,13 @@ export class MyPage extends React.Component {
     else {
       this.refs.newpassword.type = "text";
       this.refs.newpassword.value = "Passordene matcher ikke";
+      }
+    }
+    if(signedInUser.admin == 1) {
+      this.refs.deaktiverUser.onclick = () =>  {
+    userService.deactivateUser(this.id).then((result) => {
+      this.forceUpdate();
+      })
       }
     }
   }
@@ -459,8 +578,10 @@ export class SearchUser extends React.Component {
       this.handleChange = this.handleChange.bind(this);
     }
     render() {
+
       let userList = [];
       let signedInUser = userService.getSignedInUser();
+
       console.log(signedInUser.admin)
       if(signedInUser.admin == 0) {
       for(let user of this.allUsers) {
@@ -480,7 +601,7 @@ export class SearchUser extends React.Component {
 
 
         <div className="menu">
-        Søk på navn for å få frem tlf og epost. <br />
+        Søk på navn for å få frem tlf og epost. Klikk på navnet for å komme inn på info side og endre personalia<br />
          <input type="text" value={this.state.value} onChange={this.handleChange} />
 
          <table>

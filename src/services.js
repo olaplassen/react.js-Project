@@ -53,10 +53,18 @@ addUser(firstName, lastName, address, postnr, poststed, phone, email, username, 
     });
   });
   }
+deactivateUser(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE Users SET confirmed=? WHERE id=?', [false, userid], (error, result) => {
+      if (error) throw error;
+      resolve();
+    })
+  })
+}
 
-addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList,): Promise {
+addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList, vaktmalid): Promise {
     return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
+      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList, vaktmalid) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList, vaktmalid], (error, result) => {
         if (error) throw error;
         else
         resolve();
@@ -83,6 +91,16 @@ getArrangement() {
       });
     });
     }
+getLastArrangement() {
+         return new Promise ((resolve, reject) => {
+          connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
+            if (error) throw error;
+            console.log(result);
+
+              resolve(result[0])
+        });
+      });
+  }
 
   //funkjson for å endre bruker
 changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id): Promise<user[]> {
@@ -255,7 +273,7 @@ getAllArrangement() {
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Arrangement', (error, result) => {
           if (error) throw error;
-          
+
 
             resolve(result)
         });
@@ -339,6 +357,32 @@ getSkillInfo(skillid, callback) {
       });
     });
   }
+getVaktmal(callback) {
+  return new Promise ((resolve, callback) => {
+    connection.query('SELECT * FROM Vaktmal', (error, result) => {
+      if(error) throw error;
+      resolve(result)
+    })
+  })
+}
+getThisVaktmal(vaktmalid, callback) {
+  return new Promise ((resolve, callback) => {
+    connection.query('SELECT * FROM Vaktmal WHERE vaktmalid=? ', [vaktmalid], (error, result) => {
+      if(error) throw error;
+      resolve(result[0])
+    })
+  })
+}
+getRolesForMal(vaktmalid, callback) {
+  return new Promise ((resolve, callback) => {
+    connection.query('SELECT * FROM Role, RoleVaktmal WHERE RoleVaktmal.roleid = Role.roleid AND RoleVaktmal.vaktmalid = ?', [vaktmalid], (error, result) => {
+      if(error) throw error;
+      resolve(result)
+    })
+  })
+}
+
+
 }
 
 
