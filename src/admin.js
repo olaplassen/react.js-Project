@@ -272,18 +272,49 @@ export class NewArrangement extends React.Component {
             allRoles: [],
             roles: [],
             selectedRoles: [],
-            selectedValue: null
+            selectedSingleValue: null
         }
     this.allMals = [];
     this.lastArr = [];
-    this.getSelectedValue = this.getSelectedValue.bind(this);
+    this.rolesForArr = [];
+    this.allRoles = [];
+    this.numberOfRoles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    // this.getSelectedValue = this.getSelectedValue.bind(this);
   }
   render() {
 
-    this.state.roles = [];
-    this.state.allRoles.map((result) => {this.state.roles.push(<option key={result.title} value={result.title}>{result.title}</option>)});
+    let temp = 0;
+    // this.state.roles = [];
+    // this.state.allRoles.map((result) => {
+    //   this.state.roles.push(<option key={result.roleid} value={result.title} id={result.roleid}>{result.title}</option>)
+    //
+    // });
 
     let vaktmalList = [];
+    let roleList = [];
+
+    for (let role of this.allRoles) {
+         roleList.push(
+           <tr key={role.roleid}>
+           <td className="td">{role.roleid}</td>
+           <td className="td">{role.title}</td>
+           <td className="table">{this.numberOfRoles[temp]}</td>
+           <td className="table">
+           <button onClick={() => {
+           this.numberOfRoles[role.roleid-1]++;
+           this.forceUpdate();
+            }}>+</button></td>
+            <td className="table">
+            <button onClick={() => {
+              if(this.numberOfRoles[role.roleid-1] > 0){
+                this.numberOfRoles[role.roleid-1]--;
+              }
+              this.forceUpdate();
+            }}>-</button></td>
+            </tr>
+          );
+          temp++;
+       }
 
     for (let vaktmal of this.allMals) {
          vaktmalList.push({ value: vaktmal.vaktmalId, label: vaktmal.vaktmalTittel},);
@@ -310,38 +341,67 @@ export class NewArrangement extends React.Component {
        onChange={(selectValue) => this.setState({ selectValue })}
        value={selectValue}
      />
-     Eller egendefiner hvilke roller som trengs <br />
-       <select id="selected-role" className="selected-roles" onChange={this.getSelectedValue}>
+    {/* <VirtualizedSelect
+       autoFocus
+       clearable={true}
+       removeSelected={false}
+       multi={true}
+       options={roleList}
+       onChange={(selectValueSingle) => this.setState({ selectValueSingle })}
+       value={selectValueSingle}
+     />*
+       Eller egendefiner hvilke roller som trengs <br />
+       <select id="selected-role" className="selected-roles" onChange={() => this.getSelectedValue(this.state.selectedRoles)}>
              <option key="default">-- Velg rolle --</option>
              {this.state.roles}
        </select>
        <ul>
 
               {this.state.selectedRoles}
-       </ul>
+       </ul> */}
+       <table className="table" id="myTable">
+             <tbody>
+             <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
+               {roleList}
+             </tbody>
+       </table>
+       <button onClick={() => this.kjor()}>Try it</button>
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
-     <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue)}>Opprett arrangement</button>
+     <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement</button>
      </form>
      </div>
    );
- }
 
-   getSelectedValue() {
-        var key = 0;
-        var selectedValue = document.getElementById("selected-role").value;
-        this.state.selectedRoles.push(<li key={key++}>{selectedValue}</li>);
-        document.getElementById("selected-role").selectedIndex = 0;
-        this.forceUpdate();
+ }
+kjor() {
+  if (document.getElementById("myTable").rows[1].cells.item(2).innerHTML == 2) {
+  console.log(parseInt(document.getElementById("myTable").rows[1].cells.item(2).innerHTML));
+}
+}
+   // getSelectedValue(value) {
+   //      let key = 0;
+   //      console.log(value)
+   //      var selectedSingleValue = document.getElementById("selected-role").value;
+   //      this.state.selectedRoles.push(<li key={key++}>{selectedSingleValue}</li>);
+   //      // document.getElementById("selected-role").selectedIndex = 0;
+   //      console.log(this.state.roles)
+   //      this.forceUpdate();
+   //  }
+
+    addRolesforArrWidthMal(result, arrid) {
+      for (let role of result) {
+      userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
+      });
+    }
     }
 
 
-
- registerArrangement(selectValue) {
-   let selectedMal = selectValue;
+ registerArrangement(selectValue, roleListLength) {
+   console.log(roleListLength)
    userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
                                this.refs.arrContactPerson.value, this.refs.arrShowTime.value, this.refs.arrStartTime.value,
-                               this.refs.arrEndTime.value, this.refs.arrGearList.value, selectValue.value).then((result) => {
+                               this.refs.arrEndTime.value, this.refs.arrGearList.value).then((result) => {
 
                                  this.refs.arrName.value ="";
                                  this.refs.arrDescription.value ="";
@@ -353,15 +413,49 @@ export class NewArrangement extends React.Component {
                                  this.refs.arrGearList.value ="";
 
                                });
+
     userService.getLastArrangement().then((result) => {
       this.lastArr = result;
-      this.props.history.push('/eventinfo/' + this.lastArr.id);
-      this.forceUpdate();
+      if(selectValue != undefined) {
+      userService.getRolesForMal(selectValue.value).then((result) => {
+          console.log(result)
+          this.addRolesforArrWidthMal(result, this.lastArr.id);
 
+        });
+      }
+      else if(selectValue == undefined) {
+        for (let i = 1; i < roleListLength; i++) {
+          if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML != 0) {
+
+            if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML > 1) {
+              for (var y = 0; y < document.getElementById("myTable").rows[i].cells.item(2).innerHTML; y++) {
+                userService.addRolesforArrSingle(this.lastArr.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
+
+                })
+              }
+            }
+            else if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML == 1) {
+              userService.addRolesforArrSingle(this.lastArr.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
+
+              })
+            }
+          }
+          else {
+            console.log("Ingen av denne typen ble valgt");
+
+          }
+        }
+      }
+      else {
+        console.log("ingenting skjedde")
+      }
+      this.props.history.push('/eventinfo/' + this.lastArr.id);
     })
  }
 
+
  componentDidMount() {
+
   userService.getVaktmal().then((result) => {
     this.allMals = result;
     console.log(result)
@@ -369,9 +463,11 @@ export class NewArrangement extends React.Component {
   });
 
   userService.getRole().then((result) => {
-            this.setState({
-                allRoles: result
-            });
+      this.allRoles = result;
+      this.forceUpdate();
+            // this.setState({
+            //     allRoles: result
+            // });
         });
       }
 }
