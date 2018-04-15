@@ -283,7 +283,7 @@ export class NewArrangement extends React.Component {
   }
   render() {
 
-    let temp = 0;
+    let inc = 0;
     // this.state.roles = [];
     // this.state.allRoles.map((result) => {
     //   this.state.roles.push(<option key={result.roleid} value={result.title} id={result.roleid}>{result.title}</option>)
@@ -298,7 +298,7 @@ export class NewArrangement extends React.Component {
            <tr key={role.roleid}>
            <td className="td">{role.roleid}</td>
            <td className="td">{role.title}</td>
-           <td className="table">{this.numberOfRoles[temp]}</td>
+           <td className="table">{this.numberOfRoles[inc]}</td>
            <td className="table">
            <button onClick={() => {
            this.numberOfRoles[role.roleid-1]++;
@@ -365,7 +365,7 @@ export class NewArrangement extends React.Component {
                {roleList}
              </tbody>
        </table>
-       <button onClick={() => this.kjor()}>Try it</button>
+
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
      <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement</button>
@@ -374,10 +374,7 @@ export class NewArrangement extends React.Component {
    );
 
  }
-kjor() {
-  if (document.getElementById("myTable").rows[1].cells.item(2).innerHTML == 2) {
-  console.log(parseInt(document.getElementById("myTable").rows[1].cells.item(2).innerHTML));
-}
+
 }
    // getSelectedValue(value) {
    //      let key = 0;

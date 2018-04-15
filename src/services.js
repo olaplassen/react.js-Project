@@ -429,7 +429,5 @@ addRolesforArrSingle(arrid, roleid) {
 
 }
 
-
-
 let userService = new UserService();
 export { userService };

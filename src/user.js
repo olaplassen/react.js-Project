@@ -92,14 +92,14 @@ export class UserHome extends React.Component {
  }
 
 export class EventInfo extends React.Component {
-constructor(props) {
- super(props);
- this.arrangement = {};
- this.allRoles = [];
- this.id = props.match.params.id;
+  constructor(props) {
+    super(props);
+    this.arrangement = {};
+    this.allRoles = [];
+    this.id = props.match.params.id;
 
 
-  }
+    }
   render() {
      let roleList = [];
 
@@ -158,20 +158,6 @@ constructor(props) {
         this.forceUpdate();
 
       })
-      // userService.getThisVaktmalId(this.arrangement.id).then((result) => {
-      //   this.vaktmalid = result;
-      //   console.log(result)
-      //   userService.getThisVaktmal(this.vaktmalid.vaktmalid).then((result) => {
-      //     this.vaktmal= result;
-      //     console.log(result)
-      //     userService.getRolesForArr(this.arrangement.id).then((result) => {
-      //       this.AllRoles = result;
-      //       console.log(result)
-      //       this.forceUpdate();
-      //
-      //     })
-      //   })
-
     });
   }
 
