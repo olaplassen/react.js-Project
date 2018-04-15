@@ -62,9 +62,9 @@ deactivateUser(userid) {
   })
 }
 
-addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList, vaktmalid): Promise {
+addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList): Promise {
     return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList, vaktmalid) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList, vaktmalid], (error, result) => {
+      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
         if (error) throw error;
         else
         resolve();
@@ -74,7 +74,7 @@ addArrangement(title, description, meetingLocation, contactPerson, showTime, sta
 
   getRole() {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT title FROM Role', (error, result) => {
+      connection.query('SELECT * FROM Role', (error, result) => {
         if(error) throw error;
         resolve(result);
       });
@@ -284,7 +284,7 @@ getArrangementInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
          if (error) throw error;
-         console.log(result);
+
 
            resolve(result[0])
          });
@@ -349,7 +349,7 @@ getYourSkills(userid, callback) {
   }
 
 getSkillInfo(skillid, callback) {
-    return new Promise ((resolve, callback) => {
+    return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
         if(error) throw error;
 
@@ -358,15 +358,24 @@ getSkillInfo(skillid, callback) {
     });
   }
 getVaktmal(callback) {
-  return new Promise ((resolve, callback) => {
+  return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
       if(error) throw error;
       resolve(result)
     })
   })
 }
+
+getEventRolleinfo(arrid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM ArrangementRoller WHERE arrid=? ', [arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result)
+    })
+  })
+}
 getThisVaktmal(vaktmalid, callback) {
-  return new Promise ((resolve, callback) => {
+  return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal WHERE vaktmalid=? ', [vaktmalid], (error, result) => {
       if(error) throw error;
       resolve(result[0])
@@ -374,7 +383,7 @@ getThisVaktmal(vaktmalid, callback) {
   })
 }
 getRolesForMal(vaktmalid, callback) {
-  return new Promise ((resolve, callback) => {
+  return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Role, RoleVaktmal WHERE RoleVaktmal.roleid = Role.roleid AND RoleVaktmal.vaktmalid = ?', [vaktmalid], (error, result) => {
       if(error) throw error;
       resolve(result)
@@ -382,6 +391,41 @@ getRolesForMal(vaktmalid, callback) {
   })
 }
 
+getRoller(vaktmalid, callback) {
+    connection.query('SELECT * FROM vakt_rolle WHERE vaktmalid = ?', [vaktmalid], (error, result) => {
+      if (error) throw error;
+
+      callback(result);
+    });
+  }
+
+  getRolesForArr(arrid, callback) {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ?', [arrid], (error, result) => {
+        if(error) throw error;
+        resolve(result)
+      })
+    })
+  }
+
+addRolesforArr(arrid, roleid, vaktmalid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('INSERT INTO ArrangementRoller (arrid, roleid, vaktmalid) values (?,?,?)', [arrid, roleid, vaktmalid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+}
+addRolesforArrSingle(arrid, roleid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('INSERT INTO ArrangementRoller (arrid, roleid) values (?,?)', [arrid, roleid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+}
 
 }
 

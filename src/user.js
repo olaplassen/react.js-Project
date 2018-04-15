@@ -92,76 +92,90 @@ export class UserHome extends React.Component {
  }
 
 export class EventInfo extends React.Component {
-  constructor(props) {
+constructor(props) {
  super(props);
  this.arrangement = {};
- this.vaktmal = [];
- this.AllRoles = [];
-
-
- //henter id fra usermenyen og matcher den med this.id
+ this.allRoles = [];
  this.id = props.match.params.id;
+
 
   }
   render() {
-    let roleList = [];
+     let roleList = [];
 
 
-    for (let role of this.AllRoles) {
-      roleList.push(<tr key={role.rolevaktmalid} ><td> { role.title } </td></tr>);
-   }
+     for (let role of this.allRoles) {
+       roleList.push(<tr key={role.arr_rolleid} ><td> { role.title } </td></tr>);
+    }
 
     return(
       <div className="menu">
       <div>
       <h1>{this.arrangement.title} informasjon side.</h1> <br />
-      {this.start} <br />
+      {this.start}
       </div> <br />
       <div>
       Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
-      Oppmøte tidspunkt: {this.show}
+      Oppmøte tidspunkt: {this.show} <br />
+      Planlagt slutt: {this.end}
       </div> <br />
       <div style={{width: 300}}>
       Beskrivelse: <br />
       {this.arrangement.description} <br />
-      <div><h4>Vaktmal:</h4>
-      {this.vaktmal.vaktmalTittel}</div>
-      <br />
+      </div>
       <div>
       <h4>Roller som kreves for dette arrangementet:</h4> <br />
       <table>
             <tbody>
-              {roleList}
-            </tbody>
+          {roleList}
+        </tbody>
       </table>
-      </div>
-      </div> <br />
-
+      <br />
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 
+
+      </div>
 
       </div>
 
     )
 
   }
+
   componentDidMount() {
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
-      this.start = this.fixDate(this.arrangement.start);
-      this.end = this.fixDate(this.arrangement.end)
-      this.show = this.fixDate(this.arrangement.showTime)
 
-        userService.getThisVaktmal(this.arrangement.vaktmalid).then((result) => {
-          this.vaktmal= result;
-          userService.getRolesForMal(this.arrangement.vaktmalid).then((result) => {
-            this.AllRoles = result;
-            console.log(result);
-            this.forceUpdate();
-          })
-        })
-    })
+
+
+      this.start = this.fixDate(this.arrangement.start);
+      this.end = this.fixDate(this.arrangement.end);
+      this.show = this.fixDate(this.arrangement.showTime);
+
+      userService.getRolesForArr(this.arrangement.id).then((result) => {
+        this.allRoles = result;
+        console.log(result)
+        this.forceUpdate();
+
+      })
+      // userService.getThisVaktmalId(this.arrangement.id).then((result) => {
+      //   this.vaktmalid = result;
+      //   console.log(result)
+      //   userService.getThisVaktmal(this.vaktmalid.vaktmalid).then((result) => {
+      //     this.vaktmal= result;
+      //     console.log(result)
+      //     userService.getRolesForArr(this.arrangement.id).then((result) => {
+      //       this.AllRoles = result;
+      //       console.log(result)
+      //       this.forceUpdate();
+      //
+      //     })
+      //   })
+
+    });
   }
+
+
   fixDate(date) {
     let day = date.getDate();
     let month = date.getMonth() + 1;
