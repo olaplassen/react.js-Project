@@ -6,18 +6,14 @@ const history: HashHistory = createHashHistory();
 import { userService } from './services';
 import { checkLogInAdmin } from './app';
 import { logout } from './user';
-
-import VirtualizedSelect from 'react-virtualized-select';
-
 import { EventInfo } from './user';
 
-
+import VirtualizedSelect from 'react-virtualized-select';
 
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
 
-import VirtualizedSelect from 'react-virtualized-select'
 //admin meny
 export class AdminMenu extends React.Component {
     render() {
@@ -43,11 +39,10 @@ export class AdminHome extends React.Component {
   constructor(props){
   super(props);
   this.allEvents = [];
-  this.arrangement = {};
-  this.id = props.match.params.arrangementId
+
   }
    render() {
-
+     console.log(this.allEvents)
      return (
        <div style={{height: 400, width: 600}} className="menu">
            <BigCalendar
@@ -62,6 +57,9 @@ export class AdminHome extends React.Component {
          </div>
 
      );
+   }
+   nextPath(path) {
+       this.props.history.push(path);
    }
    componentDidMount(){
      userService.getAllArrangement().then((result) => {
@@ -233,17 +231,11 @@ export class ConfirmUsers extends React.Component {
       unConfirmedList.push(<li key={unConfirmed.id}><Link to={'/mypage/' + unConfirmed.id }>{unConfirmed.firstName} {unConfirmed.lastName}</Link> {unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
 
     }
-    render() {
-        let arrangementDetails = [];
-
-        for (let arrangement of this.allArrangement) {
-            arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
-        }
-
         return (
 
             <div className="menu">
-                {arrangementDetails}
+            Ikke godkjente brukere <br />
+                {unConfirmedList}
             </div>
         );
     }
@@ -287,10 +279,10 @@ export class NewArrangement extends React.Component {
     this.getSelectedValue = this.getSelectedValue.bind(this);
   }
   render() {
-    
+
     this.state.roles = [];
     this.state.allRoles.map((result) => {this.state.roles.push(<option key={result.title} value={result.title}>{result.title}</option>)});
-    
+
     let vaktmalList = [];
 
     for (let vaktmal of this.allMals) {
@@ -308,6 +300,7 @@ export class NewArrangement extends React.Component {
      Oppmøte tidspunkt: <input type='datetime-local' ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br/>
      Start tidspunkt: <input type='datetime-local' ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
      Slutt tidspunkt: <input type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br/>
+     Sett Vaktlistemal for arrangementet <br />
      <VirtualizedSelect
        autoFocus
        clearable={true}
@@ -317,12 +310,13 @@ export class NewArrangement extends React.Component {
        onChange={(selectValue) => this.setState({ selectValue })}
        value={selectValue}
      />
+     Eller egendefiner hvilke roller som trengs <br />
        <select id="selected-role" className="selected-roles" onChange={this.getSelectedValue}>
              <option key="default">-- Velg rolle --</option>
              {this.state.roles}
        </select>
        <ul>
-                        
+
               {this.state.selectedRoles}
        </ul>
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
@@ -332,17 +326,17 @@ export class NewArrangement extends React.Component {
      </div>
    );
  }
-      
+
    getSelectedValue() {
-        var key = 0;    
+        var key = 0;
         var selectedValue = document.getElementById("selected-role").value;
         this.state.selectedRoles.push(<li key={key++}>{selectedValue}</li>);
         document.getElementById("selected-role").selectedIndex = 0;
         this.forceUpdate();
     }
-     
-      
- 
+
+
+
  registerArrangement(selectValue) {
    let selectedMal = selectValue;
    userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
@@ -373,11 +367,11 @@ export class NewArrangement extends React.Component {
     console.log(result)
     this.forceUpdate();
   });
-  }
+
   userService.getRole().then((result) => {
             this.setState({
                 allRoles: result
             });
-        });    
-
+        });
+      }
 }
