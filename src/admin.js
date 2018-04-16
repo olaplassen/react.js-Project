@@ -307,7 +307,11 @@ export class NewArrangement extends React.Component {
             }}>-</button></td>
             </tr>
           );
+<<<<<<< HEAD
           // temp++;
+=======
+          temp++;
+>>>>>>> 91e7fef1363ea1e190b8c356aebe9b2e55072d08
        }
 
     for (let vaktmal of this.allMals) {
@@ -369,6 +373,26 @@ export class NewArrangement extends React.Component {
 
  }
 
+<<<<<<< HEAD
+=======
+}
+   // getSelectedValue(value) {
+   //      let key = 0;
+   //      console.log(value)
+   //      var selectedSingleValue = document.getElementById("selected-role").value;
+   //      this.state.selectedRoles.push(<li key={key++}>{selectedSingleValue}</li>);
+   //      // document.getElementById("selected-role").selectedIndex = 0;
+   //      console.log(this.state.roles)
+   //      this.forceUpdate();
+   //  }
+
+    addRolesforArrWidthMal(result, arrid) {
+      for (let role of result) {
+      userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
+      });
+    }
+    }
+>>>>>>> 91e7fef1363ea1e190b8c356aebe9b2e55072d08
 
    // getSelectedValue(value) {
    //      let key = 0;
@@ -387,7 +411,10 @@ export class NewArrangement extends React.Component {
     }
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 91e7fef1363ea1e190b8c356aebe9b2e55072d08
  registerArrangement(selectValue, roleListLength) {
    console.log(roleListLength)
    userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
