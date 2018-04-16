@@ -291,7 +291,7 @@ getArrangementInfo(id) {
        });
     }
 
-getAllSkills(userid) {
+getAllSkills() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
@@ -391,12 +391,13 @@ getRolesForMal(vaktmalid, callback) {
   })
 }
 
-getRoller(vaktmalid, callback) {
-    connection.query('SELECT * FROM vakt_rolle WHERE vaktmalid = ?', [vaktmalid], (error, result) => {
-      if (error) throw error;
-
-      callback(result);
+getAllRoles() {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Role', (error, result) => {
+        if (error) throw error;
+        resolve(result);
     });
+  });
   }
 
   getRolesForArr(arrid, callback) {
@@ -423,6 +424,16 @@ addRolesforArrSingle(arrid, roleid) {
       if(error) throw error;
       resolve()
       console.log(result)
+    })
+  })
+}
+getRoleCount(arrid, roleid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(roleid) as total FROM ArrangementRoller WHERE arrid=? AND roleid=?', [arrid, roleid], (error, result) => {
+      if(error) throw error;
+      console.log(result[0])
+      resolve(result[0].total)
+
     })
   })
 }

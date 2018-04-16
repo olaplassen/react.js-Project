@@ -83,7 +83,7 @@ export class ArrangementData extends React.Component {
             activeUser: null
         }
         this.updateShowState = this.updateShowState.bind(this);
-        console.log(this.state.activeUser);
+        
     }
     updateShowState() {
         this.setState({ showArrangementData: !this.state.showArrangementData });
@@ -313,7 +313,7 @@ export class NewArrangement extends React.Component {
             }}>-</button></td>
             </tr>
           );
-          temp++;
+          inc++;
        }
 
     for (let vaktmal of this.allMals) {
@@ -375,7 +375,7 @@ export class NewArrangement extends React.Component {
 
  }
 
-}
+
    // getSelectedValue(value) {
    //      let key = 0;
    //      console.log(value)
