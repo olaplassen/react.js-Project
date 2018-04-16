@@ -58,14 +58,10 @@ export class AdminHome extends React.Component {
 
      );
    }
-   nextPath(path) {
-       this.props.history.push(path);
-   }
+
    componentDidMount(){
      userService.getAllArrangement().then((result) => {
        this.allEvents = result;
-       console.log(this.allEvents);
-
        this.forceUpdate();
 
      });
@@ -83,7 +79,7 @@ export class ArrangementData extends React.Component {
             activeUser: null
         }
         this.updateShowState = this.updateShowState.bind(this);
-        
+
     }
     updateShowState() {
         this.setState({ showArrangementData: !this.state.showArrangementData });
@@ -264,7 +260,6 @@ export class ConfirmUsers extends React.Component {
   }
 }
 
-
 export class NewArrangement extends React.Component {
   constructor(props){
     super(props);
@@ -284,11 +279,6 @@ export class NewArrangement extends React.Component {
   render() {
 
     let inc = 0;
-    // this.state.roles = [];
-    // this.state.allRoles.map((result) => {
-    //   this.state.roles.push(<option key={result.roleid} value={result.title} id={result.roleid}>{result.title}</option>)
-    //
-    // });
 
     let vaktmalList = [];
     let roleList = [];
@@ -341,24 +331,6 @@ export class NewArrangement extends React.Component {
        onChange={(selectValue) => this.setState({ selectValue })}
        value={selectValue}
      />
-    {/* <VirtualizedSelect
-       autoFocus
-       clearable={true}
-       removeSelected={false}
-       multi={true}
-       options={roleList}
-       onChange={(selectValueSingle) => this.setState({ selectValueSingle })}
-       value={selectValueSingle}
-     />*
-       Eller egendefiner hvilke roller som trengs <br />
-       <select id="selected-role" className="selected-roles" onChange={() => this.getSelectedValue(this.state.selectedRoles)}>
-             <option key="default">-- Velg rolle --</option>
-             {this.state.roles}
-       </select>
-       <ul>
-
-              {this.state.selectedRoles}
-       </ul> */}
        <table className="table" id="myTable">
              <tbody>
              <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>

@@ -357,6 +357,16 @@ getSkillInfo(skillid, callback) {
       });
     });
   }
+deleteSkill(userid, skillid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM UserKomp WHERE userid=? AND skillid=?', [userid, skillid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+
+}
 getVaktmal(callback) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
@@ -371,6 +381,7 @@ getEventRolleinfo(arrid, callback) {
     connection.query('SELECT * FROM ArrangementRoller WHERE arrid=? ', [arrid], (error, result) => {
       if(error) throw error;
       resolve(result)
+      console.log(result)
     })
   })
 }
@@ -427,13 +438,21 @@ addRolesforArrSingle(arrid, roleid) {
     })
   })
 }
+deleteRolesfromArr(arrid, roleid){
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM ArrangementRoller WHERE arrid=? AND roleid=? LIMIT 1', [arrid, roleid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+}
 getRoleCount(arrid, roleid, callback) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT COUNT(roleid) as total FROM ArrangementRoller WHERE arrid=? AND roleid=?', [arrid, roleid], (error, result) => {
       if(error) throw error;
-      console.log(result[0])
-      resolve(result[0].total)
 
+      resolve(result[0].total);
     })
   })
 }
