@@ -95,18 +95,49 @@ export class EventInfo extends React.Component {
   constructor(props) {
     super(props);
     this.arrangement = {};
+    this.allSelectedRoles = [];
     this.allRoles = [];
+    this.test = [];
     this.id = props.match.params.id;
-
+    this.numberOfRoles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
     }
   render() {
+    let signedInUser = userService.getSignedInUser();
+
      let roleList = [];
+     let roleListAdmin = [];
+     let inc = 0;
 
-
-     for (let role of this.allRoles) {
+     for (let role of this.allSelectedRoles) {
        roleList.push(<tr key={role.arr_rolleid} ><td> { role.title } </td></tr>);
     }
+
+    for (let role of this.allRoles) {
+         roleListAdmin.push(
+           <tr key={role.roleid}>
+           <td className="td">{role.roleid}</td>
+           <td className="td">{role.title}</td>
+           <td className="table">{this.numberOfRoles[inc]}</td>
+           <td className="table">
+           <button onClick={() => {
+           this.numberOfRoles[role.roleid-1]++;
+           this.forceUpdate();
+            }}>+</button></td>
+            <td className="table">
+            <button onClick={() => {
+              if(this.numberOfRoles[role.roleid-1] > 0){
+                this.numberOfRoles[role.roleid-1]--;
+              }
+              this.forceUpdate();
+            }}>-</button></td>
+            </tr>
+          );
+          inc++;
+       }
+
+
+    if (signedInUser.admin == 0) {
 
     return(
       <div className="menu">
@@ -139,26 +170,70 @@ export class EventInfo extends React.Component {
       </div>
 
     )
+  }
+  else {
+    return (
+      <div className="menu">
+      <div>
+      <h1>{this.arrangement.title} informasjon side.</h1> <br />
+      {this.start}
+      </div> <br />
+      <div>
+      Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
+      Oppmøte tidspunkt: {this.show} <br />
+      Planlagt slutt: {this.end}
+      </div> <br />
+      <div style={{width: 300}}>
+      Beskrivelse: <br />
+      {this.arrangement.description} <br />
+      </div>
+      <div>
+      <h4>Roller som kreves for dette arrangementet:</h4> <br />
+      <table className="table" id="myTable">
+            <tbody>
+            <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
+              {roleListAdmin}
+              </tbody>
+      </table>
 
+      <br />
+      Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
+
+
+      </div>
+
+      </div>
+      )
+    }
   }
 
   componentDidMount() {
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
-
-
-
       this.start = this.fixDate(this.arrangement.start);
       this.end = this.fixDate(this.arrangement.end);
       this.show = this.fixDate(this.arrangement.showTime);
 
       userService.getRolesForArr(this.arrangement.id).then((result) => {
-        this.allRoles = result;
-        console.log(result)
-        this.forceUpdate();
+        this.allSelectedRoles = result;
 
-      })
+        this.forceUpdate();
+      });
     });
+    userService.getAllRoles().then((result) => {
+      this.allRoles = result;
+      for (var i = 1; i < this.allRoles.length; i++) {
+
+        userService.getRoleCount(this.arrangement.id, i).then((result) => {
+          this.numberOfRoles[i - 1] = result;
+          // this.test = result[i];
+
+          console.log(this.numberOfRoles[i -1])
+          this.forceUpdate();
+        })
+      }
+    })
+
   }
 
 
