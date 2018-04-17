@@ -96,7 +96,9 @@ export class EventInfo extends React.Component {
     this.difference = [];
     this.eventRoller = [];
     this.allUsers = [];
-
+    this.roleKomp = [];
+    this.userWithRoles = [];
+    this.selectedUser = [];
     }
   render() {
     let signedInUser = userService.getSignedInUser();
@@ -195,7 +197,7 @@ export class EventInfo extends React.Component {
       <button ref="endreRoller" className="button">Endre Roller</button>
 
       <br />
-      <button ref="tildeRoller" className="button">Tilde vakter</button>
+      <button ref="tildelRoller" className="button">Tilde vakter</button>
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 
 
@@ -221,7 +223,7 @@ export class EventInfo extends React.Component {
       }
       userService.getRolesForArr(this.arrangement.id).then((result) => {
         this.allSelectedRoles = result;
-        console.log(this.allSelectedRoles)
+
         this.forceUpdate();
       });
     });
@@ -281,6 +283,7 @@ export class EventInfo extends React.Component {
             for (var i = 1; i < this.allRoles.length +1; i++) {
 
               userService.getRoleCount(this.arrangement.id, i).then((result) => {
+
                 this.numberOfRoles.push(result);
                 this.firstNumberOfRoles.push(result);
                 this.secondNumberOfRoles = this.numberOfRoles;
@@ -291,16 +294,51 @@ export class EventInfo extends React.Component {
         }
       }
       if(signedInUser.admin == 1) {
-        userService.getallUsers().then((result) => {
+        userService.getAllUsers().then((result) => {
           this.allUsers = result;
         })
-        this.refs.tildeRoller.onclick = () => {
+        this.refs.tildelRoller.onclick = () => {
+          let go = true;
           for(let eventRolle of this.allSelectedRoles) {
-            if (this.state.users == undefined) {
+            userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
+              this.roleKomp.push(result);
+              console.log(this.roleKomp)
+
+            });
+            go == true;
+            // if (this.state.users == undefined) {
+            // for(let userRole of this.roleKomp) {
+            if(go == true) {
               for(let user of this.allUsers) {
-                
+                userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
+                  // for (var i = 0; i < this.allSelectedRoles.length -1; i++) {
+                    if(result.length != 0) {
+                    this.userWithRoles.push(result);
+                    // console.log(this.userWithRoles)
+                    console.log(this.roleKomp)
+
+                  for (var i = 0; i < this.roleKomp.length - 1; i++) {
+                    for (var y = 0; y < this.userWithRoles.length ; y++) {
+                      if(this.roleKomp[i].length == this.userWithRoles[y].length && this.roleKomp[i][y].arr_rolleid != undefined) {
+
+                        // console.log(this.roleKomp[i][y].arr_rolleid)
+                        break;
+                        console.log(user.id + "added for" + eventRolle.arr_rolleid + " " + eventRolle.roleid);
+                      }
+                      else if (this.roleKomp[i].length != this.userWithRoles[y].length) {
+                        console.log("har ikke kravene")
+                      }
+                    }
+
+
+                  }
+                  }
+
+                })
+
               }
             }
+
           }
         }
       }
@@ -358,7 +396,7 @@ export class MyPage extends React.Component {
     this.dateInputList = [];
     for (let skill of selectValue) {
       userService.getSkillInfo(skill.value).then((result) => {
-        console.log(result)
+
         if (result.duration === 0) {
 
           this.inputList.push(<tr key={skill.value}><td> { skill.label } </td><td>Dette kurset har ingen utløpsdato</td></tr>);

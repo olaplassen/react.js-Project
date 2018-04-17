@@ -47,7 +47,6 @@ getUsers(id, callback): Promise<user[]> {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users', (error, result) => {
       if (error) throw error;
-     console.log(result)
       resolve(result);
     });
   });
@@ -389,7 +388,7 @@ getEventRolleinfo(arrid, callback) {
     connection.query('SELECT * FROM ArrangementRoller WHERE arrid=? ', [arrid], (error, result) => {
       if(error) throw error;
       resolve(result)
-      console.log(result)
+
     })
   })
 }
@@ -421,7 +420,7 @@ getAllRoles() {
 
   getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ?', [arrid], (error, result) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
         resolve(result)
       })
@@ -461,6 +460,23 @@ getRoleCount(arrid, roleid, callback) {
       if(error) throw error;
 
       resolve(result[0].total);
+    })
+  })
+}
+getRoleKomp(roleid, arrRolleid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM RoleKomp, ArrangementRoller WHERE RoleKomp.roleid = ArrangementRoller.roleid AND RoleKomp.roleid=? AND ArrangementRoller.arr_rolleid=? ORDER BY RoleKomp.roleid', [roleid, arrRolleid], (error, result) => {
+      if(error) throw error;
+
+      resolve(result);
+    })
+  })
+}
+getUserRoleKomp(roleid, arrid, userid, arrRoleid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT UserKomp.skillid, UserKomp.userid, RoleKomp.roleid FROM UserKomp, RoleKomp, ArrangementRoller WHERE ArrangementRoller.roleid = RoleKomp.roleid AND UserKomp.skillid = RoleKomp.skillid AND ArrangementRoller.roleid = ? AND ArrangementRoller.arrid = ? AND UserKomp.userid = ? AND ArrangementRoller.arr_rolleid = ?', [roleid, arrid, userid, arrRoleid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
     })
   })
 }
