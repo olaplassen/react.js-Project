@@ -208,9 +208,9 @@ export class EventInfo extends React.Component {
     let signedInUser = userService.getSignedInUser();
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
-      this.start = this.fixDate(this.arrangement.start);
-      this.end = this.fixDate(this.arrangement.end);
-      this.show = this.fixDate(this.arrangement.showTime);
+      this.start = this.arrangement.start.toLocaleString().slice(0, -3);
+      this.end = this.arrangement.end.toLocaleString().slice(0, -3);
+      this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
       if(signedInUser.admin == 1) {
         userService.getEventRolleinfo(this.arrangement.id).then((result) => {
           this.eventRoller = result;
@@ -291,22 +291,22 @@ export class EventInfo extends React.Component {
   }
 
 
-  fixDate(date) {
-    let day = date.getDate();
-    let month = date.getMonth() + 1;
-    let year = date.getFullYear();
-    let hours = date.getHours();
-    if (hours < 10) {
-      hours = '0' + hours;
-    }
-    let mins = date.getMinutes();
-    if (mins < 10) {
-      mins = '0' + mins;
-    }
-
-    let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
-    return(dateTime);
-  }
+  // fixDate(date) {
+  //   let day = date.getDate();
+  //   let month = date.getMonth() + 1;
+  //   let year = date.getFullYear();
+  //   let hours = date.getHours();
+  //   if (hours < 10) {
+  //     hours = '0' + hours;
+  //   }
+  //   let mins = date.getMinutes();
+  //   if (mins < 10) {
+  //     mins = '0' + mins;
+  //   }
+  //
+  //   let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
+  //   return(dateTime);
+  // }
 }
 
 export class MyPage extends React.Component {
