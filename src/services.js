@@ -43,6 +43,15 @@ getUsers(id, callback): Promise<user[]> {
     });
   });
   }
+  getAllUsers(callback) {
+    return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM Users', (error, result) => {
+      if (error) throw error;
+     console.log(result)
+      resolve(result);
+    });
+  });
+  }
   //funksjon for å legge til bruker i databasen
 addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,): Promise <user[]> {
     return new Promise ((resolve, reject) => {
@@ -240,14 +249,14 @@ interessedUsers(userId, arrangementId,firstName,lastName, title) {
       })
     });
     }
-    getInteressedUsers(arrangementId){
-         return new Promise ((resolve, reject) => {
-           connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
-            if(error) throw error;
-            resolve(result);
-           })
-         });
-       }
+getInteressedUsers(arrangementId){
+      return new Promise ((resolve, reject) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
+          if(error) throw error;
+          resolve(result);
+         })
+       });
+     }
 
 userList(callback) {
       return new Promise ((resolve, reject) => {

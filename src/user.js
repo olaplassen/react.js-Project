@@ -95,6 +95,7 @@ export class EventInfo extends React.Component {
     this.secondNumberOfRoles = [];
     this.difference = [];
     this.eventRoller = [];
+    this.allUsers = [];
 
     }
   render() {
@@ -194,6 +195,7 @@ export class EventInfo extends React.Component {
       <button ref="endreRoller" className="button">Endre Roller</button>
 
       <br />
+      <button ref="tildeRoller" className="button">Tilde vakter</button>
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 
 
@@ -219,6 +221,7 @@ export class EventInfo extends React.Component {
       }
       userService.getRolesForArr(this.arrangement.id).then((result) => {
         this.allSelectedRoles = result;
+        console.log(this.allSelectedRoles)
         this.forceUpdate();
       });
     });
@@ -285,6 +288,20 @@ export class EventInfo extends React.Component {
               })
             }
           })
+        }
+      }
+      if(signedInUser.admin == 1) {
+        userService.getallUsers().then((result) => {
+          this.allUsers = result;
+        })
+        this.refs.tildeRoller.onclick = () => {
+          for(let eventRolle of this.allSelectedRoles) {
+            if (this.state.users == undefined) {
+              for(let user of this.allUsers) {
+                
+              }
+            }
+          }
         }
       }
     }
