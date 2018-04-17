@@ -10,9 +10,10 @@ import moment from 'moment';
 
 import { outlogged } from './app';
 
+
 // Then import the virtualized Select HOC
 import VirtualizedSelect from 'react-virtualized-select'
-BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment))
+BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 
 export class UserMenu extends React.Component {
@@ -49,45 +50,36 @@ export function logout() {
 export class UserHome extends React.Component {
     constructor(props) {
       super(props);
-      this.user = {}
       this.allEvents = [];
-      let signedInUser = userService.getSignedInUser();
-
       //henter id fra usermenyen og matcher den med this.id
-      this.id = props.userId;
-    }
-    nextPath(path) {
-        this.props.history.push(path);
+
     }
 
 
-   render() {
+     render() {
+       console.log(this.allEvents[6])
+       return (
+         <div style={{height: 400, width: 600}} className="menu">
+             <BigCalendar
+               events={this.allEvents}
+               showMultiDayTimes
+               defaultDate={new Date(2018, 2, 1)}
+               selectAble ={true}
 
-     return (
+               onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
 
-       <div style={{height: 400, width: 600}} className="menu">
-           <BigCalendar
-             events={this.allEvents}
-             showMultiDayTimes
-             defaultDate={new Date(2018, 2, 1)}
-             selectAble ={true}
+               />
+           </div>
 
-             onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
-
-             />
-         </div>
-
-
-     )
-   };
+       );
+     }
    //henter all brukerinfo ved hjelp av id
    componentDidMount() {
      userService.getAllArrangement().then((result) => {
        this.allEvents = result;
-       console.log(this.allEvents);
+
        this.forceUpdate();
      });
-
   }
  }
 
@@ -97,9 +89,12 @@ export class EventInfo extends React.Component {
     this.arrangement = {};
     this.allSelectedRoles = [];
     this.allRoles = [];
-    this.test = [];
     this.id = props.match.params.id;
-    this.numberOfRoles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this.numberOfRoles = [];
+    this.firstNumberOfRoles = [];
+    this.secondNumberOfRoles = [];
+    this.difference = [];
+    this.eventRoller = [];
 
     }
   render() {
@@ -121,13 +116,13 @@ export class EventInfo extends React.Component {
            <td className="table">{this.numberOfRoles[inc]}</td>
            <td className="table">
            <button onClick={() => {
-           this.numberOfRoles[role.roleid-1]++;
+           this.secondNumberOfRoles[role.roleid-1]++;
            this.forceUpdate();
             }}>+</button></td>
             <td className="table">
             <button onClick={() => {
-              if(this.numberOfRoles[role.roleid-1] > 0){
-                this.numberOfRoles[role.roleid-1]--;
+              if(this.secondNumberOfRoles[role.roleid-1] > 0){
+                this.secondNumberOfRoles[role.roleid-1]--;
               }
               this.forceUpdate();
             }}>-</button></td>
@@ -135,7 +130,8 @@ export class EventInfo extends React.Component {
           );
           inc++;
        }
-
+       // console.log(this.firstNumberOfRoles)
+       // console.log(this.secondNumberOfRoles)
 
     if (signedInUser.admin == 0) {
 
@@ -194,7 +190,8 @@ export class EventInfo extends React.Component {
             <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
               {roleListAdmin}
               </tbody>
-      </table>
+      </table> <br />
+      <button ref="endreRoller" className="button">Endre Roller</button>
 
       <br />
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
@@ -208,32 +205,89 @@ export class EventInfo extends React.Component {
   }
 
   componentDidMount() {
+    let signedInUser = userService.getSignedInUser();
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
       this.start = this.fixDate(this.arrangement.start);
       this.end = this.fixDate(this.arrangement.end);
       this.show = this.fixDate(this.arrangement.showTime);
-
+      if(signedInUser.admin == 1) {
+        userService.getEventRolleinfo(this.arrangement.id).then((result) => {
+          this.eventRoller = result;
+          this.forceUpdate();
+        });
+      }
       userService.getRolesForArr(this.arrangement.id).then((result) => {
         this.allSelectedRoles = result;
-
         this.forceUpdate();
       });
     });
-    userService.getAllRoles().then((result) => {
-      this.allRoles = result;
-      for (var i = 1; i < this.allRoles.length; i++) {
+    if(signedInUser.admin == 1) {
+      userService.getAllRoles().then((result) => {
+        this.allRoles = result;
+        for (var i = 1; i < this.allRoles.length +1; i++) {
 
-        userService.getRoleCount(this.arrangement.id, i).then((result) => {
-          this.numberOfRoles[i - 1] = result;
-          // this.test = result[i];
+          userService.getRoleCount(this.arrangement.id, i).then((result) => {
+            this.numberOfRoles.push(result);
+            this.firstNumberOfRoles.push(result);
+            this.secondNumberOfRoles = this.numberOfRoles;
+            this.forceUpdate()
+          })
+        }
+      })
 
-          console.log(this.numberOfRoles[i -1])
-          this.forceUpdate();
-        })
+
+    this.refs.endreRoller.onclick = () => {
+
+
+      for (var i = 0; i < this.allRoles.length; i++) {
+        if (this.secondNumberOfRoles[i] != this.firstNumberOfRoles[i]) {
+          this.difference.push(this.secondNumberOfRoles[i] - this.firstNumberOfRoles[i]);
+
+        }
+        else if(this.secondNumberOfRoles[i] == this.firstNumberOfRoles[i]) {
+          this.difference.push(0);
+        }
       }
-    })
+      if (this.difference == this.firstNumberOfRoles) {
+        this.props.history.push('/eventinfo/' + this.arrangement.id);
 
+      }
+      else {
+
+
+          for (var i = 1; i < this.allRoles.length; i++) {
+            if (this.difference[i -1] > 0) {
+
+              for (var y = 0; y < this.difference[i -1]; y++) {
+                userService.addRolesforArrSingle(this.arrangement.id, i).then((result) => {
+
+                })
+              }
+            }
+            else if(this.difference[i-1] < 0) {
+
+              for (var y = 0; y < -(this.difference[i -1]); y++) {
+                userService.deleteRolesfromArr(this.arrangement.id, i).then((result) => {
+                });
+              }
+            }
+          }
+          userService.getAllRoles().then((result) => {
+            this.allRoles = result;
+            for (var i = 1; i < this.allRoles.length +1; i++) {
+
+              userService.getRoleCount(this.arrangement.id, i).then((result) => {
+                this.numberOfRoles.push(result);
+                this.firstNumberOfRoles.push(result);
+                this.secondNumberOfRoles = this.numberOfRoles;
+                this.forceUpdate()
+              })
+            }
+          })
+        }
+      }
+    }
   }
 
 
@@ -286,8 +340,8 @@ export class MyPage extends React.Component {
     this.inputList = [];
     this.dateInputList = [];
     for (let skill of selectValue) {
-      userService.getYourSkills(skill.value).then((result) => {
-
+      userService.getSkillInfo(skill.value).then((result) => {
+        console.log(result)
         if (result.duration === 0) {
 
           this.inputList.push(<tr key={skill.value}><td> { skill.label } </td><td>Dette kurset har ingen utløpsdato</td></tr>);
@@ -315,6 +369,46 @@ export class MyPage extends React.Component {
     let skillList = [];
     let yourSkillList = [];
 
+    for (let yourskill of this.yourSkills) {
+      if(yourskill.validTo != null) {
+         yourSkillList.push(
+           <tr key={yourskill.skillid}>
+           <td className="td">{yourskill.title}</td>
+           <td className="table">{yourskill.validTo.toDateString()}</td>
+           <td className="table">
+           <button onClick={() => {
+             userService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
+               userService.getYourSkills(this.user.id).then((result) => {
+
+                 this.yourSkills = result;
+                 this.forceUpdate();
+               });
+             })
+            }}>Slett</button></td>
+            </tr>
+          );
+       }
+       else {
+         yourSkillList.push(
+         <tr key={yourskill.skillid}>
+         <td className="td">{yourskill.title}</td>
+          <td className="table">Ingen utløpsdato</td>
+          <td className="table">
+          <button onClick={() => {
+            userService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
+              userService.getYourSkills(this.user.id).then((result) => {
+
+                this.yourSkills = result;
+                this.forceUpdate();
+              });
+            })
+          }}>Slett</button></td>
+           </tr>
+         );
+      }
+
+     }
+
      for (let skill of this.allSkills) {
       userService.checkUserSkill(this.user.id, skill.skillid).then((result) => {
         if (result == undefined) {
@@ -322,21 +416,9 @@ export class MyPage extends React.Component {
         }
       });
     }
-
-    for (let yourskill of this.yourSkills) {
-
-        if(yourskill.validTo != null) {
-         yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}, Utløpsdato: {yourskill.validTo.toDateString()}</li>);
-       }
-       else {
-         yourSkillList.push(<li key={yourskill.skillid}>{yourskill.title}</li>);
-       }
-   }
-   console.log(yourSkillList)
-
     const {selectValue } = this.state;
     if(signedInUser.admin == 0) {
-      console.log(signedInUser)
+
     return (
 
       <div>
@@ -345,7 +427,7 @@ export class MyPage extends React.Component {
           <div> Epost: {this.user.email} </div>
           <div> Mobilnummer: {this.user.phone} </div>
           <div> Adresse: {this.user.address} </div>
-          <Link to={'/changeUser/' + this.id}>Endre opplysninger</Link>
+          <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
           <div> Brukernavn: {this.user.userName}</div>
           <div> Passord: ********</div>
 
@@ -396,7 +478,12 @@ export class MyPage extends React.Component {
       <h2>Dine Kurs</h2> <br />
 
 
-      {yourSkillList}
+      <table className="table" id="myTable">
+            <tbody>
+                <tr> <th className="th">Tittel</th> <th className="th">Utløpsdato</th> <th className="th">Fjern Kurs</th> </tr>
+              {yourSkillList}
+            </tbody>
+      </table> <br />
       </div>
       </div>
     );
@@ -472,7 +559,12 @@ export class MyPage extends React.Component {
           <h2>Deres Kurs</h2> <br />
 
 
-          {yourSkillList}
+          <table className="table" id="myTable">
+                <tbody>
+                    <tr> <th className="th">Tittel</th> <th className="th">Utløpsdato</th> <th className="th">Fjern Kurs</th> </tr>
+                  {yourSkillList}
+                </tbody>
+          </table> <br />
           </div>
           </div>
 
@@ -515,12 +607,14 @@ export class MyPage extends React.Component {
 
   componentDidMount() {
     let signedInUser = userService.getSignedInUser();
+
     userService.getUsers(this.id).then((result) => {
       this.user = result;
       console.log(result)
-      console.log(this.user.confirmed)
+
       this.forceUpdate();
       });
+
     userService.getAllSkills().then((result) => {
       this.allSkills = result;
       this.forceUpdate();
@@ -528,13 +622,14 @@ export class MyPage extends React.Component {
 
         this.yourSkills = result;
         this.forceUpdate();
-        })
       });
+      });
+
 
     this.refs.changepasswordbtn.onclick = () => {
 
       if (this.refs.newpassword.value == this.refs.verifypassword.value) {
-      userService.changePassword(this.refs.newpassword.value, this.id).then((result) => {
+      userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
 
         this.refs.newpassword.value = "";
         this.refs.verifypassword.value = "";
