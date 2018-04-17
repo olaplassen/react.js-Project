@@ -95,8 +95,13 @@ export class EventInfo extends React.Component {
     this.secondNumberOfRoles = [];
     this.difference = [];
     this.eventRoller = [];
+    this.state = {
 
+		 interestedUsers: {},
+     users: []
     }
+    }
+
   render() {
     let signedInUser = userService.getSignedInUser();
 
@@ -174,6 +179,8 @@ export class EventInfo extends React.Component {
       <h1>{this.arrangement.title} informasjon side.</h1> <br />
       {this.start}
       </div> <br />
+
+        <div>Interesserte brukere: {this.state.users} <br></br><button type="button" onClick={() => this.getInteressedUsers(this.arrangement.id)}>Vi interesserte</button> </div>
       <div>
       Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
       Oppmøte tidspunkt: {this.show} <br />
@@ -193,6 +200,7 @@ export class EventInfo extends React.Component {
       </table> <br />
       <button ref="endreRoller" className="button">Endre Roller</button>
 
+
       <br />
       Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 
@@ -202,9 +210,11 @@ export class EventInfo extends React.Component {
       </div>
       )
     }
+
   }
 
   componentDidMount() {
+
     let signedInUser = userService.getSignedInUser();
     userService.getArrangementInfo(this.id).then((result) => {
       this.arrangement = result;
@@ -288,8 +298,23 @@ export class EventInfo extends React.Component {
         }
       }
     }
-  }
 
+
+  }
+  getInteressedUsers(){
+  userService.getInteressedUsers(this.arrangement.id).then((result) => {
+    var users = [];
+    result.forEach(function (user) {
+     console.log(user)
+      users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
+    });
+     console.log(this.arrangement.id)
+
+     this.state.users = users;
+    this.forceUpdate();
+
+  })
+  }
 
   // fixDate(date) {
   //   let day = date.getDate();
