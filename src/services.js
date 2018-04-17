@@ -240,15 +240,14 @@ interessedUsers(userId, arrangementId,firstName,lastName, title) {
       })
     });
     }
-getInteressedUsers (userId, arrangementId){
-     return new Promise ((resolve, reject) => {
-       connection.query('SELECT userId, arrangementId FROM Interessert WHERE interessed="1"', [userId, arrangementId],(error, result) => {
-        if(error) throw error;
-        console.log(result)
-        resolve(result)
-       })
-     });
-   }
+    getInteressedUsers(arrangementId){
+         return new Promise ((resolve, reject) => {
+           connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
+            if(error) throw error;
+            resolve(result);
+           })
+         });
+       }
 
 userList(callback) {
       return new Promise ((resolve, reject) => {

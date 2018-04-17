@@ -71,57 +71,67 @@ export class AdminHome extends React.Component {
 
 
 export class ArrangementData extends React.Component {
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        this.state = {
-            showArrangementData: false,
-            activeUser: null
-        }
-        this.updateShowState = this.updateShowState.bind(this);
+		this.state = {
+			showArrangementData: false,
+			activeUser: null,
+			interestedUsers: {},
+			users: []
+		}
+		this.updateShowState = this.updateShowState.bind(this);
 
-    }
-    updateShowState() {
-        this.setState({ showArrangementData: !this.state.showArrangementData });
-    }
-    render() {
+	}
+	updateShowState() {
+		this.state.showArrangementData = !this.state.showArrangementData;
 
-        return (
-            <div>
-                {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
-                {this.state.showArrangementData ?
-                    <div>
-                        <ul>
-                            <li>Id: {this.props.data.id}</li>
-                            <li>Navn: {this.props.data.title}</li>
-                            <li>Tidspunkt: {this.props.data.end.toString()}</li>
-                            <li>Beskrivelse: {this.props.data.description}</li>
-                            <li>Utstyrliste: {this.props.data.gearList}</li>
-                        </ul>
-                    </div>
-                    :
-                    null
-                }
-            </div>
-        );
-    }
-    componentDidMount() {
-        this.setState({
-            activeUser: userService.getSignedInUser()["id"]
-        });
+		userService.getInteressedUsers(this.props.data.id).then((result) => {
+			var users = [];
+			result.forEach(function (user) {
+				users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
+			});
 
-    }
+			this.state.users = users;
+			this.forceUpdate();
+		});
+	}
+	render() {
+		return (
+			<div>
+				{this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
+				{this.state.showArrangementData ?
+					<div>
+						<ul>
+							<li>Id: {this.props.data.id}</li>
+							<li>Navn: {this.props.data.title}</li>
+							<li>Tidspunkt: {this.props.data.end.toString()}</li>
+							<li>Beskrivelse: {this.props.data.description}</li>
+							<li>Utstyrliste: {this.props.data.gearList}</li>
 
+						</ul>
+					   Interesserte brukere: {this.state.users} <br></br>
+              </div>
+					:
+					null
+				}
+			</div>
+		);
+	}
+	componentDidMount() {
+		this.setState({
+			activeUser: userService.getSignedInUser()["id"]
+		});
+	}
 
-    getInteressed(arrangementId, userId) {
-        this.state.activeUser = userId;
-        console.log(this.state.activeUser)
-        userService.getInteressed(arrangementId, userId).then((result) => {
-
-            this.forceUpdate();
-        })
-    }
+	getInteressed(arrangementId, userId) {
+		this.state.activeUser = userId;
+		userService.getInteressed(arrangementId, userId).then((result) => {
+			this.forceUpdate();
+		})
+	}
 }
+
 
 export class Arrangement extends React.Component {
    constructor(){
@@ -298,7 +308,13 @@ export class NewArrangement extends React.Component {
             </tr>
           );
 
+          // temp++;
+
+          //temp++;
+
+
           inc++;
+
        }
 
     for (let vaktmal of this.allMals) {
@@ -339,7 +355,19 @@ export class NewArrangement extends React.Component {
      </form>
      </div>
    );
-}
+
+ }
+
+
+   // getSelectedValue(value) {
+   //      let key = 0;
+   //      console.log(value)
+   //      var selectedSingleValue = document.getElementById("selected-role").value;
+   //      this.state.selectedRoles.push(<li key={key++}>{selectedSingleValue}</li>);
+   //      // document.getElementById("selected-role").selectedIndex = 0;
+   //      console.log(this.state.roles)
+   //      this.forceUpdate();
+   //  }
 
     addRolesforArrWidthMal(result, arrid) {
       for (let role of result) {
@@ -347,6 +375,25 @@ export class NewArrangement extends React.Component {
       });
     }
     }
+
+
+   // getSelectedValue(value) {
+   //      let key = 0;
+   //      console.log(value)
+   //      var selectedSingleValue = document.getElementById("selected-role").value;
+   //      this.state.selectedRoles.push(<li key={key++}>{selectedSingleValue}</li>);
+   //      // document.getElementById("selected-role").selectedIndex = 0;
+   //      console.log(this.state.roles)
+   //      this.forceUpdate();
+   //  }
+
+    addRolesforArrWidthMal(result, arrid) {
+      for (let role of result) {
+      userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
+      });
+    }
+    }
+
 
  registerArrangement(selectValue, roleListLength) {
    console.log(roleListLength)
