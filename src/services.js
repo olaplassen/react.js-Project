@@ -233,22 +233,21 @@ getInteressed(arrangementId, userId, interessed) {
 
 interessedUsers(userId, arrangementId,firstName,lastName, title) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT Users.id, Arrangement.id, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
+      connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND interessed="1"', [userId, arrangementId,firstName, lastName, title], (error, result) => {
         if(error) throw error;
         console.log(result);
         resolve(result);
       })
     });
     }
-getInteressedUsers (userId, arrangementId){
-     return new Promise ((resolve, reject) => {
-       connection.query('SELECT userId, arrangementId FROM Interessert WHERE interessed="1"', [userId, arrangementId],(error, result) => {
-        if(error) throw error;
-        console.log(result)
-        resolve(result)
-       })
-     });
-   }
+    getInteressedUsers(arrangementId){
+         return new Promise ((resolve, reject) => {
+           connection.query('SELECT Interessert.userId, Interessert.arrangementId, firstname, lastName, title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
+            if(error) throw error;
+            resolve(result);
+           })
+         });
+       }
 
 userList(callback) {
       return new Promise ((resolve, reject) => {
@@ -291,7 +290,7 @@ getArrangementInfo(id) {
        });
     }
 
-getAllSkills(userid) {
+getAllSkills() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
@@ -357,6 +356,16 @@ getSkillInfo(skillid, callback) {
       });
     });
   }
+deleteSkill(userid, skillid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM UserKomp WHERE userid=? AND skillid=?', [userid, skillid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+
+}
 getVaktmal(callback) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
@@ -371,6 +380,7 @@ getEventRolleinfo(arrid, callback) {
     connection.query('SELECT * FROM ArrangementRoller WHERE arrid=? ', [arrid], (error, result) => {
       if(error) throw error;
       resolve(result)
+      console.log(result)
     })
   })
 }
@@ -391,12 +401,13 @@ getRolesForMal(vaktmalid, callback) {
   })
 }
 
-getRoller(vaktmalid, callback) {
-    connection.query('SELECT * FROM vakt_rolle WHERE vaktmalid = ?', [vaktmalid], (error, result) => {
-      if (error) throw error;
-
-      callback(result);
+getAllRoles() {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Role', (error, result) => {
+        if (error) throw error;
+        resolve(result);
     });
+  });
   }
 
   getRolesForArr(arrid, callback) {
@@ -426,10 +437,26 @@ addRolesforArrSingle(arrid, roleid) {
     })
   })
 }
+deleteRolesfromArr(arrid, roleid){
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM ArrangementRoller WHERE arrid=? AND roleid=? LIMIT 1', [arrid, roleid], (error, result) => {
+      if(error) throw error;
+      resolve()
+      console.log(result)
+    })
+  })
+}
+getRoleCount(arrid, roleid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(roleid) as total FROM ArrangementRoller WHERE arrid=? AND roleid=?', [arrid, roleid], (error, result) => {
+      if(error) throw error;
 
+      resolve(result[0].total);
+    })
+  })
 }
 
-
+}
 
 let userService = new UserService();
 export { userService };

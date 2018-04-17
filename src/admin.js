@@ -58,14 +58,10 @@ export class AdminHome extends React.Component {
 
      );
    }
-   nextPath(path) {
-       this.props.history.push(path);
-   }
+
    componentDidMount(){
      userService.getAllArrangement().then((result) => {
        this.allEvents = result;
-       console.log(this.allEvents);
-
        this.forceUpdate();
 
      });
@@ -75,57 +71,67 @@ export class AdminHome extends React.Component {
 
 
 export class ArrangementData extends React.Component {
-    constructor(props) {
-        super(props);
+	constructor(props) {
+		super(props);
 
-        this.state = {
-            showArrangementData: false,
-            activeUser: null
-        }
-        this.updateShowState = this.updateShowState.bind(this);
-        console.log(this.state.activeUser);
-    }
-    updateShowState() {
-        this.setState({ showArrangementData: !this.state.showArrangementData });
-    }
-    render() {
+		this.state = {
+			showArrangementData: false,
+			activeUser: null,
+			interestedUsers: {},
+			users: []
+		}
+		this.updateShowState = this.updateShowState.bind(this);
 
-        return (
-            <div>
-                {this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
-                {this.state.showArrangementData ?
-                    <div>
-                        <ul>
-                            <li>Id: {this.props.data.id}</li>
-                            <li>Navn: {this.props.data.title}</li>
-                            <li>Tidspunkt: {this.props.data.end.toString()}</li>
-                            <li>Beskrivelse: {this.props.data.description}</li>
-                            <li>Utstyrliste: {this.props.data.gearList}</li>
-                        </ul>
-                    </div>
-                    :
-                    null
-                }
-            </div>
-        );
-    }
-    componentDidMount() {
-        this.setState({
-            activeUser: userService.getSignedInUser()["id"]
-        });
+	}
+	updateShowState() {
+		this.state.showArrangementData = !this.state.showArrangementData;
 
-    }
+		userService.getInteressedUsers(this.props.data.id).then((result) => {
+			var users = [];
+			result.forEach(function (user) {
+				users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
+			});
 
+			this.state.users = users;
+			this.forceUpdate();
+		});
+	}
+	render() {
+		return (
+			<div>
+				{this.props.data.title} <button type="button" onClick={this.updateShowState}>Les mer</button><button type="button" onClick={() => this.getInteressed(this.props.data.id, this.state.activeUser)}>Interessert</button>
+				{this.state.showArrangementData ?
+					<div>
+						<ul>
+							<li>Id: {this.props.data.id}</li>
+							<li>Navn: {this.props.data.title}</li>
+							<li>Tidspunkt: {this.props.data.end.toString()}</li>
+							<li>Beskrivelse: {this.props.data.description}</li>
+							<li>Utstyrliste: {this.props.data.gearList}</li>
 
-    getInteressed(arrangementId, userId) {
-        this.state.activeUser = userId;
-        console.log(this.state.activeUser)
-        userService.getInteressed(arrangementId, userId).then((result) => {
+						</ul>
+					   Interesserte brukere: {this.state.users} <br></br>
+              </div>
+					:
+					null
+				}
+			</div>
+		);
+	}
+	componentDidMount() {
+		this.setState({
+			activeUser: userService.getSignedInUser()["id"]
+		});
+	}
 
-            this.forceUpdate();
-        })
-    }
+	getInteressed(arrangementId, userId) {
+		this.state.activeUser = userId;
+		userService.getInteressed(arrangementId, userId).then((result) => {
+			this.forceUpdate();
+		})
+	}
 }
+
 
 export class Arrangement extends React.Component {
    constructor(){
@@ -175,7 +181,7 @@ export class ConfirmInteressedUsers extends React.Component {
      let interessedList = [];
 
      for(let interessed of this.allInteressed) {
-       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(this.state.currentUserId, this.state.currentArrangementId)}>Godkjenn</button> </li>)
+       interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(interessed.arrangementId, interessed.userId)}>Godkjenn</button> </li>)
      }
      return (
        <div className="menu">
@@ -186,35 +192,29 @@ export class ConfirmInteressedUsers extends React.Component {
    }
 
    confirmInteressed(arrangementId, userId){
-       userService.getInteressedUsers().arrangementId,
-       userService.getInteressedUsers().userId
-       this.state.currentArrangementId = arrangementId;
-       this.state.currentUserId = userId;
-       console.log(this.state.currentArrangementId)
-       console.log(this.state.currentUserId)
-
-       userService.confirmInteressed(arrangementId, userId).then((result) => {
-
+    userService.confirmInteressed(arrangementId, userId).then((result) => {
+     this.forceUpdate();
+     userService.interessedUsers().then((result) => {
+       this.allInteressed = result;
        this.forceUpdate();
-     })
+     });
+   });
    }
 
    componentDidMount(){
     userService.interessedUsers().then((result) => {
     this.allInteressed = result;
-    console.log(result)
     this.forceUpdate();
     });
+    userService.interessedUsers().then((result => {
+    let userId = result[0].userId;
+    let arrangementId = result[0].arrangementId;
     this.setState({
-      currentArrangementId: userService.getInteressedUsers().arrangementId,
-      currentUserId: userService.getInteressedUsers().userId
-
-    });
-    userService.getInteressedUsers().then((result) => {
-
-      this.forceUpdate();
-    });
-  }
+      currentArrangementId: arrangementId,
+      currentUserId: userId
+     });
+  }));
+}
 }
 // komponent for å godkjenne brukere
 export class ConfirmUsers extends React.Component {
@@ -264,7 +264,6 @@ export class ConfirmUsers extends React.Component {
   }
 }
 
-
 export class NewArrangement extends React.Component {
   constructor(props){
     super(props);
@@ -283,12 +282,7 @@ export class NewArrangement extends React.Component {
   }
   render() {
 
-    let temp = 0;
-    // this.state.roles = [];
-    // this.state.allRoles.map((result) => {
-    //   this.state.roles.push(<option key={result.roleid} value={result.title} id={result.roleid}>{result.title}</option>)
-    //
-    // });
+    let inc = 0;
 
     let vaktmalList = [];
     let roleList = [];
@@ -298,7 +292,7 @@ export class NewArrangement extends React.Component {
            <tr key={role.roleid}>
            <td className="td">{role.roleid}</td>
            <td className="td">{role.title}</td>
-           <td className="table">{this.numberOfRoles[temp]}</td>
+           <td className="table">{this.numberOfRoles[inc]}</td>
            <td className="table">
            <button onClick={() => {
            this.numberOfRoles[role.roleid-1]++;
@@ -313,7 +307,14 @@ export class NewArrangement extends React.Component {
             }}>-</button></td>
             </tr>
           );
-          temp++;
+
+          // temp++;
+
+          //temp++;
+
+
+          inc++;
+
        }
 
     for (let vaktmal of this.allMals) {
@@ -341,31 +342,13 @@ export class NewArrangement extends React.Component {
        onChange={(selectValue) => this.setState({ selectValue })}
        value={selectValue}
      />
-    {/* <VirtualizedSelect
-       autoFocus
-       clearable={true}
-       removeSelected={false}
-       multi={true}
-       options={roleList}
-       onChange={(selectValueSingle) => this.setState({ selectValueSingle })}
-       value={selectValueSingle}
-     />*
-       Eller egendefiner hvilke roller som trengs <br />
-       <select id="selected-role" className="selected-roles" onChange={() => this.getSelectedValue(this.state.selectedRoles)}>
-             <option key="default">-- Velg rolle --</option>
-             {this.state.roles}
-       </select>
-       <ul>
-
-              {this.state.selectedRoles}
-       </ul> */}
        <table className="table" id="myTable">
              <tbody>
              <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
                {roleList}
              </tbody>
        </table>
-       <button onClick={() => this.kjor()}>Try it</button>
+
      <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br/>
 
      <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement</button>
@@ -374,11 +357,26 @@ export class NewArrangement extends React.Component {
    );
 
  }
-kjor() {
-  if (document.getElementById("myTable").rows[1].cells.item(2).innerHTML == 2) {
-  console.log(parseInt(document.getElementById("myTable").rows[1].cells.item(2).innerHTML));
-}
-}
+
+
+   // getSelectedValue(value) {
+   //      let key = 0;
+   //      console.log(value)
+   //      var selectedSingleValue = document.getElementById("selected-role").value;
+   //      this.state.selectedRoles.push(<li key={key++}>{selectedSingleValue}</li>);
+   //      // document.getElementById("selected-role").selectedIndex = 0;
+   //      console.log(this.state.roles)
+   //      this.forceUpdate();
+   //  }
+
+    addRolesforArrWidthMal(result, arrid) {
+      for (let role of result) {
+      userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
+      });
+    }
+    }
+
+
    // getSelectedValue(value) {
    //      let key = 0;
    //      console.log(value)
