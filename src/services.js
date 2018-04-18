@@ -420,7 +420,7 @@ getAllRoles() {
 
   getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.arr_rolleid', [arrid], (error, result) => {
         if(error) throw error;
         resolve(result)
       })
@@ -465,7 +465,7 @@ getRoleCount(arrid, roleid, callback) {
 }
 getRoleKomp(roleid, arrRolleid, callback) {
   return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM RoleKomp, ArrangementRoller WHERE RoleKomp.roleid = ArrangementRoller.roleid AND RoleKomp.roleid=? AND ArrangementRoller.arr_rolleid=? ORDER BY RoleKomp.roleid', [roleid, arrRolleid], (error, result) => {
+    connection.query('SELECT * FROM RoleKomp, ArrangementRoller WHERE RoleKomp.roleid = ArrangementRoller.roleid AND RoleKomp.roleid=? AND ArrangementRoller.arr_rolleid=? ORDER BY ArrangementRoller.roleid', [roleid, arrRolleid], (error, result) => {
       if(error) throw error;
 
       resolve(result);
@@ -480,7 +480,32 @@ getUserRoleKomp(roleid, arrid, userid, arrRoleid, callback) {
     })
   })
 }
+addUserForRole(userid, arr_roleid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE ArrangementRoller SET userid=? WHERE arr_rolleid=? AND arrid=?', [userid, arr_roleid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result[0]);
+    })
+  })
+}
+getUsedUsers(arr_rolleid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT userid FROM ArrangementRoller WHERE arr_rolleid=? AND userid IS NOT NULL', [arr_rolleid], (error, result) => {
+      if(error) throw error;
 
+      resolve(result[0]);
+    })
+  })
+}
+getUsedEventRoles(arrid, arr_rolleid) {
+return new Promise ((resolve, reject) => {
+  connection.query('SELECT arr_rolleid FROM ArrangementRoller WHERE arrid=? AND userid IS NOT NULL AND arr_rolleid =?', [arrid, arr_rolleid], (error, result) => {
+    if(error) throw error;
+
+    resolve(result[0]);
+  })
+})
+}
 }
 
 let userService = new UserService();
