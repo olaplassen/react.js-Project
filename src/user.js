@@ -291,14 +291,13 @@ export class EventInfo extends React.Component {
           })
         }
       }
-
-        userService.getAllUsers().then((result) => {
-          this.allUsers = result;
-          this.forceUpdate();
+      userService.getAllUsers().then((result) => {
+        this.allUsers = result;
+        this.forceUpdate();
         })
-        this.refs.tildelRoller.onclick = () => {
-          let usedUser = [];
-          let usedEventRoles = [];
+      this.refs.tildelRoller.onclick = () => {
+        let usedUser = [];
+        let usedEventRoles = [];
           for(let eventRolle of this.allSelectedRoles) {
             userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
               usedUser.push(result)
@@ -317,8 +316,6 @@ export class EventInfo extends React.Component {
                     this.userWithRoles = result;
                     }
 
-                    // console.log(usedUser)
-                    // console.log(usedEventRoles)
                     for (var i = 0; i < this.allSelectedRoles.length; i++) {
                       let exists = usedUser.includes(user.id);
                       let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
@@ -333,9 +330,7 @@ export class EventInfo extends React.Component {
                             console.log(result)
                           })
                         }
-                        else {
-                          console.log("nei")
-                        }
+
                       }
                     })
                   }

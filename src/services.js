@@ -484,7 +484,7 @@ addUserForRole(userid, arr_roleid, arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE ArrangementRoller SET userid=? WHERE arr_rolleid=? AND arrid=?', [userid, arr_roleid, arrid], (error, result) => {
       if(error) throw error;
-      resolve(result[0]);
+      resolve(result);
     })
   })
 }
