@@ -330,7 +330,6 @@ export class EventInfo extends React.Component {
                             console.log(result)
                           })
                         }
-
                       }
                     })
                   }
