@@ -415,6 +415,12 @@ getAllRoles() {
     });
   });
   }
+  UpsertRoleForArrangement(userId, arr_roleId) {
+    connection.query('UPDATE ArrangementRoller SET userid=? WHERE arr_rolleid=?', [userId, arr_roleId], (error, result) => {
+      if(error) throw error;
+      console.log("RESULTAT DÆ SHJØØØEEE: " + result);
+    })
+  }
 
   getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
@@ -503,6 +509,15 @@ getUsedEventRoles(arrid, arr_rolleid) {
       resolve(result[0]);
       })
     })
+}
+getWatchList(arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT Role.title, firstname, Arrangement.id FROM Role, Users, ArrangementRoller, Arrangement WHERE Role.roleid=ArrangementRoller.roleid AND Users.id=ArrangementRoller.userid AND Arrangement.id=ArrangementRoller.arrid AND ArrangementRoller.arrid=?', [arrid], (error, result) => {
+      if(error) throw error;
+
+      resolve(result);
+    })
+  })
 }
 
 }

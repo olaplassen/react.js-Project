@@ -22,6 +22,7 @@ export default class EventInfo extends React.Component {
     this.userWithRoles = [];
     this.selectedUser = [];
     this.usedUser = [];
+		this.allWatchList=[];
 		this.state = {
 
 			interestedUsers: {},
@@ -32,9 +33,16 @@ export default class EventInfo extends React.Component {
 	render() {
 		let signedInUser = userService.getSignedInUser();
 
+		let watchList = [];
 		let roleList = [];
 		let roleListAdmin = [];
 		let inc = 0;
+
+		for (let watch of this.allWatchList) {
+ 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
+ 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
+
+ 	 }
 
 		for (let role of this.allSelectedRoles) {
 			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
@@ -119,6 +127,13 @@ export default class EventInfo extends React.Component {
 								{roleListAdmin}
 							</tbody>
 						</table> <br />
+						<h4> Vakter som er utdelt</h4>
+            <table className="table" id="myTable">
+						<tbody>
+						<tr> <th className="th">Rolle</th> <th className="th">Deltaker</th><th className="th">Godkjent</th> </tr>
+	             {watchList}
+						</tbody>
+						</table> <br />
 						<button ref="endreRoller" className="button">Endre Roller</button>
 						<br />
 						<br />
@@ -133,6 +148,12 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
+
+		userService.getWatchList(this.arrangement.id).then((result) => {
+			this.allWatchList = result;
+			this.forceUpdate();
+
+		})
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
@@ -261,13 +282,31 @@ export default class EventInfo extends React.Component {
 					}
 
 					getInteressedUsers() {
+
+						var rolesAvailableForArrangement = [];
+						userService.getRolesForArr(this.arrangement.id).then((result) => {
+							for (let role of result) {
+								rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
+							}
+						});
+
 						userService.getInteressedUsers(this.arrangement.id).then((result) => {
 							var users = [];
+
 							result.forEach(function (user) {
-								users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
+								users.push(
+									<div>
+										<li>{user.firstname + " "}</li>
+										<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
+											<option value={null} selected>-- Velg rolle -- </option>
+											{rolesAvailableForArrangement}
+										</select>
+									</div>
+								);
 							});
 							this.state.users = users;
+							console.log(this.test)
 							this.forceUpdate();
-						})
+						});
 					}
 }
