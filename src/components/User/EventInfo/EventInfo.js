@@ -122,7 +122,7 @@ export default class EventInfo extends React.Component {
 						<button ref="endreRoller" className="button">Endre Roller</button>
 						<br />
 						<br />
-			      <button ref="tildelRoller" className="button">Tilde vakter</button>
+			      <button ref="tildelRoller" className="button">Generer vaktlister</button>
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
 				</div>
