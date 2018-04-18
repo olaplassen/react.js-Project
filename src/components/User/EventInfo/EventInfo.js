@@ -149,11 +149,7 @@ export default class EventInfo extends React.Component {
 
 		let signedInUser = userService.getSignedInUser();
 
-		userService.getWatchList(this.arrangement.id).then((result) => {
-			this.allWatchList = result;
-			this.forceUpdate();
 
-		})
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
@@ -165,6 +161,11 @@ export default class EventInfo extends React.Component {
 					this.forceUpdate();
 				});
 			}
+			userService.getWatchList(this.arrangement.id).then((result) => {
+				this.allWatchList = result;
+				this.forceUpdate();
+	      console.log(this.arrangement.id)
+			})
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 
@@ -305,7 +306,7 @@ export default class EventInfo extends React.Component {
 								);
 							});
 							this.state.users = users;
-							console.log(this.test)
+
 							this.forceUpdate();
 						});
 					}

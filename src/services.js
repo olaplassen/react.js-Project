@@ -514,7 +514,7 @@ getWatchList(arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT Role.title, firstname, Arrangement.id FROM Role, Users, ArrangementRoller, Arrangement WHERE Role.roleid=ArrangementRoller.roleid AND Users.id=ArrangementRoller.userid AND Arrangement.id=ArrangementRoller.arrid AND ArrangementRoller.arrid=?', [arrid], (error, result) => {
       if(error) throw error;
-
+     console.log(result)
       resolve(result);
     })
   })
