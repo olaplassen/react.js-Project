@@ -22,7 +22,7 @@ export class UserMenu extends React.Component {
     super(props);
     //setter this.id lik verdien som ble sendt fra login.
     this.id = props.userId;
-//
+
   }
   render() {
     return (
@@ -99,6 +99,7 @@ export class EventInfo extends React.Component {
     this.roleKomp = [];
     this.userWithRoles = [];
     this.selectedUser = [];
+    this.usedUser = [];
     }
   render() {
     let signedInUser = userService.getSignedInUser();
@@ -259,14 +260,11 @@ export class EventInfo extends React.Component {
 
       }
       else {
-
-
           for (var i = 1; i < this.allRoles.length; i++) {
             if (this.difference[i -1] > 0) {
 
               for (var y = 0; y < this.difference[i -1]; y++) {
                 userService.addRolesforArrSingle(this.arrangement.id, i).then((result) => {
-
                 })
               }
             }
@@ -293,75 +291,58 @@ export class EventInfo extends React.Component {
           })
         }
       }
-      if(signedInUser.admin == 1) {
+
         userService.getAllUsers().then((result) => {
           this.allUsers = result;
+          this.forceUpdate();
         })
         this.refs.tildelRoller.onclick = () => {
-          let go = true;
+          let usedUser = [];
+          let usedEventRoles = [];
           for(let eventRolle of this.allSelectedRoles) {
-            userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
-              this.roleKomp.push(result);
-              console.log(this.roleKomp)
-
+            userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
+              usedUser.push(result)
             });
-            go == true;
-            // if (this.state.users == undefined) {
-            // for(let userRole of this.roleKomp) {
-            if(go == true) {
+            userService.getUsedEventRoles(eventRolle.arrid, eventRolle.arr_rolleid).then((result) => {
+              usedEventRoles.push(result)
+            });
+            userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
+              this.roleKomp= result;
+            });
+
               for(let user of this.allUsers) {
+
                 userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
-                  // for (var i = 0; i < this.allSelectedRoles.length -1; i++) {
-                    if(result.length != 0) {
-                    this.userWithRoles.push(result);
-                    // console.log(this.userWithRoles)
-                    console.log(this.roleKomp)
-
-                  for (var i = 0; i < this.roleKomp.length - 1; i++) {
-                    for (var y = 0; y < this.userWithRoles.length ; y++) {
-                      if(this.roleKomp[i].length == this.userWithRoles[y].length && this.roleKomp[i][y].arr_rolleid != undefined) {
-
-                        // console.log(this.roleKomp[i][y].arr_rolleid)
-                        break;
-                        console.log(user.id + "added for" + eventRolle.arr_rolleid + " " + eventRolle.roleid);
-                      }
-                      else if (this.roleKomp[i].length != this.userWithRoles[y].length) {
-                        console.log("har ikke kravene")
-                      }
+                  if(result.length != 0){
+                    this.userWithRoles = result;
                     }
 
+                    // console.log(usedUser)
+                    // console.log(usedEventRoles)
+                    for (var i = 0; i < this.allSelectedRoles.length; i++) {
+                      let exists = usedUser.includes(user.id);
+                      let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
 
+
+                        if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
+                          console.log(exists)
+                          usedUser.push(user.id)
+                          usedEventRoles.push(eventRolle.arr_rolleid)
+
+                          userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid).then((result) => {
+                            console.log(result)
+                          })
+                        }
+                        else {
+                          console.log("nei")
+                        }
+                      }
+                    })
                   }
-                  }
-
-                })
-
+                }
               }
             }
-
           }
-        }
-      }
-    }
-  }
-
-
-  // fixDate(date) {
-  //   let day = date.getDate();
-  //   let month = date.getMonth() + 1;
-  //   let year = date.getFullYear();
-  //   let hours = date.getHours();
-  //   if (hours < 10) {
-  //     hours = '0' + hours;
-  //   }
-  //   let mins = date.getMinutes();
-  //   if (mins < 10) {
-  //     mins = '0' + mins;
-  //   }
-  //
-  //   let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
-  //   return(dateTime);
-  // }
 }
 
 export class MyPage extends React.Component {
