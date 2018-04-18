@@ -181,20 +181,37 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
+<<<<<<< HEAD
 		userService.getInteressedUsers(this.arrangement.id).then((result) => {
 			console.log(result)
 		});
 		userService.getWatchList(this.arrangement.id).then((result) => {
 			this.allWatchList = result;
 			this.forceUpdate();
+=======
 
-		})
+>>>>>>> 13be54bc47c58db06e44f81ec9e1c79c51ff3f9d
+
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
 			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
 			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
+<<<<<<< HEAD
 
+=======
+			if(signedInUser.admin == 1) {
+				userService.getEventRolleinfo(this.arrangement.id).then((result) => {
+					this.eventRoller = result;
+					this.forceUpdate();
+				});
+			}
+			userService.getWatchList(this.arrangement.id).then((result) => {
+				this.allWatchList = result;
+				this.forceUpdate();
+	      console.log(this.arrangement.id)
+			})
+>>>>>>> 13be54bc47c58db06e44f81ec9e1c79c51ff3f9d
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 
@@ -362,6 +379,7 @@ export default class EventInfo extends React.Component {
 				}
 			});
 
+<<<<<<< HEAD
 			userService.getInteressedUsers(this.arrangement.id).then((result) => {
 				var users = [];
 
@@ -380,4 +398,34 @@ export default class EventInfo extends React.Component {
 				this.forceUpdate();
 			});
 		}
+=======
+					getInteressedUsers() {
+
+						var rolesAvailableForArrangement = [];
+						userService.getRolesForArr(this.arrangement.id).then((result) => {
+							for (let role of result) {
+								rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
+							}
+						});
+
+						userService.getInteressedUsers(this.arrangement.id).then((result) => {
+							var users = [];
+
+							result.forEach(function (user) {
+								users.push(
+									<div>
+										<li>{user.firstname + " "}</li>
+										<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
+											<option value={null} selected>-- Velg rolle -- </option>
+											{rolesAvailableForArrangement}
+										</select>
+									</div>
+								);
+							});
+							this.state.users = users;
+
+							this.forceUpdate();
+						});
+					}
+>>>>>>> 13be54bc47c58db06e44f81ec9e1c79c51ff3f9d
 }
