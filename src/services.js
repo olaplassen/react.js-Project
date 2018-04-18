@@ -43,9 +43,9 @@ getUsers(id, callback): Promise<user[]> {
     });
   });
   }
-  getAllUsers(callback) {
+getAllUsers(callback) {
     return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM Users', (error, result) => {
+    connection.query('SELECT * FROM Users ORDER BY vaktpoeng DESC', (error, result) => {
       if (error) throw error;
       resolve(result);
     });
@@ -307,8 +307,6 @@ getAllSkills() {
       });
     });
  }
-
-
 getSkill(skillid) {
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
@@ -498,14 +496,15 @@ getUsedUsers(arr_rolleid) {
   })
 }
 getUsedEventRoles(arrid, arr_rolleid) {
-return new Promise ((resolve, reject) => {
-  connection.query('SELECT arr_rolleid FROM ArrangementRoller WHERE arrid=? AND userid IS NOT NULL AND arr_rolleid =?', [arrid, arr_rolleid], (error, result) => {
-    if(error) throw error;
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT arr_rolleid FROM ArrangementRoller WHERE arrid=? AND userid IS NOT NULL AND arr_rolleid =?', [arrid, arr_rolleid], (error, result) => {
+      if(error) throw error;
 
-    resolve(result[0]);
-  })
-})
+      resolve(result[0]);
+      })
+    })
 }
+
 }
 
 let userService = new UserService();
