@@ -236,6 +236,7 @@ export default class EventInfo extends React.Component {
 			}
 			userService.getAllUsers().then((result) => {
 				this.allUsers = result;
+				console.log(this.allUsers)
 				this.forceUpdate();
 				})
 			this.refs.tildelRoller.onclick = () => {

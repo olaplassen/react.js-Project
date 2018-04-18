@@ -45,7 +45,7 @@ getUsers(id, callback): Promise<user[]> {
   }
 getAllUsers(callback) {
     return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM Users ORDER BY vaktpoeng DESC', (error, result) => {
+    connection.query('SELECT * FROM Users ORDER BY vaktpoeng', (error, result) => {
       if (error) throw error;
       resolve(result);
     });
