@@ -320,7 +320,6 @@ export class EventInfo extends React.Component {
                       let exists = usedUser.includes(user.id);
                       let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
 
-
                         if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
                           console.log(exists)
                           usedUser.push(user.id)

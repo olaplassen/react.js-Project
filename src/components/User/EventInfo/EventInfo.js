@@ -9,14 +9,19 @@ export default class EventInfo extends React.Component {
 	constructor(props) {
 		super(props);
 		this.arrangement = {};
-		this.allSelectedRoles = [];
-		this.allRoles = [];
-		this.id = props.match.params.id;
-		this.numberOfRoles = [];
-		this.firstNumberOfRoles = [];
-		this.secondNumberOfRoles = [];
-		this.difference = [];
-		this.eventRoller = [];
+    this.allSelectedRoles = [];
+    this.allRoles = [];
+    this.id = props.match.params.id;
+    this.numberOfRoles = [];
+    this.firstNumberOfRoles = [];
+    this.secondNumberOfRoles = [];
+    this.difference = [];
+    this.eventRoller = [];
+    this.allUsers = [];
+    this.roleKomp = [];
+    this.userWithRoles = [];
+    this.selectedUser = [];
+    this.usedUser = [];
 		this.state = {
 
 			interestedUsers: {},
@@ -116,6 +121,8 @@ export default class EventInfo extends React.Component {
 						</table> <br />
 						<button ref="endreRoller" className="button">Endre Roller</button>
 						<br />
+						<br />
+			      <button ref="tildelRoller" className="button">Tilde vakter</button>
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
 				</div>
@@ -131,7 +138,7 @@ export default class EventInfo extends React.Component {
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
 			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
 			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
-			if (signedInUser.admin == 1) {
+			if(signedInUser.admin == 1) {
 				userService.getEventRolleinfo(this.arrangement.id).then((result) => {
 					this.eventRoller = result;
 					this.forceUpdate();
@@ -139,13 +146,14 @@ export default class EventInfo extends React.Component {
 			}
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
+
 				this.forceUpdate();
 			});
 		});
-		if (signedInUser.admin == 1) {
+		if(signedInUser.admin == 1) {
 			userService.getAllRoles().then((result) => {
 				this.allRoles = result;
-				for (var i = 1; i < this.allRoles.length + 1; i++) {
+				for (var i = 1; i < this.allRoles.length +1; i++) {
 
 					userService.getRoleCount(this.arrangement.id, i).then((result) => {
 						this.numberOfRoles.push(result);
@@ -156,33 +164,35 @@ export default class EventInfo extends React.Component {
 				}
 			})
 
-			this.refs.endreRoller.onclick = () => {
 
-				for (var i = 0; i < this.allRoles.length; i++) {
-					if (this.secondNumberOfRoles[i] != this.firstNumberOfRoles[i]) {
-						this.difference.push(this.secondNumberOfRoles[i] - this.firstNumberOfRoles[i]);
-					}
-					else if (this.secondNumberOfRoles[i] == this.firstNumberOfRoles[i]) {
-						this.difference.push(0);
-					}
-				}
-				if (this.difference == this.firstNumberOfRoles) {
-					this.props.history.push('/eventinfo/' + this.arrangement.id);
+		this.refs.endreRoller.onclick = () => {
+
+
+			for (var i = 0; i < this.allRoles.length; i++) {
+				if (this.secondNumberOfRoles[i] != this.firstNumberOfRoles[i]) {
+					this.difference.push(this.secondNumberOfRoles[i] - this.firstNumberOfRoles[i]);
 
 				}
-				else {
+				else if(this.secondNumberOfRoles[i] == this.firstNumberOfRoles[i]) {
+					this.difference.push(0);
+				}
+			}
+			if (this.difference == this.firstNumberOfRoles) {
+				this.props.history.push('/eventinfo/' + this.arrangement.id);
 
+			}
+			else {
 					for (var i = 1; i < this.allRoles.length; i++) {
-						if (this.difference[i - 1] > 0) {
+						if (this.difference[i -1] > 0) {
 
-							for (var y = 0; y < this.difference[i - 1]; y++) {
+							for (var y = 0; y < this.difference[i -1]; y++) {
 								userService.addRolesforArrSingle(this.arrangement.id, i).then((result) => {
 								})
 							}
 						}
-						else if (this.difference[i - 1] < 0) {
+						else if(this.difference[i-1] < 0) {
 
-							for (var y = 0; y < -(this.difference[i - 1]); y++) {
+							for (var y = 0; y < -(this.difference[i -1]); y++) {
 								userService.deleteRolesfromArr(this.arrangement.id, i).then((result) => {
 								});
 							}
@@ -190,9 +200,10 @@ export default class EventInfo extends React.Component {
 					}
 					userService.getAllRoles().then((result) => {
 						this.allRoles = result;
-						for (var i = 1; i < this.allRoles.length + 1; i++) {
+						for (var i = 1; i < this.allRoles.length +1; i++) {
 
 							userService.getRoleCount(this.arrangement.id, i).then((result) => {
+
 								this.numberOfRoles.push(result);
 								this.firstNumberOfRoles.push(result);
 								this.secondNumberOfRoles = this.numberOfRoles;
@@ -202,34 +213,61 @@ export default class EventInfo extends React.Component {
 					})
 				}
 			}
-		}
-	}
+			userService.getAllUsers().then((result) => {
+				this.allUsers = result;
+				this.forceUpdate();
+				})
+			this.refs.tildelRoller.onclick = () => {
+				let usedUser = [];
+				let usedEventRoles = [];
+					for(let eventRolle of this.allSelectedRoles) {
+						userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
+							usedUser.push(result)
+						});
+						userService.getUsedEventRoles(eventRolle.arrid, eventRolle.arr_rolleid).then((result) => {
+							usedEventRoles.push(result)
+						});
+						userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
+							this.roleKomp= result;
+						});
 
-	getInteressedUsers() {
-		userService.getInteressedUsers(this.arrangement.id).then((result) => {
-			var users = [];
-			result.forEach(function (user) {
-				users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
-			});
-			this.state.users = users;
-			this.forceUpdate();
-		})
-	}
+							for(let user of this.allUsers) {
 
-	// fixDate(date) {
-	//   let day = date.getDate();
-	//   let month = date.getMonth() + 1;
-	//   let year = date.getFullYear();
-	//   let hours = date.getHours();
-	//   if (hours < 10) {
-	//     hours = '0' + hours;
-	//   }
-	//   let mins = date.getMinutes();
-	//   if (mins < 10) {
-	//     mins = '0' + mins;
-	//   }
-	//
-	//   let dateTime = day + '/' + month + '/' + year + ' ' + hours + ':' + mins;
-	//   return(dateTime);
-	// }
+								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
+									if(result.length != 0){
+										this.userWithRoles = result;
+										}
+
+										for (var i = 0; i < this.allSelectedRoles.length; i++) {
+											let exists = usedUser.includes(user.id);
+											let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+
+
+												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
+													console.log(exists)
+													usedUser.push(user.id)
+													usedEventRoles.push(eventRolle.arr_rolleid)
+
+													userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid).then((result) => {
+														console.log(result)
+													})
+												}
+											}
+										})
+									}
+								}
+							}
+						}
+					}
+
+					getInteressedUsers() {
+						userService.getInteressedUsers(this.arrangement.id).then((result) => {
+							var users = [];
+							result.forEach(function (user) {
+								users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
+							});
+							this.state.users = users;
+							this.forceUpdate();
+						})
+					}
 }
