@@ -86,6 +86,7 @@ export default class UserHome extends React.Component {
 		});
 		userService.getUserVaktListe(this.userId).then((result) => {
 			this.kommendeVakter = result;
+			console.log(result)
 			this.forceUpdate();
 		})
 	}

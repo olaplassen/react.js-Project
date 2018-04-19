@@ -333,23 +333,28 @@ export default class EventInfo extends React.Component {
 								for (var i = 0; i < this.interestedUsers.length; i++) {
 									let exists = usedUser.includes(interestedUser.userId);
 									let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-										if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
-											console.log(exists)
-											usedUser.push(interestedUser.userId)
-											usedEventRoles.push(eventRolle.arr_rolleid)
+									userService.isUserPassive(interestedUser.userid).then((result) => {
+										this.userPassive = result;
+										if(this.user.passive.length != 0) {
+												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.passive_start <= arr.slutt && sluttpassive >=start.arr ) {
+													console.log(exists)
+													usedUser.push(interestedUser.userId)
+													usedEventRoles.push(eventRolle.arr_rolleid)
 
-											userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-												userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
-													this.roleNoUser = result;
-													this.forceUpdate();
-												});
-												userService.getRolewithUserInfo(this.id).then((result) => {
-													this.fordeltVakter = result;
-													this.forceUpdate();
-												});
-												this.forceUpdate();
-											})
-										}
+													userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+														userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+															this.roleNoUser = result;
+															this.forceUpdate();
+														});
+														userService.getRolewithUserInfo(this.id).then((result) => {
+															this.fordeltVakter = result;
+															this.forceUpdate();
+														});
+														this.forceUpdate();
+													})
+												}
+											}
+										})
 									}
 								})
 							}
