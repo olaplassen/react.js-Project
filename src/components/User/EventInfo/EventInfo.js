@@ -23,18 +23,27 @@ export default class EventInfo extends React.Component {
 		this.allWatchList=[];
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
-		this.interestedUsers = [];
+		this.state = {
+
+			interestedUsers: {},
+			users: []
+		}
 	}
 
 	render() {
 		let signedInUser = userService.getSignedInUser();
 
-		let interestedUserList = [];
+		let watchList = [];
 		let roleList = [];
 		let roleListAdmin = [];
 		let roleUserList = [];
 		let inc = 0;
 
+		for (let watch of this.allWatchList) {
+ 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
+ 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
+
+ 	 }
 
 		for (let role of this.allSelectedRoles) {
 			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
@@ -63,6 +72,7 @@ export default class EventInfo extends React.Component {
 			inc++;
 		}
 		for(let roleWithUser of this.fordeltVakter) {
+
 			if (roleWithUser.godkjent == 0) {
 				roleUserList.push(
 					<tr key={roleWithUser.arr_rolleid}>
@@ -84,9 +94,7 @@ export default class EventInfo extends React.Component {
 					)
 				}
 			}
-
 			for(let rolesForArr of this.roleNoUser) {
-
 				roleUserList.push(
 					<tr key={rolesForArr.arr_rolleid}>
 						<td className="td">{rolesForArr.title}</td>
@@ -96,14 +104,6 @@ export default class EventInfo extends React.Component {
 					</tr>
 					)
 				}
-
-			for(let interestedUser of this.interestedUsers){
-				interestedUserList.push(
-					<tr key={interestedUser.userId}>
-					<td className="td">{interestedUser.firstname} {interestedUser.lastName}</td>
-					</tr>
-				)
-			}
 
 		if (signedInUser.admin == 0) {
 
@@ -122,21 +122,13 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
-					<div className="row">
-					<div className="column">
+					<div>
 						<h4>Roller som kreves for dette arrangementet:</h4> <br />
 						<table>
 							<tbody>
 								{roleList}
 							</tbody>
 						</table>
-						</div>
-
-						<div className="column">
-						<button>godkjenn</button>
-						</div>
-						</div>
-						<div>
 						<br />
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
@@ -144,13 +136,14 @@ export default class EventInfo extends React.Component {
 			)
 		}
 		else {
-
 			return (
 				<div className="menu">
 					<div>
 						<h1>{this.arrangement.title} informasjon side.</h1> <br />
 						{this.start}
 					</div> <br />
+
+					<div>Interesserte brukere: {this.state.users} <br></br><button type="button" onClick={() => this.getInteressedUsers(this.arrangement.id)}>Vi interesserte</button> </div>
 					<div>
 						Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
 						Oppmøte tidspunkt: {this.show} <br />
@@ -160,6 +153,7 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
+					<div>
 						<h4>Roller som kreves for dette arrangementet:</h4> <br />
 						<table className="table" id="myTable">
 							<tbody>
@@ -168,35 +162,19 @@ export default class EventInfo extends React.Component {
 							</tbody>
 						</table> <br />
 						<button ref="endreRoller" className="button">Endre Roller</button>
-						<br />
-						<hr />
-						<div className="row">
-						<div className="column1">
+						<br /> <hr />
 						<h4> Vakter som er utdelt</h4>
-            <table className="table">
+            <table className="table" id="myTable">
 						<tbody>
 						<tr> <th className="th">Rolle</th><th className="th">Sendt ut</th> <th className="th">Deltaker</th><th className="th">Godkjent</th> </tr>
 	             {roleUserList}
 						</tbody>
 						</table> <br />
-						</div>
-						<div className="column2">
-						<h4>Interesserte brukere</h4>
-						<table className="table">
-							<tbody>
-								<tr><th className="th">Intereserte brukere</th> </tr>
-								{interestedUserList}
-							</tbody>
-						</table>
-						</div>
-						</div>
 						<br />
-						<br />
-
 			      <button ref="tildelRoller" className="button">Generer vaktlister</button>
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
-
+				</div>
 			)
 		}
 	}
@@ -204,7 +182,13 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
-
+		userService.getInteressedUsers(this.arrangement.id).then((result) => {
+			console.log(result)
+		});
+		userService.getWatchList(this.arrangement.id).then((result) => {
+			this.allWatchList = result;
+			this.forceUpdate();
+		});
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
@@ -213,11 +197,9 @@ export default class EventInfo extends React.Component {
 
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
-				console.log(result)
 				this.forceUpdate();
 				});
 			});
-
 			userService.getRolewithUserInfo(this.id).then((result) => {
 				this.fordeltVakter = result;
 				console.log(result)
@@ -225,17 +207,10 @@ export default class EventInfo extends React.Component {
 			});
 			userService.getRolesWithNoUser(this.id).then((result) => {
 				this.roleNoUser = result;
-				console.log(result)
-
 				this.forceUpdate();
 			})
 
 		if(signedInUser.admin == 1) {
-			userService.getInteressedUsers(this.id).then((result) => {
-				this.interestedUsers = result;
-				console.log(result)
-				this.forceUpdate();
-		});
 			userService.getAllRoles().then((result) => {
 				this.allRoles = result;
 					for (var i = 1; i < this.allRoles.length +1; i++) {
@@ -365,5 +340,29 @@ export default class EventInfo extends React.Component {
 						}
 					}
 				}
+			getInteressedUsers() {
+				var rolesAvailableForArrangement = [];
+					userService.getRolesForArr(this.arrangement.id).then((result) => {
+						for (let role of result) {
+							rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
+						}
+					});
+				userService.getInteressedUsers(this.arrangement.id).then((result) => {
+					var users = [];
 
+					result.forEach(function (user) {
+						users.push(
+						<div>
+							<li>{user.firstname + " "}</li>
+							<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
+							<option value={null} selected>-- Velg rolle -- </option>
+							{rolesAvailableForArrangement}
+							</select>
+							</div>
+						);
+					});
+				this.state.users = users;
+				this.forceUpdate();
+			});
+		}
 }

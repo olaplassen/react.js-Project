@@ -548,8 +548,9 @@ getUserVaktListe(userid) {
   })
 }
 godkjennVakt(arr_rolleid) {
+  let today = new Date();
   return new Promise ((resolve, reject) => {
-    connection.query('UPDATE ArrangementRoller SET godkjent=1  WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
+    connection.query('UPDATE ArrangementRoller SET godkjent=1, godkjent_tid=?  WHERE arr_rolleid=?', [today, arr_rolleid], (error, result) => {
       if(error) throw error;
       resolve(result);
     })
