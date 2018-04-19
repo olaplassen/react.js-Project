@@ -17,11 +17,13 @@ export default class AdminHome extends React.Component {
 
     render() {
         return (
-            <div style={{ height: 400, width: 600 }} className="menu">
+            <div className="calendar">
                 <BigCalendar
                     events={this.allEvents}
                     showMultiDayTimes
+
                     defaultDate={new Date()}
+
                     selectAble={true}
                     onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
                 />
