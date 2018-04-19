@@ -19,7 +19,6 @@ export default class UserHome extends React.Component {
 	}
 
 	render() {
-
 		let kommendeVakterList = [];
 		for(let kommendeVakt of this.kommendeVakter) {
 			console.log(kommendeVakt)
@@ -36,15 +35,6 @@ export default class UserHome extends React.Component {
 								this.kommendeVakter = result;
 								this.forceUpdate();
 							})
-
-		return (
-			<div className="calendar">
-				<BigCalendar
-					events={this.allEvents}
-					showMultiDayTimes
-					defaultDate={new Date}
-					selectAble={true}
-
 
 						})
 					}}>Godkjenn</button></td>

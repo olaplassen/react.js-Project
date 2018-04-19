@@ -13,7 +13,7 @@ export default class ConfirmInteressedUsers extends React.Component {
         currentArrangementId: null
       }
     }
- 
+
     render() {
       let interessedList = [];
       let arrangementDetails = [];
@@ -23,15 +23,15 @@ export default class ConfirmInteressedUsers extends React.Component {
       for (let arrangement of this.allArrangement) {
          arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
        }
- 
+
       return (
         <div className="menu">
         <div>{arrangementDetails}</div>
- 
+
         </div>
       );
     }
- 
+
     confirmInteressed(arrangementId, userId){
      userService.confirmInteressed(arrangementId, userId).then((result) => {
       this.forceUpdate();
@@ -41,7 +41,7 @@ export default class ConfirmInteressedUsers extends React.Component {
       });
     });
     }
- 
+
     componentDidMount(){
       userService.getArrangement().then((result) => {
         this.allArrangement = result;
