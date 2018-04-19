@@ -17,7 +17,7 @@ export default class UserHome extends React.Component {
 		this.userId = props.match.params.userId;
 		console.log(this.userId)
 	}
-
+//push
 	render() {
 		let kommendeVakterList = [];
 		for(let kommendeVakt of this.kommendeVakter) {
