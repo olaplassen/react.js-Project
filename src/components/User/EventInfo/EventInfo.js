@@ -82,13 +82,13 @@ export default class EventInfo extends React.Component {
 					</tr>
 					)
 				}
-				else if(roleWithUser.tildeltTid != undefined) {
+				else if(roleWithUser.godkjent_tid != null) {
 					roleUserList.push(
 						<tr key={roleWithUser.arr_rolleid}>
 							<td className="td">{roleWithUser.title}</td>
 							<td className="td">{roleWithUser.tildelt_tid.toLocaleString().slice(0,-3)}</td>
 							<td className="td">{roleWithUser.firstName} {roleWithUser.lastName}</td>
-							<td className="td">{roleWithUser.tildelt_tid.toLocaleString().slice(0,-3)}</td>
+							<td className="td">{roleWithUser.godkjent_tid.toLocaleString().slice(0,-3)}</td>
 						</tr>
 					)
 				}
@@ -196,9 +196,11 @@ export default class EventInfo extends React.Component {
 
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
+				console.log(result)
 				this.forceUpdate();
 				});
 			});
+			
 			userService.getRolewithUserInfo(this.id).then((result) => {
 				this.fordeltVakter = result;
 				console.log(result)
@@ -206,6 +208,8 @@ export default class EventInfo extends React.Component {
 			});
 			userService.getRolesWithNoUser(this.id).then((result) => {
 				this.roleNoUser = result;
+				console.log(result)
+
 				this.forceUpdate();
 			})
 
