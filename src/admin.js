@@ -86,14 +86,16 @@ export class ArrangementData extends React.Component {
 	updateShowState() {
 		this.state.showArrangementData = !this.state.showArrangementData;
 
-		userService.getInteressedUsers(this.props.data.id).then((result) => {
+    userService.getInteressedUsers(this.props.data.id).then((result) => {
 			var users = [];
 			result.forEach(function (user) {
+        console.log(user)
 				users.push(<li>{user.firstname + " "}<button type="button" onClick="godkjenn">Godkjenn</button></li>);
 			});
 
 			this.state.users = users;
 			this.forceUpdate();
+
 		});
 	}
 	render() {
@@ -122,6 +124,7 @@ export class ArrangementData extends React.Component {
 		this.setState({
 			activeUser: userService.getSignedInUser()["id"]
 		});
+
 	}
 
 	getInteressed(arrangementId, userId) {
@@ -131,45 +134,38 @@ export class ArrangementData extends React.Component {
 		})
 	}
 }
-
-
 export class Arrangement extends React.Component {
-   constructor(){
-     super();
-     this.allArrangement = [];
-
-   }
-   render() {
-    let arrangementDetails = [];
-
+  constructor(){
+    super();
+    this.allArrangement = [];
+  }
+  render() {
+   let arrangementDetails = [];
     for (let arrangement of this.allArrangement) {
-       arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
-     }
+      arrangementDetails.push(<ArrangementData data={arrangement} />);
+    }
 
-      return (
+     return (
 
-        <div className ="menu">
-          {arrangementDetails}
-        </div>
-      );
-   }
-   componentDidMount(){
-     userService.getArrangement().then((result) => {
-       this.allArrangement = result;
-       this.forceUpdate();
-     });
-     userService.interessedUsers().then((result) => {
-       this.allInteressed = result;
-       console.log(result)
-       this.forceUpdate();
-     });
-   }
+       <div className ="menu">
+         {arrangementDetails}
+       </div>
+     );
+  }
+componentDidMount(){
+ userService.getArrangement().then((result) => {
+   this.allArrangement = result;
+   this.forceUpdate();
+
+ });
 }
 
+}
 export class ConfirmInteressedUsers extends React.Component {
    constructor(props) {
      super(props);
      this.allInteressed = [];
+     this.allArrangement = [];
      console.log(props)
      this.state = {
        currentUserId: null,
@@ -179,14 +175,18 @@ export class ConfirmInteressedUsers extends React.Component {
 
    render() {
      let interessedList = [];
-
+     let arrangementDetails = [];
      for(let interessed of this.allInteressed) {
        interessedList.push(<li key={interessed.firstName}> {interessed.firstname + " " + interessed.lastName + " er interessert i: " + interessed.title} <button type="button" onClick={() => this.confirmInteressed(interessed.arrangementId, interessed.userId)}>Godkjenn</button> </li>)
      }
+     for (let arrangement of this.allArrangement) {
+        arrangementDetails.push(<ArrangementData key={arrangement.id} data={arrangement} />);
+      }
+
      return (
        <div className="menu">
-       <h3> Interesserte brukere: </h3>
-       <ul> {interessedList} </ul>
+       <div>{arrangementDetails}</div>
+
        </div>
      );
    }
@@ -202,6 +202,10 @@ export class ConfirmInteressedUsers extends React.Component {
    }
 
    componentDidMount(){
+     userService.getArrangement().then((result) => {
+       this.allArrangement = result;
+       this.forceUpdate();
+     });
     userService.interessedUsers().then((result) => {
     this.allInteressed = result;
     this.forceUpdate();
@@ -310,7 +314,7 @@ export class NewArrangement extends React.Component {
 
           // temp++;
 
-          //temp++;
+          // temp++;
 
 
           inc++;

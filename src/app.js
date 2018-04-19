@@ -5,7 +5,6 @@ import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
-
 //henter classene fra outlogged.js
 import { StartMenu } from './outlogged'
 import { Login } from './outlogged';
@@ -13,29 +12,21 @@ import { Registration } from './outlogged';
 import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
-
-
 //henter classene fra users.js
-import {UserMenu} from './user';
-import {UserHome} from './user';
-import {MyPage} from './user';
-import {ChangeUser} from './user';
-import {SearchUser} from './user';
-import {EventInfo} from './user';
-import {SignOut} from './user';
-
+import UserMenu from './components/User/UserMenu/UserMenu';
+import UserHome from './components/User/UserHome/UserHome';
+import MyPage from './components/User/MyPage/MyPage';
+import ChangeUser from './components/User/ChangeUser/ChangeUser';
+import SearchUser from './components/User/SearchUser/SearchUser';
+import EventInfo from './components/User/EventInfo/EventInfo';
 
 //henter classene fra admin.js
-import {AdminMenu} from './admin';
-import {ConfirmUsers} from './admin';
-import {AdminHome} from './admin';
-import {NewArrangement} from './admin';
-import {Arrangement} from './admin';
-import {ConfirmInteressedUsers} from './admin';
-
-
-
-
+import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
+import ConfirmUsers from './components/Admin/ConfirmUsers/ConfirmUsers';
+import AdminHome from './components/Admin/AdminHome/AdminHome';
+import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
+import Arrangement from './components/Admin/Arrangement/Arrangement';
+import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
 
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
@@ -85,7 +76,6 @@ ReactDOM.render((
       <Route exact path='/changeUser/:userId' component={ChangeUser} />
       <Route exact path='/mypage/:userId' component={MyPage} />
       <Route exact path='/usersearch' component={SearchUser} />
-      <Route exact path='/signout' component={SignOut} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventinfo/:id' component={EventInfo} />
       
