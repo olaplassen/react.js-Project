@@ -151,8 +151,6 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
-
-
 						<h4>Roller som kreves for dette arrangementet:</h4> <br />
 						<table className="table" id="myTable">
 							<tbody>
@@ -160,6 +158,7 @@ export default class EventInfo extends React.Component {
 								{roleListAdmin}
 							</tbody>
 						</table> <br />
+						<hr />
 						<div className="row">
 						<div className="column">
 						<h4> Vakter som er utdelt</h4>
@@ -169,7 +168,9 @@ export default class EventInfo extends React.Component {
 	             {roleUserList}
 						</tbody>
 						</table> <br />
+						</div>
 						<div className="column">
+						<h4>Interesserte brukere</h4>
 						<table className="table">
 							<tbody>
 								<tr><th className="th">Intereserte brukere</th> </tr>
@@ -185,7 +186,7 @@ export default class EventInfo extends React.Component {
 			      <button ref="tildelRoller" className="button">Generer vaktlister</button>
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
-				</div>
+
 			)
 		}
 	}

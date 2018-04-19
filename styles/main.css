@@ -102,7 +102,7 @@ body {background-color: #E3232E;}
     clear: both;
 }
 .column {
-    float: right;
+    float: left;
     width: 40%;
     padding: 15px;
 }

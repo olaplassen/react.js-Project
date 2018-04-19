@@ -9,7 +9,7 @@ const history: HashHistory = createHashHistory();
 BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 
 export default class AdminHome extends React.Component {
-    
+
     constructor(props) {
         super(props);
         this.allEvents = [];
@@ -21,7 +21,7 @@ export default class AdminHome extends React.Component {
                 <BigCalendar
                     events={this.allEvents}
                     showMultiDayTimes
-                    defaultDate={new Date(2018, 2, 1)}
+                    defaultDate={new Date()}
                     selectAble={true}
                     onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
                 />
