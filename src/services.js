@@ -555,9 +555,9 @@ godkjennVakt(arr_rolleid) {
     })
   })
 }
-isUserPassive(userid) {
+isUserPassive(userid, arr_start, arr_end) {
   return new Promise ((resolve, reject) => {
-    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
+    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=? AND passive_start BETWEEN arr_end AND passive_slutt >= arr_start', [userid], (error, result) => {
       if(error) throw error;
       resolve(result);
     })

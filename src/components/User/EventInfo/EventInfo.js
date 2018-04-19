@@ -204,12 +204,13 @@ export default class EventInfo extends React.Component {
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
 			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
 			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
-
+			console.log(this.arrangement)
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
 				});
 			});
+			console.log(this.arrangement)
 			userService.getRolewithUserInfo(this.id).then((result) => {
 				this.fordeltVakter = result;
 				this.forceUpdate();
@@ -333,10 +334,10 @@ export default class EventInfo extends React.Component {
 								for (var i = 0; i < this.interestedUsers.length; i++) {
 									let exists = usedUser.includes(interestedUser.userId);
 									let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-									userService.isUserPassive(interestedUser.userid).then((result) => {
+									userService.isUserPassive(interestedUser.userid, this.arrangement.start.toLocaleString(),this.arrangement.end.toLocaleString()).then((result) => {
 										this.userPassive = result;
 										if(this.user.passive.length != 0) {
-												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.passive_start <= arr.slutt && sluttpassive >=start.arr ) {
+												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
 													console.log(exists)
 													usedUser.push(interestedUser.userId)
 													usedEventRoles.push(eventRolle.arr_rolleid)
