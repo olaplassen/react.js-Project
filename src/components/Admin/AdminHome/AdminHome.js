@@ -21,7 +21,9 @@ export default class AdminHome extends React.Component {
                 <BigCalendar
                     events={this.allEvents}
                     showMultiDayTimes
-                    defaultDate={new Date}
+
+                    defaultDate={new Date()}
+
                     selectAble={true}
                     onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
                 />
