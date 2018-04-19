@@ -36,8 +36,8 @@ export default class UserHome extends React.Component {
 								this.kommendeVakter = result;
 								this.forceUpdate();
 							})
-						)}
-					}}</button></td>
+						})
+					}}>Godkjenn</button></td>
 					</tr>
 				)
 			}
