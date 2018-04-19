@@ -20,6 +20,7 @@ export default class MyPage extends React.Component {
         this.yourSkills = [];
         this.values = [];
         this.testSkill = [];
+        this.passiveUser=[];
     }
 
     updateShowState() {
@@ -57,6 +58,12 @@ export default class MyPage extends React.Component {
 
         let skillList = [];
         let yourSkillList = [];
+        let passiveList = [];
+
+        for (let passive of this.passiveUser){
+          passiveList.push(<tr key={passive.userPassive_id}> <td> {passive.passive_start.toDateString()} </td>
+                                                  <td> {passive.passive_slutt.toDateString()}</td></tr>)
+        }
 
         for (let yourskill of this.yourSkills) {
             if (yourskill.validTo != null) {
@@ -129,7 +136,15 @@ export default class MyPage extends React.Component {
                             null
                         }
                         <button ref="changepasswordbtn">Lagre</button>
+                        <h4> Hvis du mot formodning vil melde deg passiv i en periode kan du legge inn start og sluttdato her: </h4>
+                      <p> Startdato for passivmelding </p>  <input type='datetime-local' ref="startPassiveTime"></input><br />
+                      <p> Sluttdato for passivmelding </p>  <input type='datetime-local' ref="endPassiveTime"></input><br />
+                       <button className="button1" ref="newpassivebutton" onClick={() => this.registerUserPassive(selectValue)}>Melde passiv</button>
+                       {passiveList}
                     </div>
+
+
+
 
                     <div className="menu">
                         <h1> Mine Kompetanser og kurs </h1> <br />
@@ -242,6 +257,13 @@ export default class MyPage extends React.Component {
             )
         }
     }
+    registerUserPassive(passive_start, passive_slutt, userid){
+      userService.userPassive(this.refs.startPassiveTime.value,this.refs.endPassiveTime.value, this.user.id).then((result) => {
+        this.refs.startPassiveTime.value = "";
+        this.refs.endPassiveTime.value = "";
+      })
+    }
+
     registerSkills(selectValue) {
         this.inputList = [];
         this.dateInputList = [];
@@ -280,7 +302,11 @@ export default class MyPage extends React.Component {
         userService.getUsers(this.id).then((result) => {
             this.user = result;
 
-            this.forceUpdate();
+            userService.getUserPassive(this.user.id).then((result) => {
+               this.passiveUser = result;
+               this.forceUpdate();
+               console.log(this.user.id)
+             })
         });
 
         userService.getAllSkills().then((result) => {
