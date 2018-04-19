@@ -106,3 +106,9 @@ body {background-color: #E3232E;}
     width: 40%;
     padding: 15px;
 }
+.calendercolumn {
+    float: left;
+    width: 49%;
+    padding: 15px;
+    height:400px;
+}

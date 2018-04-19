@@ -536,7 +536,25 @@ getWatchList(arrid) {
     })
   })
 }
+getUserVaktListe(userid) {
+  let today = new Date();
+  return new Promise ((resolve, reject) => {
 
+    connection.query('SELECT ArrangementRoller.arr_rolleid, Role.title as roleTitle, Arrangement.title as arrTitle, ArrangementRoller.godkjent, ArrangementRoller.tildelt_tid, Arrangement.start FROM Role, Arrangement, ArrangementRoller WHERE Role.roleid = ArrangementRoller.roleid AND Arrangement.id = ArrangementRoller.arrid AND ArrangementRoller.userid=? AND Arrangement.start >=? ORDER BY Arrangement.start ', [userid, today], (error, result) => {
+      if(error) throw error;
+     console.log(result)
+      resolve(result);
+    })
+  })
+}
+godkjennVakt(arr_rolleid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE ArrangementRoller SET godkjent=1  WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
 
 }
 

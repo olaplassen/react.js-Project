@@ -84,6 +84,7 @@ export default class EventInfo extends React.Component {
 					)
 				}
 			}
+			
 			for(let rolesForArr of this.roleNoUser) {
 
 				roleUserList.push(
@@ -121,13 +122,21 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
-					<div>
+					<div className="row">
+					<div className="column">
 						<h4>Roller som kreves for dette arrangementet:</h4> <br />
 						<table>
 							<tbody>
 								{roleList}
 							</tbody>
 						</table>
+						</div>
+
+						<div className="column">
+						<button>godkjenn</button>
+						</div>
+						</div>
+						<div>
 						<br />
 						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
