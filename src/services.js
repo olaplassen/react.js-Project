@@ -250,7 +250,7 @@ getInteressed(arrangementId, userId, interessed) {
 
 getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
           if(error) throw error;
           resolve(result);
          })
@@ -425,7 +425,7 @@ UpsertRoleForArrangement(userId, arr_roleId) {
 
 getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.arr_rolleid', [arrid], (error, result) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
         resolve(result)
     })

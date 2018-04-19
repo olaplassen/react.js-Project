@@ -36,12 +36,6 @@ export default class EventInfo extends React.Component {
 		let interestedUserList = [];
 		let inc = 0;
 
-		for (let watch of this.allWatchList) {
- 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
- 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
-
- 	 }
-
 		for (let role of this.allSelectedRoles) {
 			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
 		}
@@ -228,7 +222,6 @@ export default class EventInfo extends React.Component {
 		if(signedInUser.admin == 1) {
 			userService.getInteressedUsers(this.id).then((result) => {
 				this.interestedUsers = result;
-
 				this.forceUpdate();
 		});
 			userService.getAllRoles().then((result) => {
@@ -328,6 +321,38 @@ export default class EventInfo extends React.Component {
 						userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
 							this.roleKomp= result;
 						});
+						let u = 0;
+						// do {
+
+							for(let interestedUser of this.interestedUsers) {
+
+								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
+								if(result.length != 0){
+									this.userWithRoles = result;
+								}
+								for (var i = 0; i < this.interestedUsers.length; i++) {
+									let exists = usedUser.includes(interestedUser.userId);
+									let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+										if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
+											console.log(exists)
+											usedUser.push(interestedUser.userId)
+											usedEventRoles.push(eventRolle.arr_rolleid)
+
+											userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+												userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+													this.roleNoUser = result;
+													this.forceUpdate();
+												});
+												userService.getRolewithUserInfo(this.id).then((result) => {
+													this.fordeltVakter = result;
+													this.forceUpdate();
+												});
+												this.forceUpdate();
+											})
+										}
+									}
+								})
+							}
 							for(let user of this.allUsers) {
 								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
 									if(result.length != 0){
@@ -356,8 +381,8 @@ export default class EventInfo extends React.Component {
 										}
 									})
 								}
-							}
 						}
 					}
 				}
+			}
 }
