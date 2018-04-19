@@ -13,11 +13,12 @@ body {background-color: #E3232E;}
 }
 
 .link {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;;
 
 }
 
@@ -94,4 +95,14 @@ body {background-color: #E3232E;}
     padding: 5px;
     border: 1px solid black;
     border-collapse: collapse;
+}
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.column {
+    float: right;
+    width: 40%;
+    padding: 15px;
 }
