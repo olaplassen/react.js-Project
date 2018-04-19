@@ -24,6 +24,13 @@ export default class EventInfo extends React.Component {
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
 		this.interestedUsers = [];
+		this.interestedUsers = [];
+		this.state = {
+      activeUser: null,
+	   	users: [],
+			interessedUser: []
+
+		}
 	}
 
 	render() {
@@ -35,6 +42,13 @@ export default class EventInfo extends React.Component {
 		let roleUserList = [];
 		let interestedUserList = [];
 		let inc = 0;
+
+
+		for (let watch of this.allWatchList) {
+ 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
+ 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
+
+ 	 }
 
 		for (let role of this.allSelectedRoles) {
 			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
@@ -120,6 +134,8 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
+
+					<div> <h4>Er du interessert i dette arrangementet trykker du her: <button type="button" onClick={() => this.getInteressed(this.arrangement.id, this.state.activeUser)}>Interessert</button></h4></div>
 					<div>
 						<h4>Roller som kreves for dette arrangementet:</h4> <br />
 						<table>
@@ -192,6 +208,12 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
+		this.setState({
+				activeUser: userService.getSignedInUser()["id"],
+        interessedUser: userService.checkIfInteressed()
+
+		});
+
 		userService.getInteressedUsers(this.arrangement.id).then((result) => {
 			console.log(result)
 		});
@@ -218,13 +240,22 @@ export default class EventInfo extends React.Component {
 			userService.getRolesWithNoUser(this.id).then((result) => {
 				this.roleNoUser = result;
 				this.forceUpdate();
-			})
 
+			});
+
+			userService.getRolesForArr(this.arrangement.id).then((result) => {
+				this.allSelectedRoles = result;
+});
 		if(signedInUser.admin == 1) {
 			userService.getInteressedUsers(this.id).then((result) => {
 				this.interestedUsers = result;
 				this.forceUpdate();
-		});
+			});
+
+
+
+
+
 			userService.getAllRoles().then((result) => {
 				this.allRoles = result;
 					for (var i = 1; i < this.allRoles.length +1; i++) {
@@ -235,8 +266,11 @@ export default class EventInfo extends React.Component {
 						this.forceUpdate()
 					})
 				}
-			})
+			});
 		this.refs.endreRoller.onclick = () => {
+
+
+
 			for (var i = 0; i < this.allRoles.length; i++) {
 				if (this.secondNumberOfRoles[i] != this.firstNumberOfRoles[i]) {
 					this.difference.push(this.secondNumberOfRoles[i] - this.firstNumberOfRoles[i]);
@@ -390,5 +424,51 @@ export default class EventInfo extends React.Component {
 						}
 					}
 				}
-			}
+			};
+
+					getInteressed(arrangementId, userId) {
+                userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
+									this.state.interessedUser = result;
+									this.forceUpdate();
+									if(this.state.interessedUser == 0){
+										this.state.activeUser = userId;
+						        userService.getInteressed(arrangementId, userId).then((result) => {
+						            this.forceUpdate();
+						        })
+									}
+									else {
+										alert("du er allerede registrert som interessert")
+									}
+								})
+							};
+
+					getInteressedUsers() {
+
+						var rolesAvailableForArrangement = [];
+						userService.getRolesForArr(this.arrangement.id).then((result) => {
+							for (let role of result) {
+								rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
+							}
+						});
+
+						userService.getInteressedUsers(this.arrangement.id).then((result) => {
+							var users = [];
+
+							result.forEach(function (user) {
+								users.push(
+									<div>
+										<li>{user.firstname + " "}</li>
+										<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
+											<option value={null} selected>-- Velg ledig rolle -- </option>
+											{rolesAvailableForArrangement}
+
+										</select>
+									</div>
+								);
+							});
+							this.state.users = users;
+
+							this.forceUpdate();
+						});
+					}
 }
