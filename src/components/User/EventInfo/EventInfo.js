@@ -73,7 +73,7 @@ export default class EventInfo extends React.Component {
 					</tr>
 					)
 				}
-				else if(roleWithUser.godkjent_tid != null) {
+				else if(roleWithUser.godkjent == 1) {
 					roleUserList.push(
 						<tr key={roleWithUser.arr_rolleid}>
 							<td className="td">{roleWithUser.title}</td>
@@ -84,7 +84,7 @@ export default class EventInfo extends React.Component {
 					)
 				}
 			}
-			
+
 			for(let rolesForArr of this.roleNoUser) {
 
 				roleUserList.push(
@@ -167,9 +167,11 @@ export default class EventInfo extends React.Component {
 								{roleListAdmin}
 							</tbody>
 						</table> <br />
+						<button ref="endreRoller" className="button">Endre Roller</button>
+						<br />
 						<hr />
 						<div className="row">
-						<div className="column">
+						<div className="column1">
 						<h4> Vakter som er utdelt</h4>
             <table className="table">
 						<tbody>
@@ -178,7 +180,7 @@ export default class EventInfo extends React.Component {
 						</tbody>
 						</table> <br />
 						</div>
-						<div className="column">
+						<div className="column2">
 						<h4>Interesserte brukere</h4>
 						<table className="table">
 							<tbody>
@@ -188,7 +190,6 @@ export default class EventInfo extends React.Component {
 						</table>
 						</div>
 						</div>
-						<button ref="endreRoller" className="button">Endre Roller</button>
 						<br />
 						<br />
 

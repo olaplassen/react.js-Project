@@ -101,9 +101,14 @@ body {background-color: #E3232E;}
     display: table;
     clear: both;
 }
-.column {
+.column1 {
     float: left;
-    width: 40%;
+    width: 60%;
+    padding: 15px;
+}
+.column2 {
+    float: left;
+    width: 30%;
     padding: 15px;
 }
 .calendercolumn {
