@@ -19,7 +19,6 @@ export default class UserHome extends React.Component {
 	}
 //push
 	render() {
-
 		let kommendeVakterList = [];
 		for(let kommendeVakt of this.kommendeVakter) {
 			console.log(kommendeVakt)
