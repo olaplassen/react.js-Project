@@ -9,7 +9,6 @@ export default class AdminMenu extends React.Component {
             <div className="menu">
                 <ul className="ul">
                     <li className="li"><Link to={'/hjem'} className="link">Hjem</Link></li>
-                    <li className="li"><Link to={'/søk'} className="link">Min side</Link></li>
                     <li className="li"><Link to={'/confirmusers'} className="link">Godkjenning</Link></li>
                     <li className="li"><Link to={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
                     <li className="li"><Link to={'/arrangementer'} className="link">Arrangement</Link></li>
