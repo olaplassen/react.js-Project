@@ -120,17 +120,37 @@ export default class MyPage extends React.Component {
                   <div className="row">
                     <div className="info">
                         <h2> {this.user.firstName} {this.user.lastName}</h2>
-                        <div> Brukernavn: {this.user.userName}</div>
-                        <div> Epost: {this.user.email} </div>
-                        <div> Mobilnummer: {this.user.phone} </div>
-                        <div> Adresse: {this.user.address} </div>
-                        <div> Poststed: {this.user.poststed} </div>
-                        <div> Postnr: {this.user.postnr} </div>
+                          <table className="tableinfo">
+                            <tr>
+                              <td>Brukernavn</td>
+                              <td>{this.user.userName}</td>
+                            </tr>
+                            <tr>
+                              <td>Epost</td>
+                              <td>{this.user.email}</td>
+                            </tr>
+                            <tr>
+                              <td>Mobilnummer</td>
+                              <td>{this.user.phone}</td>
+                            </tr>
+                            <tr>
+                              <td>Adresse</td>
+                              <td>{this.user.address} </td>
+                            </tr>
+                            <tr>
+                              <td>Poststed</td>
+                              <td>{this.user.poststed}</td>
+                            </tr>
+                            <tr>
+                              <td>Postnr</td>
+                              <td>{this.user.postnr}</td>
+                            </tr>
+                          </table>
+                      <div>
+                        <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
+                      </div>
 
-                        <div><Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link></div>
-
-
-                        <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
+                      <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
                         {this.state.showchangePassword ?
                             <div>
                                 <input ref="newpassword" type="password" /> <br />
@@ -139,7 +159,7 @@ export default class MyPage extends React.Component {
                             :
                             null
                         }
-                        <button ref="changepasswordbtn">Lagre</button>
+                      <button ref="changepasswordbtn">Lagre</button>
                     </div>
 
                     <div className="passiv">
@@ -149,109 +169,153 @@ export default class MyPage extends React.Component {
                           <button className="button1" ref="newpassivebutton" onClick={() => this.registerUserPassive(selectValue)}>Melde passiv</button>
                        {passiveList}
                     </div>
+
+
                 </div>
 
-
-
-
+                <hr></hr>
+                <div className="row">
                     <div className="kompetanse">
-                        <h1> Mine Kompetanser og kurs </h1> <br />
-                        <h3> Legg til dine kurs </h3> <br />
-                        OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen. <br />
+                          <div className="kurs">
+                              <h1> Mine Kompetanser og kurs</h1>
+                            <table className="table" id="myTable">
+                                <tbody>
+                                    <tr>
+                                      <th className="th">Tittel</th>
+                                      <th className="th">Utløpsdato</th>
+                                      <th className="th">Fjern Kurs</th>
+                                    </tr>
+                                    {yourSkillList}
+                                </tbody>
+                            </table>
+                          </div>
+                        </div>
 
-                        <VirtualizedSelect
-                            clearable={true}
-                            removeSelected={true}
-                            multi={true}
-                            options={skillList}
-                            onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
-                            value={selectValue}
-                        />
-                        <table>
-                            <tbody>
-                                {this.inputList}
-                            </tbody>
-                        </table>
-                        <table>
-                            <tbody>
-                                {this.dateInputList}
-                            </tbody>
-                        </table>
-                        <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+                          <div className="addkurs">
+                            <h3> Legg til dine kurs </h3>
+                              <div>
+                                OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen.
+                              </div>
 
-                        <h2>Dine Kurs</h2> <br />
-
-                        <table className="table" id="myTable">
-                            <tbody>
-                                <tr> <th className="th">Tittel</th> <th className="th">Utløpsdato</th> <th className="th">Fjern Kurs</th> </tr>
-                                {yourSkillList}
-                            </tbody>
-                        </table> <br />
-                    </div>
+                            <VirtualizedSelect
+                                className="roller"
+                                clearable={true}
+                                removeSelected={true}
+                                multi={true}
+                                options={skillList}
+                                onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
+                                value={selectValue}
+                            />
+                            <table>
+                                <tbody>
+                                    {this.inputList}
+                                </tbody>
+                            </table>
+                            <table>
+                                <tbody>
+                                    {this.dateInputList}
+                                </tbody>
+                            </table>
+                            <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+                          </div>
+                      </div>
                 </div>
             );
         }
         else if (signedInUser.admin == 1) {
             return (
                 <div>
-                    <div className="menu">
-                        <h2>Dette er personalia siden for {this.user.firstName} {this.user.lastName}</h2>
-                        <div> Brukernavn: {this.user.userName}</div>
-                        <div> Epost: {this.user.email} </div>
-                        <div> Mobilnummer: {this.user.phone} </div>
-                        <div> Adresse: {this.user.address} </div>
-                        <div> Poststed: {this.user.poststed} </div>
-                        <div> Postnr: {this.user.postnr} </div>
-
-                        <div><Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link></div>
-
-
-                        <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
-                        {this.state.showchangePassword ?
-                            <div>
-                                <input ref="newpassword" type="password" /> <br />
-                                <input ref="verifypassword" type="password" /> <br />
-                            </div>
-                            :
-                            null
-                        }
-                        <button ref="changepasswordbtn">Lagre</button>
+                <div className="row">
+                  <div className="info">
+                      <h2> {this.user.firstName} {this.user.lastName}</h2>
+                        <table className="tableinfo">
+                          <tr>
+                            <td>Brukernavn</td>
+                            <td>{this.user.userName}</td>
+                          </tr>
+                          <tr>
+                            <td>Epost</td>
+                            <td>{this.user.email}</td>
+                          </tr>
+                          <tr>
+                            <td>Mobilnummer</td>
+                            <td>{this.user.phone}</td>
+                          </tr>
+                          <tr>
+                            <td>Adresse</td>
+                            <td>{this.user.address} </td>
+                          </tr>
+                          <tr>
+                            <td>Poststed</td>
+                            <td>{this.user.poststed}</td>
+                          </tr>
+                          <tr>
+                            <td>Postnr</td>
+                            <td>{this.user.postnr}</td>
+                          </tr>
+                        </table>
+                    <div>
+                      <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
                     </div>
 
-                    <div className="menu">
-                        <h1> Oversikt over kurs og kompetanser for {this.user.firstName} {this.user.lastName} </h1> <br />
-                        <h3> Legg til kurs </h3> <br />
-                        OBSOBS du kan ikke legge til flere en et kurs med utløpsdato om gangen. <br />
+                    <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
+                      {this.state.showchangePassword ?
+                          <div>
+                              <input ref="newpassword" type="password" /> <br />
+                              <input ref="verifypassword" type="password" /> <br />
+                          </div>
+                          :
+                          null
+                      }
+                    <button ref="changepasswordbtn">Lagre</button>
+                  </div>
+              </div>
 
-                        <VirtualizedSelect
-                            autoFocus
-                            clearable={true}
-                            removeSelected={true}
-                            multi={true}
-                            options={skillList}
-                            onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
-                            value={selectValue}
-                        />
-                        <table>
-                            <tbody>
-                                {this.inputList}
-                            </tbody>
-                        </table>
-                        <table>
-                            <tbody>
-                                {this.dateInputList}
-                            </tbody>
-                        </table>
-                        <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+              <hr></hr>
+              <div className="row">
+                  <div className="kompetanse">
+                        <div className="kurs">
+                            <h2> Kompetanser og furs til {this.user.firstName} {this.user.lastName}</h2>
+                          <table className="table" id="myTable">
+                              <tbody>
+                                  <tr>
+                                    <th className="th">Tittel</th>
+                                    <th className="th">Utløpsdato</th>
+                                    <th className="th">Fjern Kurs</th>
+                                  </tr>
+                                  {yourSkillList}
+                              </tbody>
+                          </table>
+                        </div>
+                      </div>
 
-                        <h2>Deres Kurs</h2> <br />
+                        <div className="addkurs">
+                          <h3> Legg til kurs på {this.user.firstName} {this.user.lastName} </h3>
+                            <div>
+                              OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen.
+                            </div>
 
-                        <table className="table" id="myTable">
-                            <tbody>
-                                <tr> <th className="th">Tittel</th> <th className="th">Utløpsdato</th> <th className="th">Fjern Kurs</th> </tr>
-                                {yourSkillList}
-                            </tbody>
-                        </table> <br />
+                          <VirtualizedSelect
+                              className="roller"
+                              clearable={true}
+                              removeSelected={true}
+                              multi={true}
+                              options={skillList}
+                              onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
+                              value={selectValue}
+                          />
+                          <table>
+                              <tbody>
+                                  {this.inputList}
+                              </tbody>
+                          </table>
+                          <table>
+                              <tbody>
+                                  {this.dateInputList}
+                              </tbody>
+                          </table>
+                          <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
+                        </div>
                     </div>
                     <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver brukeren</button>
                     {this.state.showDeactivateText ?
