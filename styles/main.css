@@ -39,25 +39,38 @@ body {background-color: #f2f2f2;}
 }
 
 .info {
-  padding: 20px;
   margin-left: 50px;
+  width: 500px;
+  height: 300px;
+  float: left;
+}
+
+.tableinfo {
+  width: 400px;
+}
+
+.passiv {
+  margin-right: 50px;
   width: 400px;
   height: 300px;
   float: left;
 }
 
-.passiv {
-  padding: 20px;
-  margin-right: 50px;
-  width: 400px;
-  height: 300px;
-  float: right;
+.kompetanse {
+  margin-left: 50px;
 }
 
-.kompetanse {
-  border-radius: 5px;
-  padding: 20px;
-  margin-top: 25px;
+.kurs {
+  float: left;
+  width: 500px;
+}
+
+.addkurs {
+  float: left;
+}
+
+.addkursadmin {
+  float: right;
 }
 
 .input {
@@ -135,4 +148,8 @@ body {background-color: #f2f2f2;}
     width: 49%;
     padding: 15px;
     height:400px;
+}
+
+.roller {
+  width: 400px;
 }
