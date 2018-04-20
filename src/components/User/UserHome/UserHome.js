@@ -53,9 +53,11 @@ export default class UserHome extends React.Component {
 			}
 		}
 		return (
-			<div className="menu">
 				<div className="row">
+
+
 					<div className="calendercolumn">
+					<h2>Arrangementskalender</h2>
 							<BigCalendar
 							events={this.allEvents}
 							showMultiDayTimes
@@ -64,16 +66,21 @@ export default class UserHome extends React.Component {
 							onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
 							/>
 					</div>
-					<div className="column">
-					<h4>Kommende vakter</h4>
-					<table className="table">
-						<tbody>
-							<tr> <th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>
-							{kommendeVakterList}
-						</tbody>
-					</table>
 
-					</div>
+					<div className="vakter">
+						<h2>Kommende vakter</h2>
+							<table className="table">
+								<tbody>
+									<tr>
+										<th className="th">Arrangement</th>
+										<th className="th">Arrangement start</th>
+										<th className="th">Rolle</th>
+										<th className="th">Tildelt tid</th>
+										<th className="th">Godkjent</th>
+									</tr>
+										{kommendeVakterList}
+								</tbody>
+					</table>
 				</div>
 			</div>
 		);

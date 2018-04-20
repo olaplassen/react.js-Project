@@ -177,7 +177,7 @@ export default class MyPage extends React.Component {
                 <div className="row">
                     <div className="kompetanse">
                           <div className="kurs">
-                              <h1> Mine Kompetanser og kurs</h1>
+                              <h1> Dine Kompetanser og kurs</h1>
                             <table className="table" id="myTable">
                                 <tbody>
                                     <tr>
