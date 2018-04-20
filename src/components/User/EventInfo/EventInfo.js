@@ -20,10 +20,8 @@ export default class EventInfo extends React.Component {
     this.roleKomp = [];
     this.userWithRoles = [];
     this.usedUser = [];
-		this.allWatchList=[];
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
-		this.interestedUsers = [];
 		this.interestedUsers = [];
 		this.state = {
       activeUser: null,
@@ -36,7 +34,6 @@ export default class EventInfo extends React.Component {
 	render() {
 		let signedInUser = userService.getSignedInUser();
 
-		let watchList = [];
 		let roleList = [];
 		let roleListAdmin = [];
 		let roleUserList = [];
@@ -44,11 +41,6 @@ export default class EventInfo extends React.Component {
 		let inc = 0;
 
 
-		for (let watch of this.allWatchList) {
- 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
- 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
-
- 	 }
 
 		for (let role of this.allSelectedRoles) {
 			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
@@ -214,25 +206,16 @@ export default class EventInfo extends React.Component {
 
 		});
 
-		userService.getInteressedUsers(this.arrangement.id).then((result) => {
-			console.log(result)
-		});
-		userService.getWatchList(this.arrangement.id).then((result) => {
-			this.allWatchList = result;
-			this.forceUpdate();
-		});
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
 			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
 			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
-			console.log(this.arrangement)
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
 				});
 			});
-			console.log(this.arrangement)
 			userService.getRolewithUserInfo(this.id).then((result) => {
 				this.fordeltVakter = result;
 				this.forceUpdate();
@@ -295,7 +278,6 @@ export default class EventInfo extends React.Component {
 									});
 									userService.getRolewithUserInfo(this.id).then((result) => {
 										this.fordeltVakter = result;
-										console.log(result)
 										this.forceUpdate();
 									});
 									userService.getRolesForArr(this.arrangement.id).then((result) => {
@@ -314,7 +296,6 @@ export default class EventInfo extends React.Component {
 									});
 									userService.getRolewithUserInfo(this.id).then((result) => {
 										this.fordeltVakter = result;
-										console.log(result)
 										this.forceUpdate();
 									});
 									userService.getRolesForArr(this.arrangement.id).then((result) => {
@@ -357,118 +338,81 @@ export default class EventInfo extends React.Component {
 							this.roleKomp= result;
 						});
 						let u = 0;
-						// do {
-
-							for(let interestedUser of this.interestedUsers) {
-
-								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
+						for(let interestedUser of this.interestedUsers) {
+							userService.isUserPassive(interestedUser.userId, this.arrangement.id).then((result) => {
+								this.userPassive = result;
+								})
+							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
 								if(result.length != 0){
 									this.userWithRoles = result;
 								}
-								for (var i = 0; i < this.interestedUsers.length; i++) {
-									let exists = usedUser.includes(interestedUser.userId);
-									let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-									userService.isUserPassive(interestedUser.userid, this.arrangement.start.toLocaleString(),this.arrangement.end.toLocaleString()).then((result) => {
-										this.userPassive = result;
-										if(this.user.passive.length != 0) {
-												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
-													console.log(exists)
-													usedUser.push(interestedUser.userId)
-													usedEventRoles.push(eventRolle.arr_rolleid)
+								let exists = usedUser.includes(interestedUser.userId);
+								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) {
+									usedUser.push(interestedUser.userId)
+									usedEventRoles.push(eventRolle.arr_rolleid)
 
-													userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-														userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
-															this.roleNoUser = result;
-															this.forceUpdate();
-														});
-														userService.getRolewithUserInfo(this.id).then((result) => {
-															this.fordeltVakter = result;
-															this.forceUpdate();
-														});
-														this.forceUpdate();
-													})
-												}
-											}
-										})
-									}
-								})
-							}
-							for(let user of this.allUsers) {
-								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
-									if(result.length != 0){
-										this.userWithRoles = result;
-									}
-									for (var i = 0; i < this.allSelectedRoles.length; i++) {
-										let exists = usedUser.includes(user.id);
-										let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-											if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
-												console.log(exists)
-												usedUser.push(user.id)
-												usedEventRoles.push(eventRolle.arr_rolleid)
-
-												userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-													userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
-														this.roleNoUser = result;
-														this.forceUpdate();
-													});
-													userService.getRolewithUserInfo(this.id).then((result) => {
-														this.fordeltVakter = result;
-														this.forceUpdate();
-													});
-													this.forceUpdate();
-												})
-											}
-										}
+									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+										console.log("interesert")
+										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+											this.roleNoUser = result;
+											this.forceUpdate();
+										});
+										userService.getRolewithUserInfo(this.id).then((result) => {
+											this.fordeltVakter = result;
+											this.forceUpdate();
+										});
 									})
 								}
+							})
+						}
+						for(let user of this.allUsers) {
+							userService.isUserPassive(user.id, this.arrangement.id).then((result) => {
+								this.userPassive = result;
+								})
+							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
+								if(result.length != 0){
+									this.userWithRoles = result;
+								}
+								let exists = usedUser.includes(user.id);
+								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) {
+
+									usedUser.push(user.id)
+									usedEventRoles.push(eventRolle.arr_rolleid)
+
+									userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+										console.log("user")
+										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+											this.roleNoUser = result;
+											this.forceUpdate();
+										});
+										userService.getRolewithUserInfo(this.id).then((result) => {
+											this.fordeltVakter = result;
+											this.forceUpdate();
+										});
+										this.forceUpdate();
+									})
+								}
+							})
 						}
 					}
 				}
-			};
-
-					getInteressed(arrangementId, userId) {
-                userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
-									this.state.interessedUser = result;
-									this.forceUpdate();
-									if(this.state.interessedUser == 0){
-										this.state.activeUser = userId;
-						        userService.getInteressed(arrangementId, userId).then((result) => {
-						            this.forceUpdate();
-						        })
-									}
-									else {
-										alert("du er allerede registrert som interessert")
-									}
-								})
-							};
-
-					getInteressedUsers() {
-
-						var rolesAvailableForArrangement = [];
-						userService.getRolesForArr(this.arrangement.id).then((result) => {
-							for (let role of result) {
-								rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
-							}
-						});
-
-						userService.getInteressedUsers(this.arrangement.id).then((result) => {
-							var users = [];
-
-							result.forEach(function (user) {
-								users.push(
-									<div>
-										<li>{user.firstname + " "}</li>
-										<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
-											<option value={null} selected>-- Velg ledig rolle -- </option>
-											{rolesAvailableForArrangement}
-
-										</select>
-									</div>
-								);
-							});
-							this.state.users = users;
-
-							this.forceUpdate();
-						});
+			}
+		};
+	getInteressed(arrangementId, userId) {
+    userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
+			this.state.interessedUser = result;
+			this.forceUpdate();
+				if(this.state.interessedUser == 0){
+					this.state.activeUser = userId;
+		       	userService.getInteressed(arrangementId, userId).then((result) => {
+		          this.forceUpdate();
+		       	})
 					}
+				else {
+					alert("du er allerede registrert som interessert")
+				}
+			})
+		};
 }

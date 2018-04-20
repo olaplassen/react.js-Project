@@ -526,26 +526,26 @@ getUsedEventRoles(arrid, arr_rolleid) {
       })
     })
 }
-getWatchList(arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT Role.title, firstname, Arrangement.id FROM Role, Users, ArrangementRoller, Arrangement WHERE Role.roleid=ArrangementRoller.roleid AND Users.id=ArrangementRoller.userid AND Arrangement.id=ArrangementRoller.arrid AND ArrangementRoller.arrid=?', [arrid], (error, result) => {
-      if(error) throw error;
-     console.log(result)
-      resolve(result);
-    })
-  })
-}
+
 getUserVaktListe(userid) {
   let today = new Date();
   return new Promise ((resolve, reject) => {
 
     connection.query('SELECT ArrangementRoller.arr_rolleid, Role.title as roleTitle, Arrangement.title as arrTitle, ArrangementRoller.godkjent, ArrangementRoller.tildelt_tid, Arrangement.start FROM Role, Arrangement, ArrangementRoller WHERE Role.roleid = ArrangementRoller.roleid AND Arrangement.id = ArrangementRoller.arrid AND ArrangementRoller.userid=? AND Arrangement.start >=? ORDER BY Arrangement.start ', [userid, today], (error, result) => {
       if(error) throw error;
-     console.log(result)
+      console.log(result)
       resolve(result);
     })
   })
 }
+checkIfInteressed(userId, arrangementId) {
+          return new Promise ((resolve, reject) => {
+          connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
+            if(error) throw error;
+            resolve(result);
+          })
+        });
+        }
 godkjennVakt(arr_rolleid) {
   let today = new Date();
   return new Promise ((resolve, reject) => {
@@ -555,11 +555,30 @@ godkjennVakt(arr_rolleid) {
     })
   })
 }
-isUserPassive(userid, arr_start, arr_end) {
+userPassive(passive_start, passive_slutt, userid) {
   return new Promise ((resolve, reject) => {
-    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=? AND passive_start BETWEEN arr_end AND  passive_slutt >= arr_start', [userid], (error, result) => {
+    connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
+      if(error) throw error;
+
+      resolve(result);
+    })
+  })
+}
+getUserPassive(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
+      if(error) throw error;
+     console.log(result)
+      resolve(result);
+    })
+  })
+}
+isUserPassive(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
       if(error) throw error;
       resolve(result);
+
     })
   })
 }
