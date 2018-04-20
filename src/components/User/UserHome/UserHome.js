@@ -65,9 +65,11 @@ export default class UserHome extends React.Component {
 				)
 		}
 		return (
-			<div className="menu">
 				<div className="row">
+
+
 					<div className="calendercolumn">
+					<h2>Arrangementskalender</h2>
 							<BigCalendar
 							events={this.allEvents}
 							showMultiDayTimes
