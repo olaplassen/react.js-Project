@@ -20,6 +20,7 @@ export default class MyPage extends React.Component {
         this.yourSkills = [];
         this.values = [];
         this.testSkill = [];
+        this.passiveUser=[];
     }
 
     updateShowState() {
@@ -57,6 +58,12 @@ export default class MyPage extends React.Component {
 
         let skillList = [];
         let yourSkillList = [];
+        let passiveList = [];
+
+        for (let passive of this.passiveUser){
+          passiveList.push(<tr key={passive.userPassive_id}> <td> {passive.passive_start.toDateString()} </td>
+                                                  <td> {passive.passive_slutt.toDateString()}</td></tr>)
+        }
 
         for (let yourskill of this.yourSkills) {
             if (yourskill.validTo != null) {
@@ -110,14 +117,18 @@ export default class MyPage extends React.Component {
         if (signedInUser.admin == 0) {
             return (
                 <div>
-                    <div className="menu">
+                  <div className="row">
+                    <div className="info">
                         <h2> {this.user.firstName} {this.user.lastName}</h2>
+                        <div> Brukernavn: {this.user.userName}</div>
                         <div> Epost: {this.user.email} </div>
                         <div> Mobilnummer: {this.user.phone} </div>
                         <div> Adresse: {this.user.address} </div>
-                        <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
-                        <div> Brukernavn: {this.user.userName}</div>
-                        <div> Passord: ********</div>
+                        <div> Poststed: {this.user.poststed} </div>
+                        <div> Postnr: {this.user.postnr} </div>
+
+                        <div><Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link></div>
+
 
                         <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
                         {this.state.showchangePassword ?
@@ -131,13 +142,24 @@ export default class MyPage extends React.Component {
                         <button ref="changepasswordbtn">Lagre</button>
                     </div>
 
-                    <div className="menu">
+                    <div className="passiv">
+                        <h4> Hvis du mot formodning vil melde deg passiv i en periode kan du legge inn start og sluttdato her: </h4>
+                          <p> Startdato for passivmelding </p>  <input type='datetime-local' ref="startPassiveTime"></input><br />
+                          <p> Sluttdato for passivmelding </p>  <input type='datetime-local' ref="endPassiveTime"></input><br />
+                          <button className="button1" ref="newpassivebutton" onClick={() => this.registerUserPassive(selectValue)}>Melde passiv</button>
+                       {passiveList}
+                    </div>
+                </div>
+
+
+
+
+                    <div className="kompetanse">
                         <h1> Mine Kompetanser og kurs </h1> <br />
                         <h3> Legg til dine kurs </h3> <br />
                         OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen. <br />
 
                         <VirtualizedSelect
-                            autoFocus
                             clearable={true}
                             removeSelected={true}
                             multi={true}
@@ -173,22 +195,15 @@ export default class MyPage extends React.Component {
             return (
                 <div>
                     <div className="menu">
-                        <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver</button>
-                        {this.state.showDeactivateText ?
-                            <div>
-                                <h2>{this.user.firstName} {this.user.lastName} er deaktiver.</h2>
-                            </div>
-                            :
-                            null
-                        }
                         <h2>Dette er personalia siden for {this.user.firstName} {this.user.lastName}</h2>
+                        <div> Brukernavn: {this.user.userName}</div>
                         <div> Epost: {this.user.email} </div>
                         <div> Mobilnummer: {this.user.phone} </div>
                         <div> Adresse: {this.user.address} </div>
+                        <div> Poststed: {this.user.poststed} </div>
+                        <div> Postnr: {this.user.postnr} </div>
 
-                        <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
-                        <div> Brukernavn: {this.user.userName}</div>
-                        <div> Passord: ********</div>
+                        <div><Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link></div>
 
 
                         <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
@@ -238,10 +253,25 @@ export default class MyPage extends React.Component {
                             </tbody>
                         </table> <br />
                     </div>
+                    <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver brukeren</button>
+                    {this.state.showDeactivateText ?
+                        <div>
+                            <h2>{this.user.firstName} {this.user.lastName} er deaktiver.</h2>
+                        </div>
+                        :
+                        null
+                    }
                 </div>
             )
         }
     }
+    registerUserPassive(passive_start, passive_slutt, userid){
+      userService.userPassive(this.refs.startPassiveTime.value,this.refs.endPassiveTime.value, this.user.id).then((result) => {
+        this.refs.startPassiveTime.value = "";
+        this.refs.endPassiveTime.value = "";
+      })
+    }
+
     registerSkills(selectValue) {
         this.inputList = [];
         this.dateInputList = [];
@@ -280,7 +310,11 @@ export default class MyPage extends React.Component {
         userService.getUsers(this.id).then((result) => {
             this.user = result;
 
-            this.forceUpdate();
+            userService.getUserPassive(this.user.id).then((result) => {
+               this.passiveUser = result;
+               this.forceUpdate();
+               console.log(this.user.id)
+             })
         });
 
         userService.getAllSkills().then((result) => {

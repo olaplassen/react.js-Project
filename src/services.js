@@ -250,7 +250,7 @@ getInteressed(arrangementId, userId, interessed) {
 
 getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=?', [arrangementId],(error, result) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
           if(error) throw error;
           resolve(result);
          })
@@ -425,7 +425,7 @@ UpsertRoleForArrangement(userId, arr_roleId) {
 
 getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.arr_rolleid', [arrid], (error, result) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
         resolve(result)
     })
@@ -435,7 +435,6 @@ getRolesWithNoUser(arrid, callback) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? AND ArrangementRoller.userid IS NULL ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
-        console.log(result)
         resolve(result)
     })
   })
@@ -548,8 +547,17 @@ getUserVaktListe(userid) {
   })
 }
 godkjennVakt(arr_rolleid) {
+  let today = new Date();
   return new Promise ((resolve, reject) => {
-    connection.query('UPDATE ArrangementRoller SET godkjent=1  WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
+    connection.query('UPDATE ArrangementRoller SET godkjent=1, godkjent_tid=?  WHERE arr_rolleid=?', [today, arr_rolleid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+isUserPassive(userid, arr_start, arr_end) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=? AND passive_start BETWEEN arr_end AND  passive_slutt >= arr_start', [userid], (error, result) => {
       if(error) throw error;
       resolve(result);
     })
