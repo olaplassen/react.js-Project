@@ -23,13 +23,16 @@ export default class EventInfo extends React.Component {
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
 		this.interestedUsers = [];
+		this.userIsInterested = [];
 		this.state = {
       activeUser: null,
 	   	users: [],
-			interessedUser: []
+			interessedUser: [],
+			showInterestedText: false
 
 		}
 	}
+
 
 	render() {
 		let signedInUser = userService.getSignedInUser();
@@ -38,6 +41,7 @@ export default class EventInfo extends React.Component {
 		let roleListAdmin = [];
 		let roleUserList = [];
 		let interestedUserList = [];
+		let isInterestedList = [];
 		let inc = 0;
 
 
@@ -69,7 +73,6 @@ export default class EventInfo extends React.Component {
 			inc++;
 		}
 		for(let roleWithUser of this.fordeltVakter) {
-
 			if (roleWithUser.godkjent == 0) {
 				roleUserList.push(
 					<tr key={roleWithUser.arr_rolleid}>
@@ -109,6 +112,35 @@ export default class EventInfo extends React.Component {
 				)
 			}
 
+				if (this.userIsInterested.length != 0) {
+					isInterestedList.push(<li key={signedInUser.id} className="li">Du har meldt interessert for dette arrangementet. <br />
+					<button onClick={() => {
+						userService.removeInterested(signedInUser.id, this.arrangement.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+								this.userIsInterested = result;
+								this.forceUpdate();
+							});
+						})
+					}}>Fjern interesse</button>
+					</li>
+				)
+				}
+				else if(this.userIsInterested.length == 0) {
+					isInterestedList.push(<li key={signedInUser.id} className="li">Du har ikke meldt interesse for dette arrangementet. <br />
+					<button onClick={() => {
+						userService.getInteressed(this.arrangement.id, signedInUser.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+								this.userIsInterested = result;
+								this.forceUpdate();
+							});
+						})
+					}}>Meld interesse</button>
+					</li>
+				)
+				}
+
+			console.log(isInterestedList)
+			console.log(this.userIsInterested.length)
 		if (signedInUser.admin == 0) {
 
 			return (
@@ -126,10 +158,12 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
-
-					<div> <h4>Er du interessert i dette arrangementet trykker du her: <button type="button" onClick={() => this.getInteressed(this.arrangement.id, this.state.activeUser)}>Interessert</button></h4></div>
 					<div>
-						<h4>Roller som kreves for dette arrangementet:</h4> <br />
+					{isInterestedList}
+					</div>
+					<br /> <br />
+					<div>
+						<h4>Roller som kreves for dette arrangementet:</h4>
 						<table>
 							<tbody>
 								{roleList}
@@ -214,6 +248,10 @@ export default class EventInfo extends React.Component {
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
+				});
+				userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+					this.userIsInterested = result;
+					this.forceUpdate();
 				});
 			});
 			userService.getRolewithUserInfo(this.id).then((result) => {
@@ -401,6 +439,7 @@ export default class EventInfo extends React.Component {
 			}
 		};
 	getInteressed(arrangementId, userId) {
+		this.setState({ showInterestedText: !this.state.showInterestedText });;
     userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
 			this.state.interessedUser = result;
 			this.forceUpdate();
