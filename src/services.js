@@ -116,6 +116,7 @@ getArrangement() {
       });
     });
     }
+
 getLastArrangement() {
          return new Promise ((resolve, reject) => {
           connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
@@ -509,6 +510,26 @@ changeUserForRole(userid, arr_roleid, arrid, tildeltTid) {
 addShiftChange(original_userid, toChange_userid, arr_rolleid) {
   return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO VaktBytte (original_userid, change_userid, arr_rolleid) VALUES (?,?,?) ', [original_userid, toChange_userid, arr_rolleid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+getShiftChangeInfo() {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT vaktbytteid, ArrangementRoller.arrid, a.id AS newUserid, b.id AS oldUserid, a.firstName AS newfirstName, a.lastName AS newlastName, b.firstName AS oldfirstName, b.lastName AS oldlastName, Arrangement.title, ArrangementRoller.arr_rolleid FROM Users a, Users b, ArrangementRoller, VaktBytte, Arrangement WHERE VaktBytte.change_userid = a.id AND VaktBytte.original_userid = b.id AND ArrangementRoller.arr_rolleid = VaktBytte.arr_rolleid AND ArrangementRoller.arrid = Arrangement.id AND godkjent_bytte = 0', (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+godkjennBytte(newuserid, arr_rolleid, tildelt_tid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE ArrangementRoller SET userid=?, tildelt_tid=?  WHERE arr_rolleid=?', [newuserid, tildelt_tid, arr_rolleid,], (error, result) => {
+      connection.query('UPDATE VaktBytte SET godkjent_bytte=1'), (error, result) => {
+        if(error) throw error;
+        resolve(result)
+      }
       if(error) throw error;
       resolve(result);
     })

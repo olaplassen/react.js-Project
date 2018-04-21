@@ -7,11 +7,14 @@ export default class ConfirmUsers extends React.Component {
 	constructor() {
 		super();
 		this.allUnConformed = [];
+		this.allShiftChange = [];
 	}
 
 	render() {
 		let signedInUser = userService.getSignedInUser()
 		let unConfirmedList = []; // array for å skrive ut alle brukere som ikke er godkjent
+		let unConfirmedShift = [];
+		let tildelt_tid = new Date()
 		//her pushes alle ikke godkjente brukere inn i arrayen.
 		for (let unConfirmed of this.allUnConformed) {
 			unConfirmedList.push(<li key={unConfirmed.id}>
@@ -21,20 +24,49 @@ export default class ConfirmUsers extends React.Component {
 				<hr /></li>)
 
 		}
+		for(let shiftChange of this.allShiftChange) {
+
+			unConfirmedShift.push(
+				<tr key={shiftChange.arr_rolleid}>
+				<td className="td">{shiftChange.title}</td>
+				<td className="td">{shiftChange.oldfirstName}{shiftChange.oldlastName}</td>
+				<td className="td">{shiftChange.newfirstName}{shiftChange.newlastName}</td>
+				<td className="td"><button onClick={() => {
+					userService.godkjennBytte(shiftChange.newUserid, shiftChange.arr_rolleid, tildelt_tid).then((result) => {
+						userService.getShiftChangeInfo().then((result) => {
+							this.allShiftChange = result;
+							console.log(result)
+							this.forceUpdate();
+						})
+					})
+				}}>Godkjenn bytte</button></td>
+				</tr>
+			)
+		}
+
 		return (
 
 			<div className="menu">
 				Ikke godkjente brukere <br />
 				{unConfirmedList}
+
+				Ikke godkjente vaktbytter <br />
+				{unConfirmedShift}
 			</div>
 		);
 	}
 
 	componentDidMount() {
+
 		userService.unConfirmedUsers().then((result) => {
 			this.allUnConformed = result;
 			this.forceUpdate();
 		});
+		userService.getShiftChangeInfo().then((result) => {
+			this.allShiftChange = result;
+			console.log(result)
+			this.forceUpdate();
+		})
 	}
 
 	// funksjon for når godkjenn knappen klikkes
