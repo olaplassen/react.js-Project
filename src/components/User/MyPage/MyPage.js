@@ -159,11 +159,12 @@ export default class MyPage extends React.Component {
                             <div>
                                 <input ref="newpassword" type="password" /> <br />
                                 <input ref="verifypassword" type="password" /> <br />
+                                <button ref="changepasswordbtn">Lagre</button>
                             </div>
                             :
                             null
                         }
-                      <button ref="changepasswordbtn">Lagre</button>
+
                     </div>
 
                     <div className="passiv">
@@ -269,11 +270,12 @@ export default class MyPage extends React.Component {
                           <div>
                               <input ref="newpassword" type="password" /> <br />
                               <input ref="verifypassword" type="password" /> <br />
+                              <button ref="changepasswordbtn">Lagre</button>
                           </div>
                           :
                           null
                       }
-                    <button ref="changepasswordbtn">Lagre</button>
+
                   </div>
               </div>
 
@@ -395,6 +397,7 @@ export default class MyPage extends React.Component {
                 this.forceUpdate();
             });
         });
+        if(this.state.showchangePassword == true) {
 
         this.refs.changepasswordbtn.onclick = () => {
 
@@ -411,6 +414,7 @@ export default class MyPage extends React.Component {
                 this.refs.newpassword.value = "Passordene matcher ikke";
             }
         }
+      }
         if (signedInUser.admin == 1) {
             this.refs.deaktiverUser.onclick = () => {
                 userService.deactivateUser(this.id).then((result) => {
