@@ -134,11 +134,18 @@ body {background-color: #f2f2f2;}
     text-align: center;
     width: 40%;
 }
+.table100{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
 .td {
     padding: 5px;
     border: 1px solid black;
     border-collapse: collapse;
 }
+
 .th {
     text-align: left;
     padding: 5px;

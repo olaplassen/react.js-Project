@@ -484,7 +484,7 @@ export default class EventInfo extends React.Component {
 							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
 							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
 							      // mailService.sendMail(email, subject, textmail);
-										userService.userPassive(this.arrangement.start, this.arrangement.end, interestedUser.userId).then((result) => {
+										userService.userPassive(this.arrangement.start, this.arrangement.end, user.id).then((result) => {
 											console.log(result)
 											this.forceUpdate();
 										})

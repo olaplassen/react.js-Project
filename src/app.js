@@ -28,6 +28,9 @@ import AdminHome from './components/Admin/AdminHome/AdminHome';
 import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
 import Arrangement from './components/Admin/Arrangement/Arrangement';
 import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
+import Statistics from './components/Admin/Statistics/Statistic';
+import UserStatistics from './components/Admin/Statistics/UserStatistic';
+
 
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
@@ -102,6 +105,8 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />
          <Route exact path='/eventinfo/:id' component={EventInfo} />
+         <Route exact path='/statistics' component={Statistics} />
+         <Route exact path='/userStatistic/:userid' component={UserStatistics} />
 
       </Switch>
     </div>

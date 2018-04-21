@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../../services';
 import { Link } from 'react-router-dom';
+
 export default class ConfirmUsers extends React.Component {
 
 	constructor() {

@@ -278,7 +278,7 @@ userList(callback) {
 
 searchList(input, callback) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by firstName', [true, false, '%' + input + '%'], (error, result) => {
+      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by id', [true, false, '%' + input + '%'], (error, result) => {
         if(error) throw error;
 
         resolve(result);
@@ -621,6 +621,38 @@ getArrRolleInfo(arr_rolleid) {
       if(error) throw error;
       resolve(result[0]);
 
+    })
+  })
+}
+shiftInfo2mnd() {
+  let toMnd = new Date();
+  toMnd.setMonth(toMnd.getMonth() - 2)
+
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(ArrangementRoller.arr_rolleid) as roleCount, Users.id, Users.firstName, Users.lastName, Users.vaktpoeng FROM Users, ArrangementRoller, Arrangement WHERE ArrangementRoller.userid = Users.id AND Arrangement.id = ArrangementRoller.arrid AND Arrangement.end > ? GROUP BY Users.id', [toMnd], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+
+    })
+  })
+}
+shiftInfo2mndSearch(input) {
+  let toMnd = new Date();
+  toMnd.setMonth(toMnd.getMonth() - 2)
+
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(ArrangementRoller.arr_rolleid) as roleCount, Users.id, Users.firstName, Users.lastName, Users.vaktpoeng FROM Users, ArrangementRoller, Arrangement WHERE ArrangementRoller.userid = Users.id AND Arrangement.id = ArrangementRoller.arrid AND Arrangement.end > ? AND Users.firstName LIKE ? GROUP BY Users.id', [toMnd, '%' + input + '%'], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+
+    })
+  })
+}
+participatedRoles(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(arr_rolleid) as deltattRolle, Role.title FROM ArrangementRoller, Role WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.userid=?', [userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
     })
   })
 }

@@ -13,6 +13,7 @@ export default class AdminMenu extends React.Component {
                     <li className="li"><Link to={'/newarrangement'} className="link">Lage nytt arrangement</Link></li>
                     <li className="li"><Link to={'/arrangementer'} className="link">Arrangement</Link></li>
                     <li className="li"><Link to={'/adminsearch'} className="link">BrukerSøk</Link></li>
+                    <li className="li"><Link to={'/statistics'} className="link">Statistikk</Link></li>
                     <li className="li"><Link to={'/#'} onClick={() => logout()} className="link">Logg ut</Link></li>
                 </ul>
             </div>
