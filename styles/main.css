@@ -40,7 +40,7 @@ body {background-color: #f2f2f2;}
 
 .info {
   margin-left: 50px;
-  width: 500px;
+  width: 450px;
   height: 300px;
   float: left;
 }
@@ -51,6 +51,7 @@ body {background-color: #f2f2f2;}
 
 .passiv {
   margin-right: 50px;
+  margin-left: 50px;
   width: 400px;
   height: 300px;
   float: left;
@@ -160,6 +161,7 @@ body {background-color: #f2f2f2;}
 .calendercolumn {
   margin-left: 30px;
   margin-right: 25px;
+  margin-bottom: 75px;
   width: 500px;
   height: 400px;
   float: left;
@@ -170,6 +172,7 @@ body {background-color: #f2f2f2;}
 }
 
 .vakter {
+  margin-left: 30px;
   width: 700px;
   float: left;
 
