@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { userService } from '../../../services';
 import { Link } from 'react-router-dom';
 export default class ConfirmUsers extends React.Component {
-	
+
 	constructor() {
 		super();
 		this.allUnConformed = [];
@@ -14,7 +14,11 @@ export default class ConfirmUsers extends React.Component {
 		let unConfirmedList = []; // array for å skrive ut alle brukere som ikke er godkjent
 		//her pushes alle ikke godkjente brukere inn i arrayen.
 		for (let unConfirmed of this.allUnConformed) {
-			unConfirmedList.push(<li key={unConfirmed.id}><Link to={'/mypage/' + unConfirmed.id}>{unConfirmed.firstName} {unConfirmed.lastName}</Link> {unConfirmed.phone + " " + unConfirmed.email} <button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button> <hr /></li>)
+			unConfirmedList.push(<li key={unConfirmed.id}>
+				<Link to={'/mypage/' + unConfirmed.id}>{unConfirmed.firstName} {unConfirmed.lastName}</Link>
+				{unConfirmed.phone + " " + unConfirmed.email}
+				<button className="confirmBtn" onClick={() => this.confirmUser(unConfirmed.id)}>Godkjenn</button>
+				<hr /></li>)
 
 		}
 		return (

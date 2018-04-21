@@ -32,7 +32,7 @@ export default class UserHome extends React.Component {
 					<td className="td">{kommendeVakt.tildelt_tid.toLocaleString().slice(0,-3)}</td>
 					<td className="td"><button onClick={() => {
 						userService.godkjennVakt(kommendeVakt.arr_rolleid).then((result) => {
-							userService.getUserVaktListe(this.userId).then((result) => {
+							userService.getComingVaktListe(this.userId).then((result) => {
 								this.kommendeVakter = result;
 								this.forceUpdate();
 							})
@@ -49,6 +49,10 @@ export default class UserHome extends React.Component {
 						<td className="td">{kommendeVakt.roleTitle}</td>
 						<td className="td">{kommendeVakt.tildelt_tid.toLocaleString().slice(0,-3)}</td>
 						<td className="td">Godkjent</td>
+						<td className="td"><button onClick={() => {
+							this.props.history.push('/changeshift/' + kommendeVakt.arr_rolleid)
+
+						}}>Bytt Vakt</button></td>
 					</tr>
 				)
 			}
@@ -102,12 +106,10 @@ export default class UserHome extends React.Component {
 		});
 		userService.getComingVaktListe(this.userId).then((result) => {
 			this.kommendeVakter = result;
-			console.log(result)
 			this.forceUpdate();
 		})
 		userService.getDoneVaktListe(this.userId).then((result) => {
-			this.fullforteVakter = result;
-			console.log(result)
+			this.fullforteVakter = result
 			this.forceUpdate();
 		})
 

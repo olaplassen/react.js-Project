@@ -42,6 +42,16 @@ getUsers(id, callback): Promise<user[]> {
     });
   });
 }
+
+getUserByMail(recieverEmail) {
+  return new Promise ((resolve, reject) => {
+  connection.query('SELECT * FROM Users WHERE email=?', [recieverEmail], (error, result) => {
+    if (error) throw error;
+    resolve(result[0]);
+  });
+});
+}
+
 getAllUsers(callback) {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE admin=0 ORDER BY vaktpoeng', (error, result) => {
@@ -248,7 +258,7 @@ removeInterested(userid, arrid) {
 
 getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
           if(error) throw error;
           resolve(result);
          })
@@ -488,6 +498,22 @@ addUserForRole(userid, arr_roleid, arrid, tildeltTid) {
     })
   })
 }
+changeUserForRole(userid, arr_roleid, arrid, tildeltTid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE ArrangementRoller SET userid=?, tildelt_tid=?, godkjent_tid=NULL, godkjent=0  WHERE arr_rolleid=? AND arrid=?', [userid, tildeltTid, arr_roleid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+addShiftChange(original_userid, toChange_userid, arr_rolleid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('INSERT INTO VaktBytte (original_userid, change_userid, arr_rolleid) VALUES (?,?,?) ', [original_userid, toChange_userid, arr_rolleid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
 getUsedUsers(arr_rolleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT userid FROM ArrangementRoller WHERE arr_rolleid=? AND userid IS NOT NULL', [arr_rolleid], (error, result) => {
@@ -563,6 +589,16 @@ isUserPassive(userid, arrid) {
     connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
       if(error) throw error;
       resolve(result);
+
+    })
+  })
+}
+
+getArrRolleInfo(arr_rolleid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM ArrangementRoller WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
+      if(error) throw error;
+      resolve(result[0]);
 
     })
   })

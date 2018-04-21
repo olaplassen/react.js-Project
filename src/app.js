@@ -19,6 +19,7 @@ import MyPage from './components/User/MyPage/MyPage';
 import ChangeUser from './components/User/ChangeUser/ChangeUser';
 import SearchUser from './components/User/SearchUser/SearchUser';
 import EventInfo from './components/User/EventInfo/EventInfo';
+import ChangeShift from './components/User/ChangeShift/changeshift';
 
 //henter classene fra admin.js
 import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
@@ -78,7 +79,7 @@ ReactDOM.render((
       <Route exact path='/usersearch' component={SearchUser} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventinfo/:id' component={EventInfo} />
-      
+      <Route exact path='/changeshift/:arr_rolleid' component={ChangeShift} />
       </Switch>
     </div>
   </HashRouter>

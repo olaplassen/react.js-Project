@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../../services';
 import createHashHistory from 'history/createHashHistory';
+import { mailService } from '../../../mailservices';
 
 const history: HashHistory = createHashHistory();
 
@@ -37,7 +38,7 @@ export default class EventInfo extends React.Component {
 	render() {
 		let signedInUser = userService.getSignedInUser();
 
-		let roleList = [];
+		let roleListUser = [];
 		let roleListAdmin = [];
 		let roleUserList = [];
 		let interestedUserList = [];
@@ -46,8 +47,59 @@ export default class EventInfo extends React.Component {
 
 
 
-		for (let role of this.allSelectedRoles) {
-			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
+		for (let role of this.fordeltVakter) {
+
+			if (role.godkjent == 0 && role.userid != signedInUser.id) {
+				 roleListUser.push(
+					<tr key={role.arr_rolleid}>
+						<td className="td">{role.title}</td>
+						<td className="td">Ikke godjent</td>
+					</tr>
+					)
+				}
+				else if (role.godkjent == 0 && role.userid == signedInUser.id) {
+					roleListUser.push(
+ 					<tr key={role.arr_rolleid}>
+ 						<td className="td">{role.title}</td>
+ 						<td className="td">{role.tildelt_tid.toLocaleString()}</td>
+						<td className="td"><button onClick={() => {
+							userService.godkjennVakt(role.arr_rolleid).then((result) => {
+								userService.getRolewithUserInfo(this.arrangement.id).then((result) => {
+									this.fordeltVakter = result;
+									this.forceUpdate();
+								});
+							})
+						}}>Godkjenn</button></td>
+ 					</tr>
+ 					)
+				}
+				else if (role.godkjent == 1 && role.userid != signedInUser.id) {
+					roleListUser.push(
+ 					<tr key={role.arr_rolleid}>
+ 						<td className="td">{role.title}</td>
+ 						<td className="td">{role.firstName}{role.lastName}</td>
+						<td className="td">Godkjent</td>
+ 					</tr>
+ 					)
+				}
+				else{
+					roleListUser.push(
+					<tr key={role.arr_rolleid}>
+						<td className="td">{role.title}</td>
+						<td className="td">Din vakt</td>
+						<td className="td">Godkjent</td>
+					</tr>
+				)
+				}
+		}
+		for (let roleNoUser of this.roleNoUser) {
+				roleListUser.push(
+				<tr key={roleNoUser.arr_rolleid}>
+					<td className="td">{roleNoUser.title}</td>
+					<td className="td">Ikke tildelt</td>
+					<td className="td">Ikke Godkjent</td>
+				</tr>
+				)
 		}
 
 		for (let role of this.allRoles) {
@@ -138,9 +190,6 @@ export default class EventInfo extends React.Component {
 					</li>
 				)
 				}
-
-			console.log(isInterestedList)
-			console.log(this.userIsInterested.length)
 		if (signedInUser.admin == 0) {
 
 			return (
@@ -164,9 +213,9 @@ export default class EventInfo extends React.Component {
 					<br /> <br />
 					<div>
 						<h4>Roller som kreves for dette arrangementet:</h4>
-						<table>
+						<table className="table">
 							<tbody>
-								{roleList}
+								{roleListUser}
 							</tbody>
 						</table>
 						<br />
@@ -392,6 +441,15 @@ export default class EventInfo extends React.Component {
 
 									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
 										console.log("interesert")
+										// let email = interestedUser.email;
+										// let subject = "Røde Kors ny vakt"
+							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      // mailService.sendMail(email, subject, textmail);
+										userService.userPassive(this.arrangement.start, this.arrangement.end, interestedUser.userId).then((result) => {
+											console.log(result)
+											this.forceUpdate();
+										})
 										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
@@ -421,6 +479,15 @@ export default class EventInfo extends React.Component {
 
 									userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
 										console.log("user")
+										// let email = interestedUser.email;
+										// let subject = "Røde Kors ny vakt"
+							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      // mailService.sendMail(email, subject, textmail);
+										userService.userPassive(this.arrangement.start, this.arrangement.end, interestedUser.userId).then((result) => {
+											console.log(result)
+											this.forceUpdate();
+										})
 										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
