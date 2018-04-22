@@ -7,9 +7,6 @@ import { userService } from './services';
 import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
 
-
-
-
 // class for navigasjons meny
 export class StartMenu extends React.Component {
  render() {
@@ -71,7 +68,7 @@ export class Login extends React.Component {
 
           }
           console.log(user.userId);
-        
+
            checkLogInUser(user);
         }
       }
@@ -80,7 +77,7 @@ export class Login extends React.Component {
         alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
       }
 
-    });
+    })
 
   }
 }

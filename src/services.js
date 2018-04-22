@@ -296,7 +296,7 @@ getAllArrangement() {
       });
     }
 
-getArrangementInfo(id) {
+getEventInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
          if (error) throw error;
@@ -304,6 +304,15 @@ getArrangementInfo(id) {
          });
        });
     }
+changeEvent(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
+  return new Promise ((resolve, reject) => {
+   connection.query('UPDATE Arrangement SET title =?, meetingLocation=?, description=?, contactPerson=?, gearList=?, showTime=?, start=?, end=? WHERE id=?', [title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId], (error, result) => {
+     if (error) throw error;
+       resolve(result)
+     });
+   });
+}
+
 
 getAllSkills() {
      return new Promise ((resolve, reject) => {

@@ -30,6 +30,7 @@ import Arrangement from './components/Admin/Arrangement/Arrangement';
 import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
 import Statistics from './components/Admin/Statistics/Statistic';
 import UserStatistics from './components/Admin/Statistics/UserStatistic';
+import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
 
 
 export function outlogged(){
@@ -107,6 +108,8 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/eventinfo/:id' component={EventInfo} />
          <Route exact path='/statistics' component={Statistics} />
          <Route exact path='/userStatistic/:userid' component={UserStatistics} />
+         <Route exact path='/changevent/:eventId' component={ChangeEvent} />
+
 
       </Switch>
     </div>
