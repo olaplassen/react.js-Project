@@ -650,7 +650,7 @@ shiftInfo2mndSearch(input) {
 }
 participatedRoles(userid) {
   return new Promise ((resolve, reject) => {
-    connection.query('SELECT COUNT(arr_rolleid) as deltattRolle, Role.title FROM ArrangementRoller, Role WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.userid=?', [userid], (error, result) => {
+    connection.query('SELECT COUNT(ArrangementRoller.roleid) as deltattRolle, Role.title, Role.roleid FROM ArrangementRoller, Role WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.userid=? GROUP BY Role.roleid', [userid], (error, result) => {
       if(error) throw error;
       resolve(result);
     })
