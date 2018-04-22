@@ -60,7 +60,7 @@ export class Login extends React.Component {
 
           }
           console.log(admin.adminId);
-          
+
           checkLogInAdmin(admin);
         }
         else  {
@@ -71,7 +71,7 @@ export class Login extends React.Component {
 
           }
           console.log(user.userId);
-          userService.checkArrAddPoints();
+        
            checkLogInUser(user);
         }
       }
