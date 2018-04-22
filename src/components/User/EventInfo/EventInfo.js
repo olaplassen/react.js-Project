@@ -290,12 +290,11 @@ export default class EventInfo extends React.Component {
 							</table>
 						</div>
 					</div>
-					<br />
 					<hr />
 
 					<div className="row">
 						<div className="roller">
-							<h4>Roller som kreves for dette arrangementet:</h4>
+							<h4>Roller som kreves for dette arrangementet</h4>
 								<table className="tabellroller" id="myTable">
 									<tbody>
 										<tr>
