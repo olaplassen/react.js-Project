@@ -88,7 +88,7 @@ export default class NewArrangement extends React.Component {
                               options={vaktmalList}
                               onChange={(selectValue) => this.setState({ selectValue })}
                               value={selectValue}
-                              placeholder="Velg" /></td>
+                              placeholder="Velg vaktmal, eller egendefiner roller i tabellen" /></td>
                         </tr>
                         <tr>
                           <td>Oppmøte tidspunkt</td>
@@ -111,6 +111,7 @@ export default class NewArrangement extends React.Component {
                   </div>
 
                   <div className="arrtabell">
+                    
                       <table className="table" id="myTable">
                           <tbody>
                               <tr>
@@ -123,11 +124,13 @@ export default class NewArrangement extends React.Component {
                               {roleList}
                           </tbody>
                       </table>
-                      <button className="button" ref="newArrButton" onClick={() =>
-                        this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement
-                      </button>
+
                   </div>
+
                 </div>
+                <button className="button3" ref="newArrButton" onClick={() =>
+                  this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement
+                </button>
             </div>
         );
     }
