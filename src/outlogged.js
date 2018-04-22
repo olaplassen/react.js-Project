@@ -30,17 +30,35 @@ export class Login extends React.Component {
   render() {
     return (
 
-      <div className="menu">
+      <div className="loggin">
       <h1 className="h1">Velkommen</h1>
       <img className="img" src={'src/img/rkors.jpg'} />
-      <form>
-        <label htmlFor="username">Username </label>
-        <input className="input" ref="username" placeholder="Type your username"></input><br/>
-        <label htmlFor="password">Password </label>
-        <input className="input" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
-        <button className="button" ref="loginBtn">Login</button> <br/>
-        <Link to='/newPassword'>Forgot password</Link> <br/>
-        </form>
+      <table className="loggintabell">
+        <tr>
+          <td>
+            Brukernavn
+          </td>
+          <td>
+            <input className="loggininput" ref="username" placeholder="Skriv inn brukernavn"></input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Passord
+          </td>
+          <td>
+              <input className="loggininput" type="password" ref="password" placeholder="Skriv inn passord"></input>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <button className="button" ref="loginBtn">Login</button>
+          </td>
+          <td>
+            <Link className="button" to='/newPassword'>Glemt passord</Link>
+          </td>
+        </tr>
+        </table>
       </div>
     );
   }
