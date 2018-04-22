@@ -277,6 +277,16 @@ export default class MyPage extends React.Component {
                       }
 
                   </div>
+                  <div className="deaktiver">
+                    <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver brukeren</button>
+                    {this.state.showDeactivateText ?
+                        <div>
+                            <h2>{this.user.firstName} {this.user.lastName} er deaktiver.</h2>
+                        </div>
+                        :
+                        null
+                    }
+                  </div>
               </div>
 
               <hr></hr>
@@ -325,14 +335,7 @@ export default class MyPage extends React.Component {
                           <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                         </div>
                     </div>
-                    <button ref="deaktiverUser" onClick={this.updateShowState} className="button">Deaktiver brukeren</button>
-                    {this.state.showDeactivateText ?
-                        <div>
-                            <h2>{this.user.firstName} {this.user.lastName} er deaktiver.</h2>
-                        </div>
-                        :
-                        null
-                    }
+
                 </div>
             )
         }
