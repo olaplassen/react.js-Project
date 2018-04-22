@@ -10,7 +10,6 @@ import { checkLogInAdmin } from './app';
 // class for navigasjons meny
 export class StartMenu extends React.Component {
  render() {
-
    return (
      <div className="menu">
       <ul className="ul">
@@ -18,7 +17,6 @@ export class StartMenu extends React.Component {
        <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
       </ul>
       </div>
-
    );
  }
 }
@@ -26,59 +24,36 @@ export class StartMenu extends React.Component {
 export class Login extends React.Component {
   render() {
     return (
-
-      <div className="loggin">
+      <div className="menu">
       <h1 className="h1">Velkommen</h1>
       <img className="img" src={'src/img/rkors.jpg'} />
-      <table className="loggintabell">
-        <tr>
-          <td>
-            Brukernavn
-          </td>
-          <td>
-            <input className="loggininput" ref="username" placeholder="Skriv inn brukernavn"></input>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Passord
-          </td>
-          <td>
-              <input className="loggininput" type="password" ref="password" placeholder="Skriv inn passord"></input>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <button className="button" ref="loginBtn">Login</button>
-          </td>
-          <td>
-            <Link className="button" to='/newPassword'>Glemt passord</Link>
-          </td>
-        </tr>
-        </table>
+      <form>
+        <label htmlFor="username">Username </label>
+        <input className="input" ref="username" placeholder="Type your username"></input><br/>
+        <label htmlFor="password">Password </label>
+        <input className="input" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
+        <button className="button" ref="loginBtn">Login</button> <br/>
+        <Link to='/newPassword'>Forgot password</Link> <br/>
+        </form>
+        <div ref="error">
+        </div>
       </div>
     );
   }
   componentDidMount() {
-
     //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
-
-        console.log(result)
         if (result != undefined && result.confirmed == true) {
-    // når resultatet fra LoginUser er undefined avsluttes funkjsonen
-    //slik at loginAdmin kjøres
+
+          //slik at loginAdmin kjøres
         if (result.admin == true) {
           let admin = {
             adminId: result.id
-
-          }
-          console.log(admin.adminId);
-
+          };
           checkLogInAdmin(admin);
         }
-        else  {
+        else {
           // oppretter array for user med id slik at verdien kan sendes til den nye
           // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
           let user = {
@@ -91,8 +66,8 @@ export class Login extends React.Component {
         }
       }
       else {
-
-        alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
+        //feilmelding ved mislykket innlogging
+        this.refs.error = "Feil passord eller brukernavn, eller så er din bruker ikke godkjent"
       }
 
     })
@@ -104,8 +79,7 @@ export class Login extends React.Component {
 
 export class Registration extends React.Component {
  render() {
-
-// registrerings skjemaet som skrives ut under registrerings komponenten
+// registrerings skjema
    return (
      <div className="menu">
      <form>
@@ -123,10 +97,6 @@ export class Registration extends React.Component {
      </div>
    );
  }
- //funksjon for oprette path historie for å sende bruker til ny side
- nextPath(path) {
-     this.props.history.push(path);
-   }
 //rendrer på nytt og lagrer dataen bruker har ført inn i databasen
  componentDidMount() {
  this.refs.newUserbtn.onclick = () => {
@@ -141,23 +111,21 @@ export class Registration extends React.Component {
                          this.refs.newEmail.value = ""
                          this.refs.newUsername.value = "";
                          this.refs.newPassword.value = "";
-                         this.nextPath('/login'); // sender user til login page etter registrering
+                         this.props.history.push('/login'); // sender user til login page etter registrering
 
                        });
                      }
+    //setter poststed verdi etter hvilket postnummer bruker fyller inn
     this.refs.newPostnr.oninput = () => {
-
       userService.getPoststed(this.refs.newPostnr.value).then((result) => {
         if(this.refs.newPostnr.value.length < 1) {
           this.refs.newPoststed.value = "";
         }
         else {
-        for(let place of result) {
+          for(let place of result) {
             this.refs.newPoststed.value = place.poststed;
-            console.log(place.poststed)
-
+          }
         }
-      }
       });
     }
   }
@@ -174,18 +142,13 @@ export class NewPassword extends React.Component {
       </div>
     );
   }
-//sender bruker til ny komponent etter at brukeren har spurt etter nytt passord
-  nextPath(path) {
-  this.props.history.push(path);
-  }
-
   componentDidMount() {
   this.refs.newPasswordbtn.onclick = () => {
     userService.resetPassword(this.refs.username.value, this.refs.email.value).then((result) => {
       //når username og email matcher med en user i databsen og resultatet ikke er null
       // sendes bruker til ny komponent
       if(result != null) {
-      this.nextPath('/passwordsendt')
+      this.props.history.push('/passwordsendt')
     }
     });
     }

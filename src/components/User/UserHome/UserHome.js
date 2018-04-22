@@ -12,7 +12,7 @@ BigCalendar.setLocalizer(BigCalendar.momentLocalizer(moment));
 export default class UserHome extends React.Component {
 	constructor(props) {
 		super(props);
-		this.allEvents = [];
+		this.allEvnts = [];
 		this.kommendeVakter = [];
 		this.fullforteVakter = [];
 		this.userId = props.match.params.userId;
@@ -22,6 +22,8 @@ export default class UserHome extends React.Component {
 		let kommendeVakterList = [];
 		let fullforteVakterList = [];
 		let thisTime = new Date()
+
+		//Definerer en table row for hver kommende vakt, basert på om brukeren har godkjent vakten eller ikke
 		for(let kommendeVakt of this.kommendeVakter) {
 			if(kommendeVakt.godkjent == 0) {
 				kommendeVakterList.push(
@@ -31,6 +33,7 @@ export default class UserHome extends React.Component {
 					<td className="td">{kommendeVakt.roleTitle}</td>
 					<td className="td">{kommendeVakt.tildelt_tid.toLocaleString().slice(0,-3)}</td>
 					<td className="td"><button onClick={() => {
+						//Godkjenner vakten og oppdaterer kommendevakter listen
 						userService.godkjennVakt(kommendeVakt.arr_rolleid).then((result) => {
 							userService.getComingVaktListe(this.userId).then((result) => {
 								this.kommendeVakter = result;
@@ -57,6 +60,7 @@ export default class UserHome extends React.Component {
 				)
 			}
 		}
+		//Liste for fullførte vakter der arrangament sluttdatoen er før i dag
 		for (let fullfort of this.fullforteVakter) {
 				fullforteVakterList.push(
 					<tr key={fullfort.arr_rolleid}>
@@ -73,7 +77,7 @@ export default class UserHome extends React.Component {
 					<div className="calendercolumn">
 					<h2>Arrangementskalender</h2>
 							<BigCalendar
-							events={this.allEvents}
+							events={this.allEvnts}
 							showMultiDayTimes
 							defaultDate={new Date()}
 							selectAble={true}
@@ -81,28 +85,28 @@ export default class UserHome extends React.Component {
 							/>
 					</div>
 					<div className="column3">
-					<h4>Kommende vakter</h4>
-					<h5>Du må godkjenne vakten før du kan bytte</h5>
-					<table className="table">
-						<tbody>
-							<tr><th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>
-							{kommendeVakterList}
-						</tbody>
-					</table>
-					<h4>Fullførte vakter</h4>
-					<table className="table">
-						<tbody>
-							<tr><th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>
-							{fullforteVakterList}
-						</tbody>
-					</table>
+						<h4>Kommende vakter</h4>
+						<h5>Du må godkjenne vakten før du kan bytte</h5>
+						<table className="table">
+							<tbody>
+								<tr><th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>
+								{kommendeVakterList}
+							</tbody>
+						</table>
+						<h4>Fullførte vakter</h4>
+						<table className="table">
+							<tbody>
+								<tr><th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>
+								{fullforteVakterList}
+							</tbody>
+						</table>
+					</div>
 				</div>
-			</div>
-		);
+			);
 	}
 	componentDidMount() {
 		userService.getAllArrangement().then((result) => {
-			this.allEvents = result;
+			this.allEvnts = result;
 			this.forceUpdate();
 		});
 		userService.getComingVaktListe(this.userId).then((result) => {
@@ -113,7 +117,5 @@ export default class UserHome extends React.Component {
 			this.fullforteVakter = result
 			this.forceUpdate();
 		})
-
-
 	}
 }

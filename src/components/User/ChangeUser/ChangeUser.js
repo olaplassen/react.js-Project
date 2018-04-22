@@ -9,7 +9,7 @@ export default class ChangeUser extends React.Component {
     constructor(props) {
         super(props);
         this.user = {};
-        this.id = props.match.params.userId;
+        this.userId = props.match.params.userId;
     }
     render() {
 
@@ -55,14 +55,12 @@ export default class ChangeUser extends React.Component {
         );
     }
 
-    nextPath(path) {
-        this.props.history.push(path);
-    }
+
     componentDidMount() {
-
-        userService.getUsers(this.id).then((result) => {
-
+      //henter bruker informasjon
+        userService.getUsers(this.userId).then((result) => {
             this.user = result;
+            //setter inputbokser lik brukerinformasjon
             this.refs.changefirstName.value = this.user.firstName;
             this.refs.changelastName.value = this.user.lastName;
             this.refs.changeaddress.value = this.user.address;
@@ -75,6 +73,7 @@ export default class ChangeUser extends React.Component {
         });
 
         this.refs.changeUserButton.onclick = () => {
+            //oppdaterer bruker med inført informasjon
             userService.changeUser(this.refs.changefirstName.value,
                 this.refs.changelastName.value,
                 this.refs.changeaddress.value,
@@ -82,19 +81,15 @@ export default class ChangeUser extends React.Component {
                 this.refs.changepoststed.value,
                 this.refs.changephone.value,
                 this.refs.changeemail.value,
-
-                this.id).then((result) => {
-                    userService.getUsers(this.id).then((result) => {
-                        this.props.history.push('/mypage/' + this.id)
-                        this.forceUpdate();
-                    });
+                this.userId).then((result) => {
+                  this.props.history.push('/mypage/' + this.userId)
+                  this.forceUpdate();
                 });
         };
 
         this.refs.changepostalNumber.oninput = () => {
-
+          //får poststed automatisk ved innføring av postnr
             userService.getPoststed(this.refs.changepostalNumber.value).then((result) => {
-
                 if (this.refs.changepostalNumber.value < 1) {
                     this.refs.changepoststed.value = "";
                 }

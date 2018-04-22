@@ -11,7 +11,7 @@ let transporter = nodemailer.createTransport({
     pass: 'YpmfXR8f'
   }
 });
-
+//definerer mail innhold
 var mailOptions = {
   from: 'badrgruppe22@gmail.com',
   to: recieverAdress,

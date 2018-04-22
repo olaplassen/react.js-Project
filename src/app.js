@@ -4,15 +4,15 @@ import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
-
-//henter classene fra outlogged.js
+ 
+//henter classene for utlogget funksjonalitet
 import { StartMenu } from './outlogged'
 import { Login } from './outlogged';
 import { Registration } from './outlogged';
 import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
-//henter classene fra users.js
+//henter classene for bruker funksjonalitet
 import UserMenu from './components/User/UserMenu/UserMenu';
 import UserHome from './components/User/UserHome/UserHome';
 import MyPage from './components/User/MyPage/MyPage';
@@ -21,7 +21,7 @@ import SearchUser from './components/User/SearchUser/SearchUser';
 import EventInfo from './components/User/EventInfo/EventInfo';
 import ChangeShift from './components/User/ChangeShift/changeshift';
 
-//henter classene fra admin.js
+//henter classene for admin funksjonalitet
 import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
 import ConfirmUsers from './components/Admin/ConfirmUsers/ConfirmUsers';
 import AdminHome from './components/Admin/AdminHome/AdminHome';
@@ -32,9 +32,10 @@ import Statistics from './components/Admin/Statistics/Statistic';
 import UserStatistics from './components/Admin/Statistics/UserStatistic';
 import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
 
-
+//funksjon som kjøres når programmet startes/refreshes for å sjekke om det er lagret en bruker i localStorage
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
+  //når bruker ikke er admin, kjøres user ReactDOM
   if (signedInUser != undefined && signedInUser.admin == false) {
     let user = {
       userId: signedInUser.id
@@ -69,7 +70,7 @@ ReactDOM.render((
 ), document.getElementById('root'));
 }
 }
-//ny ReactDOM som kjøres når user logger inn.
+//ReactDOM når signedInUser er user
  export function checkLogInUser(user) {
   ReactDOM.render((
   <HashRouter>
@@ -89,15 +90,14 @@ ReactDOM.render((
   </HashRouter>
 ), document.getElementById('root'))
 };
-//ny ReactDOM som kjøres når user admin inn.
+//ReactDOM når signedInUser er admin
 export function checkLogInAdmin(admin) {
   ReactDOM.render((
   <HashRouter>
     <div>
       <AdminMenu />
       <Switch>
-
-          <Route exact path='/hjem' component={AdminHome} />
+        <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
