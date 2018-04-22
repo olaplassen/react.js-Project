@@ -86,6 +86,28 @@ body {background-color: #f2f2f2;}
     box-sizing: border-box;
 }
 
+.loggin {
+  margin: auto;
+  width: 500px;
+}
+
+.loggintabell {
+  width: 400px;
+  margin: auto;
+  margin-top: 15px;
+}
+
+.loggininput {
+    width: 200px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+
 .changeinput {
   width: 300px;
   padding: 12px 20px;
@@ -109,7 +131,11 @@ body {background-color: #f2f2f2;}
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    text-decoration: none;
+    font-size: 1em;
+
 }
+
 .button2 {
     width: 40%;
     background-color: black;
@@ -132,16 +158,17 @@ body {background-color: #f2f2f2;}
 }
 .img {
   border-radius: 8px;
-  width: 15%;
-
-    display: block;
-    margin-left: auto;
-    margin-right: auto
-}
-.h1 {
+  width: 150px;;
+  display: block;
   margin-left: auto;
-    margin-right: auto;
-    width: 5.5em
+  margin-right: auto
+
+}
+
+
+.h1 {
+  font-size: 5em;
+  text-align: center;
 }
 
 .confirmBtn {
