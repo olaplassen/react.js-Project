@@ -37,7 +37,7 @@ export default class MyPage extends React.Component {
         for (let skill of selectValue) {
             userService.getSkillInfo(skill.value).then((result) => {
                 if (result.duration === 0) {
-                    this.inputList.push(<tr key={skill.value}><td> {skill.label} </td><td>Dette kurset har ingen utløpsdato</td></tr>);
+                    this.inputList.push(<tr key={skill.value}><td>{skill.label}</td><td>Dette kurset har ingen utløpsdato</td></tr>);
                 }
                 else if (result.duration != 0 && this.dateInputList.length > 0) {
                     this.setState(selectValue.splice(-1, 1));
@@ -46,7 +46,7 @@ export default class MyPage extends React.Component {
                 else {
                     ref++;
                     this.dateRef = ref;
-                    this.dateInputList.push(<tr key={skill.value} ><td> {skill.label} </td><td>, Legg til utløpsdato:<input ref={(ref) => this.dateRef = ref} type='date' /></td></tr>);
+                    this.dateInputList.push(<tr key={skill.value}><td>{skill.label}</td><td>, Legg til utløpsdato:<input ref={(ref) => this.dateRef = ref} type='date' /></td></tr>);
                 }
                 this.forceUpdate()
             });
@@ -61,8 +61,10 @@ export default class MyPage extends React.Component {
         let passiveList = [];
 
         for (let passive of this.passiveUser){
-          passiveList.push(<tr key={passive.userPassive_id}> <td> {passive.passive_start.toDateString()} </td>
-                                                  <td> {passive.passive_slutt.toDateString()}</td></tr>)
+          passiveList.push(<tr key={passive.userPassive_id}>
+            <td>{passive.passive_start.toDateString()}</td>
+            <td>{passive.passive_slutt.toDateString()}</td>
+            </tr>)
         }
 
         for (let yourskill of this.yourSkills) {
@@ -121,6 +123,7 @@ export default class MyPage extends React.Component {
                     <div className="info">
                         <h2> {this.user.firstName} {this.user.lastName}</h2>
                           <table className="tableinfo">
+                          <tbody>
                             <tr>
                               <td>Brukernavn</td>
                               <td>{this.user.userName}</td>
@@ -145,6 +148,7 @@ export default class MyPage extends React.Component {
                               <td>Postnr</td>
                               <td>{this.user.postnr}</td>
                             </tr>
+                            </tbody>
                           </table>
                       <div>
                         <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
@@ -155,11 +159,12 @@ export default class MyPage extends React.Component {
                             <div>
                                 <input ref="newpassword" type="password" /> <br />
                                 <input ref="verifypassword" type="password" /> <br />
+                                <button ref="changepasswordbtn">Lagre</button>
                             </div>
                             :
                             null
                         }
-                      <button ref="changepasswordbtn">Lagre</button>
+
                     </div>
 
                     <div className="passiv">
@@ -173,11 +178,11 @@ export default class MyPage extends React.Component {
 
                 </div>
 
-                <hr></hr>
+                <hr />
                 <div className="row">
                     <div className="kompetanse">
                           <div className="kurs">
-                              <h1> Mine Kompetanser og kurs</h1>
+                              <h1> Dine Kompetanser og kurs</h1>
                             <table className="table" id="myTable">
                                 <tbody>
                                     <tr>
@@ -194,7 +199,7 @@ export default class MyPage extends React.Component {
                           <div className="addkurs">
                             <h3> Legg til dine kurs </h3>
                               <div>
-                                OBSOBS du kan ikke legge til flere enn et kurs med utløpsdato om gangen.
+                                OBSOBS!  Du kan ikke legge til flere enn et kurs med utløpsdato om gangen.
                               </div>
 
                             <VirtualizedSelect
@@ -229,6 +234,7 @@ export default class MyPage extends React.Component {
                   <div className="info">
                       <h2> {this.user.firstName} {this.user.lastName}</h2>
                         <table className="tableinfo">
+                          <tbody>
                           <tr>
                             <td>Brukernavn</td>
                             <td>{this.user.userName}</td>
@@ -253,6 +259,7 @@ export default class MyPage extends React.Component {
                             <td>Postnr</td>
                             <td>{this.user.postnr}</td>
                           </tr>
+                          </tbody>
                         </table>
                     <div>
                       <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
@@ -263,11 +270,12 @@ export default class MyPage extends React.Component {
                           <div>
                               <input ref="newpassword" type="password" /> <br />
                               <input ref="verifypassword" type="password" /> <br />
+                              <button ref="changepasswordbtn">Lagre</button>
                           </div>
                           :
                           null
                       }
-                    <button ref="changepasswordbtn">Lagre</button>
+
                   </div>
               </div>
 
@@ -377,7 +385,6 @@ export default class MyPage extends React.Component {
             userService.getUserPassive(this.user.id).then((result) => {
                this.passiveUser = result;
                this.forceUpdate();
-               console.log(this.user.id)
              })
         });
 
@@ -390,6 +397,7 @@ export default class MyPage extends React.Component {
                 this.forceUpdate();
             });
         });
+        if(this.state.showchangePassword == true) {
 
         this.refs.changepasswordbtn.onclick = () => {
 
@@ -406,6 +414,7 @@ export default class MyPage extends React.Component {
                 this.refs.newpassword.value = "Passordene matcher ikke";
             }
         }
+      }
         if (signedInUser.admin == 1) {
             this.refs.deaktiverUser.onclick = () => {
                 userService.deactivateUser(this.id).then((result) => {

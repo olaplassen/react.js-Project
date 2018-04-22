@@ -18,6 +18,7 @@ export default class AdminHome extends React.Component {
     render() {
         return (
             <div className="calendercolumn">
+              <h2>Arrangementskalender</h2>
                 <BigCalendar
                     events={this.allEvents}
                     showMultiDayTimes

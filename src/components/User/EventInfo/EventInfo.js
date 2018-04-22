@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../../services';
 import createHashHistory from 'history/createHashHistory';
+import { mailService } from '../../../mailservices';
 
 const history: HashHistory = createHashHistory();
 
@@ -20,38 +21,85 @@ export default class EventInfo extends React.Component {
     this.roleKomp = [];
     this.userWithRoles = [];
     this.usedUser = [];
-		this.allWatchList=[];
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
 		this.interestedUsers = [];
-		this.interestedUsers = [];
+		this.userIsInterested = [];
 		this.state = {
       activeUser: null,
 	   	users: [],
-			interessedUser: []
+			interessedUser: [],
+			showInterestedText: false
 
 		}
 	}
 
+
 	render() {
 		let signedInUser = userService.getSignedInUser();
 
-		let watchList = [];
-		let roleList = [];
+		let roleListUser = [];
 		let roleListAdmin = [];
 		let roleUserList = [];
 		let interestedUserList = [];
+		let isInterestedList = [];
 		let inc = 0;
 
 
-		for (let watch of this.allWatchList) {
- 	 	watchList.push(<tr key= {watch.roleid}> <td className="td"> {watch.title} </td>
- 	 	                                       <td className="td"> {watch.firstname} </td> </tr>);
 
- 	 }
+		for (let role of this.fordeltVakter) {
 
-		for (let role of this.allSelectedRoles) {
-			roleList.push(<tr key={role.arr_rolleid} ><td> {role.title} </td></tr>);
+			if (role.godkjent == 0 && role.userid != signedInUser.id) {
+				 roleListUser.push(
+					<tr key={role.arr_rolleid}>
+						<td className="td">{role.title}</td>
+						<td className="td">Ikke godjent</td>
+					</tr>
+					)
+				}
+				else if (role.godkjent == 0 && role.userid == signedInUser.id) {
+					roleListUser.push(
+ 					<tr key={role.arr_rolleid}>
+ 						<td className="td">{role.title}</td>
+ 						<td className="td">{role.tildelt_tid.toLocaleString()}</td>
+						<td className="td"><button onClick={() => {
+							userService.godkjennVakt(role.arr_rolleid).then((result) => {
+								userService.getRolewithUserInfo(this.arrangement.id).then((result) => {
+									this.fordeltVakter = result;
+									this.forceUpdate();
+								});
+							})
+						}}>Godkjenn</button></td>
+ 					</tr>
+ 					)
+				}
+				else if (role.godkjent == 1 && role.userid != signedInUser.id) {
+					roleListUser.push(
+ 					<tr key={role.arr_rolleid}>
+ 						<td className="td">{role.title}</td>
+ 						<td className="td">{role.firstName}{role.lastName}</td>
+						<td className="td">Godkjent</td>
+ 					</tr>
+ 					)
+				}
+				else{
+					roleListUser.push(
+					<tr key={role.arr_rolleid}>
+						<td className="td">{role.title}</td>
+						<td className="td">Din vakt</td>
+						<td className="td">Godkjent</td>
+					</tr>
+				)
+				}
+		}
+		for (let roleNoUser of this.roleNoUser) {
+				roleListUser.push(
+				<tr key={roleNoUser.arr_rolleid}>
+					<td className="td">{roleNoUser.title}</td>
+					<td className="td">Ikke tildelt</td>
+					<td className="td">Ikke Godkjent</td>
+				</tr>
+				)
 		}
 
 		for (let role of this.allRoles) {
@@ -77,7 +125,6 @@ export default class EventInfo extends React.Component {
 			inc++;
 		}
 		for(let roleWithUser of this.fordeltVakter) {
-
 			if (roleWithUser.godkjent == 0) {
 				roleUserList.push(
 					<tr key={roleWithUser.arr_rolleid}>
@@ -117,6 +164,32 @@ export default class EventInfo extends React.Component {
 				)
 			}
 
+				if (this.userIsInterested.length != 0) {
+					isInterestedList.push(<li key={signedInUser.id} className="li">Du har meldt interessert for dette arrangementet. <br />
+					<button onClick={() => {
+						userService.removeInterested(signedInUser.id, this.arrangement.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+								this.userIsInterested = result;
+								this.forceUpdate();
+							});
+						})
+					}}>Fjern interesse</button>
+					</li>
+				)
+				}
+				else if(this.userIsInterested.length == 0) {
+					isInterestedList.push(<li key={signedInUser.id} className="li">Du har ikke meldt interesse for dette arrangementet. <br />
+					<button onClick={() => {
+						userService.getInteressed(this.arrangement.id, signedInUser.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+								this.userIsInterested = result;
+								this.forceUpdate();
+							});
+						})
+					}}>Meld interesse</button>
+					</li>
+				)
+				}
 		if (signedInUser.admin == 0) {
 
 			return (
@@ -134,13 +207,15 @@ export default class EventInfo extends React.Component {
 						Beskrivelse: <br />
 						{this.arrangement.description} <br />
 					</div>
-
-					<div> <h4>Er du interessert i dette arrangementet trykker du her: <button type="button" onClick={() => this.getInteressed(this.arrangement.id, this.state.activeUser)}>Interessert</button></h4></div>
 					<div>
-						<h4>Roller som kreves for dette arrangementet:</h4> <br />
-						<table>
+					{isInterestedList}
+					</div>
+					<br /> <br />
+					<div>
+						<h4>Roller som kreves for dette arrangementet:</h4>
+						<table className="table">
 							<tbody>
-								{roleList}
+								{roleListUser}
 							</tbody>
 						</table>
 						<br />
@@ -214,25 +289,20 @@ export default class EventInfo extends React.Component {
 
 		});
 
-		userService.getInteressedUsers(this.arrangement.id).then((result) => {
-			console.log(result)
-		});
-		userService.getWatchList(this.arrangement.id).then((result) => {
-			this.allWatchList = result;
-			this.forceUpdate();
-		});
 		userService.getArrangementInfo(this.id).then((result) => {
 			this.arrangement = result;
 			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
 			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
 			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
-			console.log(this.arrangement)
 			userService.getRolesForArr(this.arrangement.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
 				});
+				userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+					this.userIsInterested = result;
+					this.forceUpdate();
+				});
 			});
-			console.log(this.arrangement)
 			userService.getRolewithUserInfo(this.id).then((result) => {
 				this.fordeltVakter = result;
 				this.forceUpdate();
@@ -295,7 +365,6 @@ export default class EventInfo extends React.Component {
 									});
 									userService.getRolewithUserInfo(this.id).then((result) => {
 										this.fordeltVakter = result;
-										console.log(result)
 										this.forceUpdate();
 									});
 									userService.getRolesForArr(this.arrangement.id).then((result) => {
@@ -314,7 +383,6 @@ export default class EventInfo extends React.Component {
 									});
 									userService.getRolewithUserInfo(this.id).then((result) => {
 										this.fordeltVakter = result;
-										console.log(result)
 										this.forceUpdate();
 									});
 									userService.getRolesForArr(this.arrangement.id).then((result) => {
@@ -357,118 +425,100 @@ export default class EventInfo extends React.Component {
 							this.roleKomp= result;
 						});
 						let u = 0;
-						// do {
-
-							for(let interestedUser of this.interestedUsers) {
-
-								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
+						for(let interestedUser of this.interestedUsers) {
+							userService.isUserPassive(interestedUser.userId, this.arrangement.id).then((result) => {
+								this.userPassive = result;
+								})
+							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
 								if(result.length != 0){
 									this.userWithRoles = result;
 								}
-								for (var i = 0; i < this.interestedUsers.length; i++) {
-									let exists = usedUser.includes(interestedUser.userId);
-									let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-									userService.isUserPassive(interestedUser.userid, this.arrangement.start.toLocaleString(),this.arrangement.end.toLocaleString()).then((result) => {
-										this.userPassive = result;
-										if(this.user.passive.length != 0) {
-												if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
-													console.log(exists)
-													usedUser.push(interestedUser.userId)
-													usedEventRoles.push(eventRolle.arr_rolleid)
+								let exists = usedUser.includes(interestedUser.userId);
+								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) {
+									usedUser.push(interestedUser.userId)
+									usedEventRoles.push(eventRolle.arr_rolleid)
 
-													userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-														userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
-															this.roleNoUser = result;
-															this.forceUpdate();
-														});
-														userService.getRolewithUserInfo(this.id).then((result) => {
-															this.fordeltVakter = result;
-															this.forceUpdate();
-														});
-														this.forceUpdate();
-													})
-												}
-											}
+									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+										console.log("interesert")
+										// let email = interestedUser.email;
+										// let subject = "Røde Kors ny vakt"
+							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      // mailService.sendMail(email, subject, textmail);
+										userService.userPassive(this.arrangement.start, this.arrangement.end, interestedUser.userId).then((result) => {
+											console.log(result)
+											this.forceUpdate();
 										})
-									}
-								})
-							}
-							for(let user of this.allUsers) {
-								userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
-									if(result.length != 0){
-										this.userWithRoles = result;
-									}
-									for (var i = 0; i < this.allSelectedRoles.length; i++) {
-										let exists = usedUser.includes(user.id);
-										let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-											if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length) {
-												console.log(exists)
-												usedUser.push(user.id)
-												usedEventRoles.push(eventRolle.arr_rolleid)
-
-												userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-													userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
-														this.roleNoUser = result;
-														this.forceUpdate();
-													});
-													userService.getRolewithUserInfo(this.id).then((result) => {
-														this.fordeltVakter = result;
-														this.forceUpdate();
-													});
-													this.forceUpdate();
-												})
-											}
-										}
+										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+											this.roleNoUser = result;
+											this.forceUpdate();
+										});
+										userService.getRolewithUserInfo(this.id).then((result) => {
+											this.fordeltVakter = result;
+											this.forceUpdate();
+										});
 									})
 								}
+							})
+						}
+						for(let user of this.allUsers) {
+							userService.isUserPassive(user.id, this.arrangement.id).then((result) => {
+								this.userPassive = result;
+								})
+							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
+								if(result.length != 0){
+									this.userWithRoles = result;
+								}
+								let exists = usedUser.includes(user.id);
+								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
+								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) {
+
+									usedUser.push(user.id)
+									usedEventRoles.push(eventRolle.arr_rolleid)
+
+									userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+										console.log("user")
+										// let email = interestedUser.email;
+										// let subject = "Røde Kors ny vakt"
+							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      // mailService.sendMail(email, subject, textmail);
+										userService.userPassive(this.arrangement.start, this.arrangement.end, user.id).then((result) => {
+											console.log(result)
+											this.forceUpdate();
+										})
+										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+											this.roleNoUser = result;
+											this.forceUpdate();
+										});
+										userService.getRolewithUserInfo(this.id).then((result) => {
+											this.fordeltVakter = result;
+											this.forceUpdate();
+										});
+										this.forceUpdate();
+									})
+								}
+							})
 						}
 					}
 				}
-			};
-
-					getInteressed(arrangementId, userId) {
-                userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
-									this.state.interessedUser = result;
-									this.forceUpdate();
-									if(this.state.interessedUser == 0){
-										this.state.activeUser = userId;
-						        userService.getInteressed(arrangementId, userId).then((result) => {
-						            this.forceUpdate();
-						        })
-									}
-									else {
-										alert("du er allerede registrert som interessert")
-									}
-								})
-							};
-
-					getInteressedUsers() {
-
-						var rolesAvailableForArrangement = [];
-						userService.getRolesForArr(this.arrangement.id).then((result) => {
-							for (let role of result) {
-								rolesAvailableForArrangement.push(<option value={role.arr_rolleid}>{role.title}</option>);
-							}
-						});
-
-						userService.getInteressedUsers(this.arrangement.id).then((result) => {
-							var users = [];
-
-							result.forEach(function (user) {
-								users.push(
-									<div>
-										<li>{user.firstname + " "}</li>
-										<select onChange={function(e) {userService.UpsertRoleForArrangement(user.userId, e.target.value)}}>
-											<option value={null} selected>-- Velg ledig rolle -- </option>
-											{rolesAvailableForArrangement}
-
-										</select>
-									</div>
-								);
-							});
-							this.state.users = users;
-
-							this.forceUpdate();
-						});
+			}
+		};
+	getInteressed(arrangementId, userId) {
+		this.setState({ showInterestedText: !this.state.showInterestedText });;
+    userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
+			this.state.interessedUser = result;
+			this.forceUpdate();
+				if(this.state.interessedUser == 0){
+					this.state.activeUser = userId;
+		       	userService.getInteressed(arrangementId, userId).then((result) => {
+		          this.forceUpdate();
+		       	})
 					}
+				else {
+					alert("du er allerede registrert som interessert")
+				}
+			})
+		};
 }

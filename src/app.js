@@ -19,6 +19,7 @@ import MyPage from './components/User/MyPage/MyPage';
 import ChangeUser from './components/User/ChangeUser/ChangeUser';
 import SearchUser from './components/User/SearchUser/SearchUser';
 import EventInfo from './components/User/EventInfo/EventInfo';
+import ChangeShift from './components/User/ChangeShift/changeshift';
 
 //henter classene fra admin.js
 import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
@@ -27,6 +28,9 @@ import AdminHome from './components/Admin/AdminHome/AdminHome';
 import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
 import Arrangement from './components/Admin/Arrangement/Arrangement';
 import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
+import Statistics from './components/Admin/Statistics/Statistic';
+import UserStatistics from './components/Admin/Statistics/UserStatistic';
+
 
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
@@ -78,7 +82,7 @@ ReactDOM.render((
       <Route exact path='/usersearch' component={SearchUser} />
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventinfo/:id' component={EventInfo} />
-      
+      <Route exact path='/changeshift/:arr_rolleid' component={ChangeShift} />
       </Switch>
     </div>
   </HashRouter>
@@ -101,6 +105,8 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />
          <Route exact path='/eventinfo/:id' component={EventInfo} />
+         <Route exact path='/statistics' component={Statistics} />
+         <Route exact path='/userStatistic/:userid' component={UserStatistics} />
 
       </Switch>
     </div>
