@@ -48,6 +48,7 @@ body {background-color: #f2f2f2;}
 
 .tableinfo {
   width: 400px;
+
 }
 
 .passiv {
@@ -100,7 +101,7 @@ body {background-color: #f2f2f2;}
 }
 
 .button {
-    width: 100%;
+    width: 200px;
     background-color: black;
     color: white;
     padding: 14px 20px;
@@ -144,6 +145,7 @@ body {background-color: #f2f2f2;}
     text-align: center;
     width: 40%;
 }
+
 .table100{
     border: 1px solid black;
     border-collapse: collapse;
@@ -167,16 +169,29 @@ body {background-color: #f2f2f2;}
     display: table;
     clear: both;
 }
-.column1 {
-    float: left;
-    width: 60%;
-    padding: 15px;
+
+
+.roller {
+  float: left;
+  width: 400px;
+  margin-right: 50px;
 }
-.column2 {
-    float: left;
-    width: 30%;
-    padding: 15px;
+.tabellroller{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
 }
+.tildelvakter {
+    float: left;
+    width: 500px;
+}
+
+.tabellvakter{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
 .column3 {
     float: left;
     width: 40%;
@@ -192,13 +207,40 @@ body {background-color: #f2f2f2;}
   float: left;
 }
 
-.roller {
-  width: 400px;
-}
 
 .vakter {
   margin-left: 30px;
   width: 700px;
   float: left;
 
+}
+
+.blokk {
+  margin-left: 50px;
+  margin-right: 25px;
+}
+
+.beskrivelsetabell {
+    width: 600px;
+    float: left;
+    margin-right: 50px;
+}
+
+.beskrivelse {
+  width: 205px;
+  float: left;
+
+}
+.beskrivelsetekst {
+  width: 300px;
+}
+
+.interesse {
+  float: left;
+  width: 300px;
+  margin-top: 75px;
+
+}
+
+.interesseknapp {
 }
