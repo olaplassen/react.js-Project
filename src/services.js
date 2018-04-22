@@ -656,6 +656,14 @@ participatedRoles(userid) {
     })
   })
 }
+getUserShiftInfoBetween(userid, start, end) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT COUNT(ArrangementRoller.arr_rolleid) as antVakter, SUM(TIMESTAMPDIFF(hour, Arrangement.start, Arrangement.end)) timer FROM ArrangementRoller, Arrangement WHERE ArrangementRoller.arrid = Arrangement.id AND ArrangementRoller.userid = ? AND Arrangement.end > ? AND Arrangement.end < ? GROUP BY ArrangementRoller.userid', [userid, start, end], (error, result) => {
+      if(error) throw error;
+      resolve(result[0]);
+    })
+  })
+}
 
 }
 
