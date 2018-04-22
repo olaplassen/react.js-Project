@@ -26,7 +26,7 @@ export default class ConfirmUsers extends React.Component {
 
 		}
 		for(let shiftChange of this.allShiftChange) {
-
+			console.log(shiftChange)
 			unConfirmedShift.push(
 				<tr key={shiftChange.arr_rolleid}>
 				<td className="td">{shiftChange.title}</td>
@@ -38,6 +38,12 @@ export default class ConfirmUsers extends React.Component {
 							this.allShiftChange = result;
 							console.log(result)
 							this.forceUpdate();
+							userService.addPoints(shiftChange.newUserid).then((result) =>{
+								console.log(result)
+							})
+							userService.removePoints(shiftChange.oldUserid).then((result) => {
+								console.log(result)
+							})
 						})
 					})
 				}}>Godkjenn bytte</button></td>
@@ -52,7 +58,12 @@ export default class ConfirmUsers extends React.Component {
 				{unConfirmedList}
 
 				Ikke godkjente vaktbytter <br />
+				<table className="table">
+				<tbody>
+				<tr><th className="th">Arrangement</th><th className="th">Nåværende bruker</th><th className="th">Øsnker bytte med</th><th className="th">Godkjenn</th></tr>
 				{unConfirmedShift}
+				</tbody>
+				</table>
 			</div>
 		);
 	}

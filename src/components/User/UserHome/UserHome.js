@@ -82,6 +82,7 @@ export default class UserHome extends React.Component {
 					</div>
 					<div className="column3">
 					<h4>Kommende vakter</h4>
+					<h5>Du må godkjenne vakten før du kan bytte</h5>
 					<table className="table">
 						<tbody>
 							<tr><th className="th">Arrangement</th><th className="th">Arrangement start</th><th className="th">Rolle</th><th className="th">Tildelt tid</th><th className="th">Godkjent</th></tr>

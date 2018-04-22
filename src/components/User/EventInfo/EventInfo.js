@@ -501,6 +501,9 @@ export default class EventInfo extends React.Component {
 											console.log(result)
 											this.forceUpdate();
 										})
+										userService.addPoints(interesteduser.userId).then((result) =>{
+											console.log(result)
+										})
 										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
@@ -538,6 +541,9 @@ export default class EventInfo extends React.Component {
 										userService.userPassive(this.arrangement.start, this.arrangement.end, user.id).then((result) => {
 											console.log(result)
 											this.forceUpdate();
+										})
+										userService.addPoints(user.id).then((result) =>{
+											console.log(result)
 										})
 										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
 											this.roleNoUser = result;

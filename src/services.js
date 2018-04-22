@@ -278,7 +278,7 @@ userList(callback) {
 
 searchList(input, callback) {
       return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND firstName LIKE ? order by id', [true, false, '%' + input + '%'], (error, result) => {
+      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND CONCAT(firstName, " ", lastName) LIKE "%"?"%" OR CONCAT(lastName, " ", firstName) LIKE "%"?"%" order by id', [true, false, input, input], (error, result) => {
         if(error) throw error;
 
         resolve(result);
@@ -661,6 +661,22 @@ getUserShiftInfoBetween(userid, start, end) {
     connection.query('SELECT COUNT(ArrangementRoller.arr_rolleid) as antVakter, SUM(TIMESTAMPDIFF(hour, Arrangement.start, Arrangement.end)) timer FROM ArrangementRoller, Arrangement WHERE ArrangementRoller.arrid = Arrangement.id AND ArrangementRoller.userid = ? AND Arrangement.end > ? AND Arrangement.end < ? GROUP BY ArrangementRoller.userid', [userid, start, end], (error, result) => {
       if(error) throw error;
       resolve(result[0]);
+    })
+  })
+}
+addPoints(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE Users SET vaktpoeng = vaktpoeng + 1 WHERE id=?', [userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+removePoints(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('UPDATE Users SET vaktpoeng = vaktpoeng - 1 WHERE id=?', [userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
     })
   })
 }
