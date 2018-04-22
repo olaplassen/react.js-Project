@@ -39,7 +39,7 @@ export default class UserStatistics extends React.Component {
 
         return (
             <div className="menu">
-              <h2>Statistikk for {this.user.firstName}{this.user.lastName} </h2>
+              <h2>Statistikk for {this.user.firstName} {this.user.lastName} </h2>
               <div className="row">
               <div className="column3">
               <h4>Generell statistikk</h4>
