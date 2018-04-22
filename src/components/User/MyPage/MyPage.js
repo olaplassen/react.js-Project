@@ -211,16 +211,12 @@ export default class MyPage extends React.Component {
                                 onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
                                 value={selectValue}
                             />
-                            <table>
-                                <tbody>
-                                    {this.inputList}
-                                </tbody>
-                            </table>
-                            <table>
-                                <tbody>
-                                    {this.dateInputList}
-                                </tbody>
-                            </table>
+                            <div>
+                              {this.inputList}
+                            </div>
+                            <div>
+                              {this.dateInputList}
+                            </div>
                             <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                           </div>
                       </div>
@@ -322,16 +318,12 @@ export default class MyPage extends React.Component {
                               onChange={(selectValue) => this.setState({ selectValue }, this.changeHandler(selectValue))}
                               value={selectValue}
                           />
-                          <table>
-                              <tbody>
-                                  {this.inputList}
-                              </tbody>
-                          </table>
-                          <table>
-                              <tbody>
-                                  {this.dateInputList}
-                              </tbody>
-                          </table>
+                          <div>
+                            {this.inputList}
+                          </div>
+                          <div>
+                            {this.dateInputList}
+                          </div>
                           <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                         </div>
                     </div>
