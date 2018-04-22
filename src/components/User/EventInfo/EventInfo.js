@@ -159,14 +159,14 @@ export default class EventInfo extends React.Component {
 				for(let interestedUser of this.interestedUsers){
 				interestedUserList.push(
 					<tr key={interestedUser.userId}>
-					<td className="td">{interestedUser.firstname} {interestedUser.lastName}</td>
+					<td>{interestedUser.firstname} {interestedUser.lastName}</td>
 					</tr>
 				)
 			}
 
 				if (this.userIsInterested.length != 0) {
-					isInterestedList.push(<li key={signedInUser.id} className="li">Du har meldt interessert for dette arrangementet. <br />
-					<button onClick={() => {
+					isInterestedList.push(<div key={signedInUser.id}>
+					<button classname="interesseknapp" onClick={() => {
 						userService.removeInterested(signedInUser.id, this.arrangement.id).then((result) => {
 							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
 								this.userIsInterested = result;
@@ -174,43 +174,69 @@ export default class EventInfo extends React.Component {
 							});
 						})
 					}}>Fjern interesse</button>
-					</li>
+						<div>
+							Du har meldt interessert for dette arrangementet.
+						</div>
+					</div>
 				)
 				}
 				else if(this.userIsInterested.length == 0) {
-					isInterestedList.push(<li key={signedInUser.id} className="li">Du har ikke meldt interesse for dette arrangementet. <br />
-					<button onClick={() => {
+					isInterestedList.push(<div key={signedInUser.id}>
+					<button className="interesseknapp" onClick={() => {
 						userService.getInteressed(this.arrangement.id, signedInUser.id).then((result) => {
 							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
 						})
-					}}>Meld interesse</button>
-					</li>
+					}}>Meld interesse</button> <br />
+						<div>
+							Du har ikke meldt interesse for dette arrangementet.
+						</div>
+					</div>
 				)
 				}
 		if (signedInUser.admin == 0) {
 
 			return (
-				<div className="menu">
-					<div>
-						<h1>{this.arrangement.title} informasjon side.</h1> <br />
-						{this.start}
-					</div> <br />
-					<div>
-						Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
-						Oppmøte tidspunkt: {this.show} <br />
-						Planlagt slutt: {this.end}
-					</div> <br />
-					<div style={{ width: 300 }}>
-						Beskrivelse: <br />
-						{this.arrangement.description} <br />
+				<div className="blokk">
+
+					<div className="row">
+						<div className="beskrivelsetabell">
+							<h1>{this.arrangement.title} informasjon side.</h1>
+							<table>
+								<tr>
+									<td>Arrangemetet starter</td>
+									<td>{this.start}</td>
+								</tr>
+								<tr>
+									<td>Oppmøte sted</td>
+									<td>{this.arrangement.meetingLocation}</td>
+								</tr>
+								<tr>
+									<td>Oppmøte tidspunktn</td>
+									<td>{this.show}</td>
+								</tr>
+								<tr>
+									<td>Planlagt slutt</td>
+									<td>{this.end}</td>
+								</tr>
+								<tr>
+									<td>Kontaktperson</td>
+									<td>{this.arrangement.contactPerson}</td>
+								</tr>
+								<tr>
+									<td className="beskrivelse">Beskrivelse</td>
+									<td className="beskrivelsetekst">{this.arrangement.description}</td>
+								</tr>
+							</table>
+						</div>
+						<div  className="interesse">
+							{isInterestedList}
+						</div>
 					</div>
-					<div>
-					{isInterestedList}
-					</div>
-					<br /> <br />
+					<hr />
+
 					<div>
 						<h4>Roller som kreves for dette arrangementet:</h4>
 						<table className="table">
@@ -218,64 +244,89 @@ export default class EventInfo extends React.Component {
 								{roleListUser}
 							</tbody>
 						</table>
-						<br />
-						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
 					</div>
 				</div>
 			)
 		}
 		else {
 			return (
-				<div className="menu">
-					<div>
-						<h1>{this.arrangement.title} informasjon side.</h1> <br />
-						{this.start}
-					</div> <br />
-					<div>
-						Oppmøte lokasjon:{this.arrangement.meetingLocation}<br />
-						Oppmøte tidspunkt: {this.show} <br />
-						Planlagt slutt: {this.end}
-					</div> <br />
-					<div style={{ width: 300 }}>
-						Beskrivelse: <br />
-						{this.arrangement.description} <br />
-					</div>
-						<h4>Roller som kreves for dette arrangementet:</h4> <br />
-						<table className="table" id="myTable">
-							<tbody>
-								<tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
-								{roleListAdmin}
-							</tbody>
-						</table> <br />
-						<button ref="endreRoller" className="button">Endre Roller</button>
-						<br />
-						<hr />
-						<div className="row">
-						<div className="column1">
-						<h4> Vakter som er utdelt</h4>
-            <table className="table">
-						<tbody>
-						<tr> <th className="th">Rolle</th><th className="th">Sendt ut</th> <th className="th">Deltaker</th><th className="th">Godkjent</th> </tr>
-	             {roleUserList}
-						</tbody>
-						</table> <br />
+				<div className="blokk">
+					<div className="row">
+						<div className="beskrivelsetabell">
+							<h1>{this.arrangement.title} informasjon side.</h1>
+							<table>
+								<tr>
+									<td>Arrangemetet starter</td>
+									<td>{this.start}</td>
+								</tr>
+								<tr>
+									<td>Oppmøte sted</td>
+									<td>{this.arrangement.meetingLocation}</td>
+								</tr>
+								<tr>
+									<td>Oppmøte tidspunktn</td>
+									<td>{this.show}</td>
+								</tr>
+								<tr>
+									<td>Planlagt slutt</td>
+									<td>{this.end}</td>
+								</tr>
+								<tr>
+									<td>Kontaktperson</td>
+									<td>{this.arrangement.contactPerson}</td>
+								</tr>
+								<tr>
+									<td className="beskrivelse">Beskrivelse</td>
+									<td className="beskrivelsetekst">{this.arrangement.description}</td>
+								</tr>
+							</table>
 						</div>
-						<div className="column2">
-						<h4>Interesserte brukere</h4>
-						<table className="table">
-							<tbody>
-								<tr><th className="th">Intereserte brukere</th> </tr>
-								{interestedUserList}
-							</tbody>
-						</table>
-						</div>
-						</div>
-						<br />
-						<br />
+					<br />
 
-			      <button ref="tildelRoller" className="button">Generer vaktlister</button>
-						Har du spørsmål vedrørende dette arrangementet kontakt {this.arrangement.contactPerson}
+						<div className="column2">
+							<h4>Interesserte brukere</h4>
+							<table>
+									{interestedUserList}
+							</table>
+						</div>
 					</div>
+					<hr />
+
+					<div className="row">
+						<div className="roller">
+							<h4>Roller som kreves for dette arrangementet</h4>
+								<table className="tabellroller" id="myTable">
+									<tbody>
+										<tr>
+											<th className="th">Nr</th>
+											<th className="th">Tittel</th>
+											<th className="th">Antall</th>
+											<th className="th">Legg til</th>
+											<th className="th">Trekk fra</th>
+										</tr>
+										{roleListAdmin}
+									</tbody>
+								</table>
+							<button ref="endreRoller" className="button">Endre Roller</button>
+						</div>
+
+						<div className="tildelvakter">
+							<h4> Vakter som er utdelt</h4>
+            	<table className="tabellvakter">
+								<tbody>
+									<tr>
+										<th className="th">Rolle</th>
+										<th className="th">Sendt ut</th>
+										<th className="th">Deltaker</th>
+										<th className="th">Godkjent</th>
+									</tr>
+	           			{roleUserList}
+								</tbody>
+							</table>
+							<button ref="tildelRoller" className="button">Generer vaktlister</button>
+						</div>
+					</div>
+				</div>
 			)
 		}
 	}

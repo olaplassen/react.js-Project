@@ -57,36 +57,77 @@ export default class NewArrangement extends React.Component {
         const { selectValue } = this.state;
 
         return (
-            <div className="menu">
-                <form>
-                    <input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input><br />
-                    <input className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></input><br />
-                    <input className="input" ref="arrMeetingLocation" placeholder="Skriv inn møtelokasjon"></input><br />
-                    <input className="input" ref="arrContactPerson" placeholder="Skriv inn ekstern kontaktperson"></input><br />
-                    Oppmøte tidspunkt: <input type='datetime-local' ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input><br />
-                    Start tidspunkt: <input type='datetime-local' ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br />
-                    Slutt tidspunkt: <input type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input><br />
-                    Sett Vaktlistemal for arrangementet <br />
-                    <VirtualizedSelect
-                        autoFocus
-                        clearable={true}
-                        removeSelected={false}
-                        multi={false}
-                        options={vaktmalList}
-                        onChange={(selectValue) => this.setState({ selectValue })}
-                        value={selectValue}
-                    />
-                    <table className="table" id="myTable">
-                        <tbody>
-                            <tr> <th className="th">Nr</th> <th className="th">Tittel</th> <th className="th">Antall</th> <th className="th">Legg til</th> <th className="th">Trekk fra</th> </tr>
-                            {roleList}
-                        </tbody>
-                    </table>
+            <div className="blokk">
+              <h2>Lag nytt arrangement</h2>
+                <div className="row">
+                  <div className="arrform">
+                    <form>
+                      <table>
+                        <tr>
+                          <td>Arrangementnavn</td>
+                          <td><input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Møtelokasjon</td>
+                          <td><input className="input" ref="arrMeetingLocation" placeholder="Skriv inn møtelokasjon"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Utstyrsliste</td>
+                          <td><input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Kontaktperson og tlf</td>
+                          <td><input className="input" ref="arrContactPerson" placeholder="Skriv inn ekstern kontaktperson"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Vaktlistemal </td>
+                          <td><VirtualizedSelect
+                              clearable={true}
+                              removeSelected={false}
+                              multi={false}
+                              options={vaktmalList}
+                              onChange={(selectValue) => this.setState({ selectValue })}
+                              value={selectValue}
+                              placeholder="Velg" /></td>
+                        </tr>
+                        <tr>
+                          <td>Oppmøte tidspunkt</td>
+                          <td><input className="input" type='datetime-local' ref="arrShowTime" placeholder="Skriv inn oppmøtetidspunkt(YYYY-MM-DD TT:MM)"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Start tidspunkt</td>
+                          <td><input className="input" type='datetime-local' ref="arrStartTime" placeholder="Skriv inn startidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input></td>
+                        </tr>
+                        <tr>
+                          <td>Slutt tidspunkt</td>
+                          <td><input className="input" type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input></td>
+                        </tr>
+                        <tr>
+                          <td className="beskrivelse">Beskrivelse av arrangementet</td>
+                          <td><textarea className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></textarea></td>
+                        </tr>
+                      </table>
+                    </form>
+                  </div>
 
-                    <input className="input" ref="arrGearList" placeholder="Skriv inn utstyrsliste"></input><br />
-
-                    <button className="button" ref="newArrButton" onClick={() => this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement</button>
-                </form>
+                  <div className="arrtabell">
+                      <table className="table" id="myTable">
+                          <tbody>
+                              <tr>
+                                <th className="th">Nr</th>
+                                <th className="th">Tittel</th>
+                                <th className="th">Antall</th>
+                                <th className="th">Legg til</th>
+                                <th className="th">Trekk fra</th>
+                              </tr>
+                              {roleList}
+                          </tbody>
+                      </table>
+                      <button className="button" ref="newArrButton" onClick={() =>
+                        this.registerArrangement(selectValue, roleList.length)}>Opprett arrangement
+                      </button>
+                  </div>
+                </div>
             </div>
         );
     }
