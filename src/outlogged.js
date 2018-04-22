@@ -45,7 +45,7 @@ export class Login extends React.Component {
     );
   }
   componentDidMount() {
-    
+
     //
     this.refs.loginBtn.onclick = () => {
       userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
@@ -60,6 +60,7 @@ export class Login extends React.Component {
 
           }
           console.log(admin.adminId);
+          
           checkLogInAdmin(admin);
         }
         else  {
@@ -70,6 +71,7 @@ export class Login extends React.Component {
 
           }
           console.log(user.userId);
+          userService.checkArrAddPoints();
            checkLogInUser(user);
         }
       }
