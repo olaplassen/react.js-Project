@@ -4,7 +4,7 @@ import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
- 
+
 //henter classene for utlogget funksjonalitet
 import { StartMenu } from './outlogged'
 import { Login } from './outlogged';
@@ -27,7 +27,6 @@ import ConfirmUsers from './components/Admin/ConfirmUsers/ConfirmUsers';
 import AdminHome from './components/Admin/AdminHome/AdminHome';
 import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
 import Arrangement from './components/Admin/Arrangement/Arrangement';
-import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
 import Statistics from './components/Admin/Statistics/Statistic';
 import UserStatistics from './components/Admin/Statistics/UserStatistic';
 import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
@@ -101,7 +100,6 @@ export function checkLogInAdmin(admin) {
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
-         <Route exact path='/interesserte' component={ConfirmInteressedUsers} />
          <Route exact path='/adminsearch' component={SearchUser} />
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />

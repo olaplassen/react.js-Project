@@ -34,7 +34,7 @@ export default class AdminHome extends React.Component {
     }
 
     componentDidMount() {
-        userService.getAllArrangement().then((result) => {
+        userService.getAllArrangement().then((result) => { //henter alle arrangement for BigCalendar
             this.allEvents = result;
             this.forceUpdate();
         });

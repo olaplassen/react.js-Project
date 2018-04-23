@@ -58,10 +58,10 @@ export default class ChangeEvent extends React.Component {
     }
     componentDidMount() {
 
-        userService.getEventInfo(this.evntId).then((result) => {
+        userService.getEventInfo(this.evntId).then((result) => { // henter event info
 
             this.evnt = result;
-            let showTime = JSON.stringify(this.evnt.showTime)
+            let showTime = JSON.stringify(this.evnt.showTime) //definerer datoformat for mulighet til å sette value på input
             let startTime = JSON.stringify(this.evnt.start)
             let endTime = JSON.stringify(this.evnt.end)
             this.refs.title.value = this.evnt.title;
@@ -72,12 +72,11 @@ export default class ChangeEvent extends React.Component {
             this.refs.show.value = JSON.parse(showTime).slice(0,-1);
             this.refs.start.value = JSON.parse(startTime).slice(0,-1);
             this.refs.end.value = JSON.parse(endTime).slice(0,-1);
-
             this.forceUpdate();
 
         });
 
-        this.refs.changeEvntButton.onclick = () => {
+        this.refs.changeEvntButton.onclick = () => { // oppdaterer eventinfo
             userService.changeEvent(
                 this.refs.title.value,
                 this.refs.meetingLocation.value,

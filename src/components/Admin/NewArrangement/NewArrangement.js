@@ -14,15 +14,15 @@ export default class NewArrangement extends React.Component {
             selectedRoles: [],
             selectedSingleValue: null
         }
-        this.allMals = [];
-        this.lastArr = [];
-        this.rolesForArr = [];
-        this.allRoles = [];
-        this.numberOfRoles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        this.allMals = []; // alle vaktmaler
+        this.addedEvnt = []; // eventet som blir opprettet
+        this.rolesForArr = []; // roller for arangementet
+        this.allRoles = []; //alle roller i databasen
+        this.numberOfRoles = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // ant roller
     }
     render() {
 
-        let inc = 0;
+        let inc = 0; // variabel for definere hvile rolle per table row
 
         let vaktmalList = [];
         let roleList = [];
@@ -34,12 +34,12 @@ export default class NewArrangement extends React.Component {
                     <td className="td">{role.title}</td>
                     <td className="table">{this.numberOfRoles[inc]}</td>
                     <td className="table">
-                        <button onClick={() => {
+                        <button onClick={() => { // legger til rolle i array
                             this.numberOfRoles[role.roleid - 1]++;
                             this.forceUpdate();
                         }}>+</button></td>
                     <td className="table">
-                        <button onClick={() => {
+                        <button onClick={() => { // fjerner rolle i array
                             if (this.numberOfRoles[role.roleid - 1] > 0) {
                                 this.numberOfRoles[role.roleid - 1]--;
                             }
@@ -51,14 +51,15 @@ export default class NewArrangement extends React.Component {
             inc++;
         }
 
-        for (let vaktmal of this.allMals) {
+        for (let vaktmal of this.allMals) { // liste over alle malier brukt i VirtualizedSelect
             vaktmalList.push({ value: vaktmal.vaktmalId, label: vaktmal.vaktmalTittel }, );
         }
-        const { selectValue } = this.state;
+        const { selectValue } = this.state; // valgt vaktmal
 
         return (
             <div className="blokk">
               <h2>Lag nytt arrangement</h2>
+              <h4>Bruk vaktmal for å velge roller, eller egendefiner med tabellen til høyre</h4>
                 <div className="row">
                   <div className="arrform">
                     <form>
@@ -111,7 +112,7 @@ export default class NewArrangement extends React.Component {
                   </div>
 
                   <div className="arrtabell">
-                    
+
                       <table className="table" id="myTable">
                           <tbody>
                               <tr>
@@ -135,21 +136,14 @@ export default class NewArrangement extends React.Component {
         );
     }
 
-    addRolesforArrWidthMal(result, arrid) {
+    addRolesforArrWidthMal(result, evntId) { //legger til alle roller i arrangementet fra vaktmalen
         for (let role of result) {
-            userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
+            userService.addRolesforArr(evntId, role.roleid, role.vaktmalid).then((result) => {
             });
         }
     }
 
-    addRolesforArrWidthMal(result, arrid) {
-        for (let role of result) {
-            userService.addRolesforArr(arrid, role.roleid, role.vaktmalid).then((result) => {
-            });
-        }
-    }
-
-    registerArrangement(selectValue, roleListLength) {
+    registerArrangement(selectValue, roleListLength) { // legger til arrangementet i databasen
         userService.addArrangement(this.refs.arrName.value, this.refs.arrDescription.value, this.refs.arrMeetingLocation.value,
             this.refs.arrContactPerson.value, this.refs.arrShowTime.value, this.refs.arrStartTime.value,
             this.refs.arrEndTime.value, this.refs.arrGearList.value).then((result) => {
@@ -165,27 +159,27 @@ export default class NewArrangement extends React.Component {
 
             });
 
-        userService.getLastArrangement().then((result) => {
-            this.lastArr = result;
-            if (selectValue != undefined) {
+        userService.getLastArrangement().then((result) => { //henter arrangementet som ble opprettet
+            this.addedEvnt = result;
+            if (selectValue != undefined) { //vaktmal er valgt
                 userService.getRolesForMal(selectValue.value).then((result) => {
-                    this.addRolesforArrWidthMal(result, this.lastArr.id);
+                    this.addRolesforArrWidthMal(result, this.addedEvnt.id); //legger til roller for arrangementet med vaktmal
 
                 });
             }
-            else if (selectValue == undefined) {
+            else if (selectValue == undefined) { //vaktmal er ikke valgt, benytter tabellen for å legge til roller
                 for (let i = 1; i < roleListLength; i++) {
-                    if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML != 0) {
+                    if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML != 0) {//når antall kolonnen i tabellen ikke er 0
 
-                        if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML > 1) {
-                            for (var y = 0; y < document.getElementById("myTable").rows[i].cells.item(2).innerHTML; y++) {
-                                userService.addRolesforArrSingle(this.lastArr.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
+                        if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML > 1) {//antall kolonnen er større en 1
+                            for (var y = 1; y < document.getElementById("myTable").rows[i].cells.item(2).innerHTML; y++) { //ant ganger denne rollen skal legges til
+                                userService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => { //legger til rollen i arrangementet
 
                                 })
                             }
                         }
-                        else if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML == 1) {
-                            userService.addRolesforArrSingle(this.lastArr.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
+                        else if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML == 1) {//rollen skal legges til 1 gang
+                            userService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
 
                             })
                         }
@@ -199,18 +193,18 @@ export default class NewArrangement extends React.Component {
             else {
                 console.log("ingenting skjedde")
             }
-            this.props.history.push('/eventinfo/' + this.lastArr.id);
+            this.props.history.push('/eventinfo/' + this.addedEvnt.id);
         })
     }
 
     componentDidMount() {
 
-        userService.getVaktmal().then((result) => {
+        userService.getVaktmal().then((result) => { //henter alle vaktmaler
             this.allMals = result;
             this.forceUpdate();
         });
 
-        userService.getRole().then((result) => {
+        userService.getRole().then((result) => {//henter alle roller
             this.allRoles = result;
             this.forceUpdate();
         });
