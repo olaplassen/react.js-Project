@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../../services';
+import { userService } from '../../services';
 import { Link } from 'react-router-dom';
 
 import VirtualizedSelect from 'react-virtualized-select'
@@ -449,7 +449,7 @@ export default class MyPage extends React.Component {
               this.forceUpdate();
             });
         });
-    
+
 
 
         if (signedInUser.admin == 1) {

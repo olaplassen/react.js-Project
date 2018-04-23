@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VirtualizedSelect from 'react-virtualized-select';
-import { userService } from '../../../services';
+import { userService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 

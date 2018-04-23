@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
-import { userService } from '../../../services';
+import { userService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
 
 const history: HashHistory = createHashHistory();

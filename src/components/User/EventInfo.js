@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../../services';
+import { userService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
-import { mailService } from '../../../mailservices';
+import { mailService } from '../../mailservices';
 
 const history: HashHistory = createHashHistory();
 

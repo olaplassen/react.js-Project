@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../../services';
+import { userService } from '../../services';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import createHashHistory from 'history/createHashHistory';
