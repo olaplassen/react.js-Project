@@ -1,6 +1,7 @@
 
 import mysql from 'mysql';
 import { mailService } from './mailservices';
+var passwordHash = require('password-hash')
 
 // Setup database server reconnection when server timeouts connection:
 let connection;
@@ -68,7 +69,8 @@ getUserName(id, callback) {
 }
 addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,) {
     return new Promise ((resolve, reject) => {
-    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username, password], (error, result) => {
+    var hashedPassword = passwordHash.generate('password');
+    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, hashedPassword)', [firstName, lastName, address, postnr, poststed, phone, email, username], (error, result) => {
       if (error) throw error;
       else console.log("Registration complete")
       resolve();
