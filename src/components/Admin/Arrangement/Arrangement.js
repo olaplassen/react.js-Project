@@ -27,17 +27,17 @@ export default class Arrangement extends React.Component {
           );
       }
         return (
-            <div className="menu">
+            <div className="blokk">
             <h3>Oversikt over kommende arrangementer, klikk for mer informasjon og mulighet til å melde deg interessert</h3>
               <table className="table100">
-              <tbody>
-                <tr>
-                  <th className="th">Tittel</th>
-                  <th className="th">Start dato</th>
-                  <th className="th">Slutt dato</th>
-                  <th className="th">Klikk</th>
-                </tr>
-                {evntList}
+                <tbody>
+                  <tr>
+                    <th className="th">Tittel</th>
+                    <th className="th">Start dato</th>
+                    <th className="th">Slutt dato</th>
+                    <th className="th">Klikk</th>
+                  </tr>
+                  {evntList}
                 </tbody>
               </table>
             </div>

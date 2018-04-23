@@ -85,19 +85,18 @@ deactivateUser(userid) {
     })
   })
 }
-loginUser(username, inputpassword, callback) {
+loginUser(username, inputpassword) {
     return new Promise ((resolve, reject) => {
-    let hashedPassword = inputpassword
-    connection.query('SELECT * FROM Users WHERE (userName =?)', [username], (error, result) => {
-      let hashedPassword = result[0].password;
 
-      let correctpasword = passwordHash.verify(inputpassword, hashedPassword);
-      console.log(correctpasword)
+    connection.query('SELECT * FROM Users WHERE (userName =?)', [username], (error, result) => {
+      let hashedPassword = result[0].password;  //variabel for kryptert passord fra databasen
+      let correctpassword = passwordHash.verify(inputpassword, hashedPassword); //Sjekker att input verdi stemmer overens med det krypterte passordet
+
       if (error) throw error;
-      if(correctpasword == true) {
+      localStorage.setItem('passwordResult', JSON.stringify(correctpassword));
       localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       resolve(result[0]);
-      }
+
       });
       });
 

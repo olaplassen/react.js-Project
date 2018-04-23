@@ -138,6 +138,10 @@ export default class MyPage extends React.Component {
                             <td>{this.user.userName}</td>
                           </tr>
                           <tr>
+                            <td>Medlemsnummer</td>
+                            <td>{this.user.id}</td>
+                          </tr>
+                          <tr>
                             <td>Epost</td>
                             <td>{this.user.email}</td>
                           </tr>
@@ -256,6 +260,10 @@ export default class MyPage extends React.Component {
                             <tr>
                               <td>Brukernavn</td>
                               <td>{this.user.userName}</td>
+                            </tr>
+                            <tr>
+                              <td>Medlemsnummer</td>
+                              <td>{this.user.id}</td>
                             </tr>
                             <tr>
                               <td>Epost</td>
@@ -440,7 +448,8 @@ export default class MyPage extends React.Component {
               this.forceUpdate();
             });
         });
-        //endre passord
+    
+
 
         if (signedInUser.admin == 1) {
           //deaktiverknapp for admin
