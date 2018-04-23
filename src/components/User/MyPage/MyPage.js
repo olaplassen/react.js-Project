@@ -283,17 +283,7 @@ export default class MyPage extends React.Component {
                       <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
                     </div>
 
-                    <button onClick={this.updateShowState}>Klikk her for å endre passord</button>
-                      {this.state.showchangePassword ?
-                          <div>
-                              <input ref="newpassword" type="password" /> <br />
-                              <input ref="verifypassword" type="password" /> <br />
-                              <button ref="changepasswordbtn">Lagre</button>
-                              <div ref="error2"></div>
-                          </div>
-                          :
-                          null
-                      }
+
 
                   </div>
                   <div className="deaktiver">
@@ -432,13 +422,18 @@ export default class MyPage extends React.Component {
             });
         });
         //endre passord
+        console.log(this.state.showchangePassword )
         if(this.state.showchangePassword == true) {
         this.refs.changepasswordbtn.onclick = () => {
-          //sjekker at passordene fra input matcher
+          console.log(this.state.showchangePassword )
+          onsole.log("click")
+        
+
             if (this.refs.newpassword.value == this.refs.verifypassword.value) {
                 userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
                     this.refs.newpassword.value = "";
                     this.refs.verifypassword.value = "";
+                    console.log(result)
                     this.forceUpdate();
                 });
             }

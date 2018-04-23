@@ -161,7 +161,7 @@ isUserPassive(userid, arrid) {
 }
 changePassword(password, id) {
     return new Promise ((resolve, reject) => {
-    let hashedPassword = passwordHash.generate(newpassword);
+    let hashedPassword = passwordHash.generate(password);
     connection.query('UPDATE Users SET password=? WHERE id=?', [hashedPassword, id], (error, result) => {
       if (error) throw error;
       console.log("endring fullført")
