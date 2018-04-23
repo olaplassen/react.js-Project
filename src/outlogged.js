@@ -112,7 +112,25 @@ export class Login extends React.Component {
 	}
 }
 }
+export class RegistrationFeltPassword extends React.Component {
+	constructor() {
+		super();
+		this.validerFelt = this.validerFelt.bind(this);
+	}
 
+	validerFelt(e) {
+		this.props.regexValidering(e.target.value);
+	}
+
+	render() {
+		return (
+			<div>
+				<input className={"input " + (this.props.validert ? "gyldig" : "ugyldig")} onChange={this.validerFelt} value={this.props.verdi} placeholder={this.props.felttype} type="password"/>
+				<br />
+			</div>
+		);
+	}
+}
 export class RegistrationFelt extends React.Component {
 	constructor() {
 		super();
@@ -152,6 +170,8 @@ export class Registration extends React.Component {
       usernameVerdi: '',
       passwordValid: false,
       passwordVerdi: '',
+			passwordconfirmValid: false,
+			passwordconfirmVerdi:''
 		}
 
 		this.validerfornavnFelt = this.validerfornavnFelt.bind(this);
@@ -161,6 +181,8 @@ export class Registration extends React.Component {
     this.valideremailaddressFelt= this.valideremailaddressFelt.bind(this);
     this.validerusernameFelt= this.validerusernameFelt.bind(this);
     this.validerpasswordFelt= this.validerpasswordFelt.bind(this);
+		this.validerpasswordconfirmFelt= this.validerpasswordconfirmFelt.bind(this);
+
   }
 
 	render() {
@@ -183,8 +205,9 @@ export class Registration extends React.Component {
             <div className="errormessage" ref="erroremailaddress"></div>
 					<RegistrationFelt validert={this.state.usernameValid}  verdi={this.state.usernameVerdi} regexValidering={this.validerusernameFelt} felttype="Brukernavn" />
               <div className="errormessage" ref="errorusername"></div>
-          <RegistrationFelt validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" />
-              <div className="errormessage" ref="errorpassword"></div>
+          <RegistrationFeltPassword validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" />
+           <RegistrationFeltPassword validert={this.state.passwordconfirmValid}  verdi={this.state.passwordconfirmVerdi} regexValidering={this.validerpasswordconfirmFelt} felttype="Bekrefte passord" />
+							<div className="errormessage" ref="errorpassword"></div>
 				<div ref="error"></div>
 				 <button className="button" ref="newUserbtn">Submit</button>
 				</form>
@@ -240,6 +263,12 @@ export class Registration extends React.Component {
     var passwordValid = regex.test(passwordVerdi);
     this.setState({passwordValid, passwordVerdi});
   }
+	validerpasswordconfirmFelt(passwordconfirmVerdi) {
+     var passwordVerdi = this.state.passwordVerdi;
+		var passwordconfirmValid = passwordVerdi;
+    this.setState({passwordconfirmValid, passwordconfirmVerdi});
+  }
+
 
 
 	//funksjon for oprette path historie for å sende bruker til ny side
