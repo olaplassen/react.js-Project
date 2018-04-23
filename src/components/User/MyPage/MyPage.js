@@ -221,10 +221,14 @@ export default class MyPage extends React.Component {
                                 value={selectValue}
                             />
                             <div>
-                              {this.inputList}
+                              <table>
+                                {this.inputList}
+                              </table>
                             </div>
                             <div>
-                              {this.dateInputList}
+                              <table>
+                                {this.dateInputList}
+                              </table>
                             </div>
                             <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                           </div>
@@ -329,10 +333,14 @@ export default class MyPage extends React.Component {
                               value={selectValue}
                           />
                           <div>
-                            {this.inputList}
+                            <table>
+                              {this.inputList}
+                            </table>
                           </div>
                           <div>
-                            {this.dateInputList}
+                            <table>
+                              {this.dateInputList}
+                            </table>
                           </div>
                           <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                         </div>
