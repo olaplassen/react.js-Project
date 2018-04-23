@@ -65,11 +65,11 @@ export default class NewArrangement extends React.Component {
                     <form>
                       <table>
                         <tr>
-                          <td>Arrangementnavn</td>
+                          <td>Tittel</td>
                           <td><input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input></td>
                         </tr>
                         <tr>
-                          <td>Møtelokasjon</td>
+                          <td>Møte lokasjon</td>
                           <td><input className="input" ref="arrMeetingLocation" placeholder="Skriv inn møtelokasjon"></input></td>
                         </tr>
                         <tr>
@@ -104,7 +104,7 @@ export default class NewArrangement extends React.Component {
                           <td><input className="input" type='datetime-local' ref="arrEndTime" placeholder="Skriv inn sluttidspunkt for arrangementet(YYYY-MM-DD TT:MM)"></input></td>
                         </tr>
                         <tr>
-                          <td className="beskrivelse">Beskrivelse av arrangementet</td>
+                          <td>Beskrivelse</td>
                           <td><textarea className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></textarea></td>
                         </tr>
                       </table>

@@ -27,16 +27,12 @@ export default class ChangeEvent extends React.Component {
                       <td><input placeholder="Møte lokasjon"  className="changeinput" type='text' ref='meetingLocation' /></td>
                     </tr>
                     <tr>
-                      <td>Beskrivelse</td>
-                      <td><textarea placeholder="Beskrivelse"  className="textarea" type='text' ref='description' /></td>
+                      <td>Utstyrs Liste</td>
+                      <td><input placeholder="Utstyrs Liste"  className="changeinput" type='text' ref='gearList' /></td>
                     </tr>
                     <tr>
                       <td>Kontaktperson</td>
                       <td><input placeholder="Kontaktperson"  className="changeinput" type='text' ref='contactPerson' /></td>
-                    </tr>
-                    <tr>
-                      <td>Utstyrs Liste</td>
-                      <td><input placeholder="Utstyrs Liste"  className="changeinput" type='text' ref='gearList' /></td>
                     </tr>
                     <tr>
                       <td>Oppmøte tidspunkt</td>
@@ -50,8 +46,13 @@ export default class ChangeEvent extends React.Component {
                       <td>Slutt tidspunkt</td>
                       <td><input placeholder="Slutt tidspunkt"  className="changeinput" type='datetime-local' ref='end' /></td>
                     </tr>
+                    <tr>
+                      <td>Beskrivelse</td>
+                      <td><textarea className="changeinput" placeholder="Beskrivelse"  type='text' ref='description' /></td>
+                    </tr>
                   </table>
-                    <button ref='changeEvntButton'>Lagre</button>
+                    <button className="button" ref='changeEvntButton'>Lagre</button>
+                    <button className="tilbake" className="button" onClick={() => {this.props.history.push('/eventinfo/'+this.evnt.id)}}> Tilbake </button>
                 </div>
             </div>
         );

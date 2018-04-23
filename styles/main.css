@@ -346,13 +346,6 @@ body {background-color: #f2f2f2;}
   margin-right: 25px;
 }
 
-.textarea {
-
-  height: 100px;
-  float: left;
-
-}
-
 .login {
   text-align: center;
   border-radius: 5px;
