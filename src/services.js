@@ -689,16 +689,16 @@ getUserPassive(userid) {
       })
     })
   }
-}
+
 isUserPassive(userid, arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
       if(error) throw error;
       resolve(result);
-
     })
   })
 }
 
+}
 let userService = new UserService();
 export { userService };
