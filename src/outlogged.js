@@ -168,29 +168,63 @@ export class Registration extends React.Component {
 
 		// registrerings skjemaet som skrives ut under registrerings komponenten.
 		return (
-			<div className="menu">
+			<div className="blokk">
       <h2>Fyll inn nødvendig informasjon</h2>
       <h4>Boksene blir grønne når riktig informasjon er fyllt inn</h4>
 				<form>
-					<RegistrationFelt validert={this.state.firstnameValid} verdi={this.state.firstnameVerdi} regexValidering={this.validerfornavnFelt} felttype="Fornavn" />
-					  <div className="errormessage" ref="errorfirstname"></div>
-          <RegistrationFelt validert={this.state.lastnameValid} verdi={this.state.lastnameVerdi} regexValidering={this.valideretternavnFelt} felttype="Etternavn" />
-					  <div className="errormessage" ref="errorlastname"></div>
-          <RegistrationFelt validert={this.state.addressValid} verdi={this.state.addressVerdi} regexValidering={this.valideraddressFelt} felttype="Addresse" />
-           <div className="errormessage" ref="erroraddress"></div>
-					<input className="input" ref="newPostnr" placeholder="Postnummer"></input><br/>
-		      <input className="input" ref="newPoststed" placeholder="Poststed"></input><br/>
-          <RegistrationFelt validert={this.state.phonenumberValid}  verdi={this.state.phonenumberVerdi} regexValidering={this.validerphonenumberFelt} felttype="Telefonnummer" />
-           <div className="errormessage" ref="errorphonenumber"></div>
-					<RegistrationFelt validert={this.state.emailaddressValid}  verdi={this.state.emailaddressVerdi} regexValidering={this.valideremailaddressFelt} felttype="Epostadresse" />
-            <div className="errormessage" ref="erroremailaddress"></div>
-					<RegistrationFelt validert={this.state.usernameValid}  verdi={this.state.usernameVerdi} regexValidering={this.validerusernameFelt} felttype="Brukernavn" />
-              <div className="errormessage" ref="errorusername"></div>
-          <RegistrationFeltPassword validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" />
-           <RegistrationFeltPassword validert={this.state.passwordconfirmValid}  verdi={this.state.passwordconfirmVerdi} regexValidering={this.validerpasswordconfirmFelt} felttype="Bekrefte passord" />
-							<div className="errormessage" ref="errorpassword"></div>
-				<div ref="error"></div>
-				 <button className="button" ref="newUserbtn">Submit</button>
+          <table>
+            <tbody>
+              <tr>
+                <td>Fornavn</td>
+                <td><RegistrationFelt validert={this.state.firstnameValid} verdi={this.state.firstnameVerdi} regexValidering={this.validerfornavnFelt} felttype="Fornavn" /></td>
+                <td className="errormessage" ref="errorfirstname"></td>
+              </tr>
+              <tr>
+                <td>Etternavn</td>
+                <td><RegistrationFelt validert={this.state.lastnameValid} verdi={this.state.lastnameVerdi} regexValidering={this.valideretternavnFelt} felttype="Etternavn" /></td>
+                <td className="errormessage" ref="errorlastname"></td>
+              </tr>
+              <tr>
+                <td>Adresse</td>
+                <td><RegistrationFelt validert={this.state.addressValid} verdi={this.state.addressVerdi} regexValidering={this.valideraddressFelt} felttype="Addresse" /></td>
+                <td className="errormessage" ref="erroraddress"></td>
+              </tr>
+              <tr>
+                <td>Postnummer</td>
+                <td><input className="input" ref="newPostnr" placeholder="Postnummer"></input></td>
+              </tr>
+              <tr>
+                <td>Poststed</td>
+                <td><input className="input" ref="newPoststed" placeholder="Poststed"></input></td>
+              </tr>
+              <tr>
+                <td>Telefonnummer</td>
+                <td><RegistrationFelt validert={this.state.phonenumberValid}  verdi={this.state.phonenumberVerdi} regexValidering={this.validerphonenumberFelt} felttype="Telefonnummer" /></td>
+                <td className="errormessage" ref="errorphonenumber"></td>
+              </tr>
+              <tr>
+                <td>Epost</td>
+                <td><RegistrationFelt validert={this.state.emailaddressValid}  verdi={this.state.emailaddressVerdi} regexValidering={this.valideremailaddressFelt} felttype="Epostadresse" /></td>
+                <td className="errormessage" ref="erroremailaddress"></td>
+              </tr>
+              <tr>
+                <td>Brukernavn</td>
+                <td><RegistrationFelt validert={this.state.usernameValid}  verdi={this.state.usernameVerdi} regexValidering={this.validerusernameFelt} felttype="Brukernavn" /></td>
+                <td className="errormessage" ref="errorusername"></td>
+              </tr>
+              <tr>
+                <td>Passord</td>
+                <td><RegistrationFeltPassword validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" /></td>
+                <td className="errormessage" ref="errorpassword"></td>
+              </tr>
+              <tr>
+                <td>Bekreft passord</td>
+                <td><RegistrationFeltPassword validert={this.state.passwordconfirmValid}  verdi={this.state.passwordconfirmVerdi} regexValidering={this.validerpasswordconfirmFelt} felttype="Bekrefte passord" /></td>
+                <td ></td>
+              </tr>
+            </tbody>
+          </table>
+				<button className="button" ref="newUserbtn">Submit</button>
 				</form>
 			</div>
 		);
@@ -278,7 +312,6 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 		else	if(this.state.lastnameValid == false){
 
 				this.refs.errorlastname.textContent="Etternavnet kan bare inneholde bokstaver og må fylles ut"
-       this.refs.errorlastname.textContent=""
 			}
 		else	if(this.state.addressValid == false){
 
