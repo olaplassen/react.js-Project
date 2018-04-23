@@ -31,7 +31,12 @@ import Statistics from './components/Admin/Statistics/Statistic';
 import UserStatistics from './components/Admin/Statistics/UserStatistic';
 import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
 
-//funksjon som kjøres når programmet startes/refreshes for å sjekke om det er lagret en bruker i localStorage
+function checkSkillValid() { // sjekker om kursene sin utløpsdato er før dagens dato, deretter sletter de
+  userService.checkSkillValid();
+}
+
+
+//funksjon som kjøres når programmet startes/refreshes for å sjekke om det er lagret en bruker i localStorage (kjøres nederst i app)
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
   //når bruker ikke er admin, kjøres user ReactDOM
@@ -114,4 +119,6 @@ export function checkLogInAdmin(admin) {
   </HashRouter>
 ), document.getElementById('root'))
 };
+
+checkSkillValid()
 outlogged();

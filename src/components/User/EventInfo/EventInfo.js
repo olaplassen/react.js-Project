@@ -376,18 +376,23 @@ export default class EventInfo extends React.Component {
 			//henter alle interesserte for dette arrangementet
 			userService.getInteressedUsers(this.evntId).then((result) => {
 				this.interestedUsers = result;
+				console.log(this.interestedUsers)
 				this.forceUpdate();
 			});
 			//henter alle roller i databasen i stigende id rekkefølge
 			userService.getAllRoles().then((result) => {
 				this.allRoles = result;
+				this.forceUpdate();
 					for (var i = 1; i < this.allRoles.length +1; i++) {
 					//henter ant roller valgt per rolle før endring. 'i' er her id til rollen
 					userService.getRoleCount(this.evnt.id, i).then((result) => {
 						//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
+						console.log(result)
 						this.numberOfRoles.push(result);
 						this.firstNumberOfRoles.push(result);
 						this.secondNumberOfRoles = this.numberOfRoles;
+
+
 						this.forceUpdate()
 					})
 				}
@@ -404,20 +409,21 @@ export default class EventInfo extends React.Component {
 					this.difference.push(0);
 
 				}
+				}
 
-			console.log(this.difference)
-			// console.log(this.firstNumberOfRoles)
-			// console.log(this.secondNumberOfRoles)
-			if (this.secondNumberOfRoles[i] == this.firstNumberOfRoles[i]) {
+			if (this.difference == [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) {
 				this.refs.error.textContent = "ingen endring i roller";
-				console.log("hei")
+
 
 			}
+
 			else {
-					for (var u = 1; u < this.allRoles.length; u++) {
-						if (this.difference[u -1] > 0) {
-							for (var y = 0; y < this.difference[u -1]; y++) {
-								userService.addRolesforArrSingle(this.evnt.id, i).then((result) => {
+					for (var u = 1; u < this.allRoles.length + 1; u++) {
+
+						if (this.difference[u - 1] > 0) {
+							for (var y = 0; y < this.difference[u - 1]; y++) {
+								userService.addRolesforArrSingle(this.evnt.id, u).then((result) => {
+									this.difference = []
 									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
@@ -430,14 +436,13 @@ export default class EventInfo extends React.Component {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
-									this.difference = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-									console.log(this.difference)
 								})
 							}
 						}
 						else if(this.difference[u-1] < 0) {
 							for (var y = 0; y < -(this.difference[u -1]); y++) {
 								userService.deleteRolesfromArr(this.evnt.id, u).then((result) => {
+									this.difference = []
 									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
@@ -450,17 +455,24 @@ export default class EventInfo extends React.Component {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
-									this.difference = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+
 								});
 							}
 						}
-						else {
-							return;
-						}
+						this.firstNumberOfRoles = [];
+						this.secondNumberOfRoles = [];
+						this.numberOfRoles = [];
+						userService.getRoleCount(this.evnt.id, u).then((result) => {
+							//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
+							this.numberOfRoles.push(result);
+							this.firstNumberOfRoles.push(result);
+							this.secondNumberOfRoles = this.numberOfRoles;
+							this.forceUpdate();
+						})
 
 					}
 				}
-			}
+
 			}
 			//henter alle brukere i databasen
 			userService.getAllUsers().then((result) => {
@@ -495,9 +507,8 @@ export default class EventInfo extends React.Component {
 								})
 							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
 								//henter interesserte brukers kompetanse for denne spesifike rollen, length av denne vil være ant. kurs i denne rollen
-								if(result.length != 0){
-									this.userWithRoles = result;
-								}
+								this.userWithRoles = result;
+
 								let exists = usedUser.includes(interestedUser.userId); // variabel for om brukeren har rolle i arrangementet
 								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid); // variabel for om rollen er tildelt bruker
 								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) { //bruker har ikke rolle, rollen har ikke bruker, brukeren har riktig kompetanse og brukeren er ikke passiv
@@ -506,6 +517,7 @@ export default class EventInfo extends React.Component {
 
 									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => { //legger til bruker id for denne rollen
 										console.log("interesert")
+										console.log(interestedUser)
 										// let email = interestedUser.email;
 										// let subject = "Røde Kors ny vakt"
 							      // let textmail = "Du har blitt kalt for vakt til " + this.evnt.title + " den " + this.evnt.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
@@ -515,7 +527,7 @@ export default class EventInfo extends React.Component {
 											//legger til passiv periode for brukeren i arrangement perioden, så bruker ikke kan blir valgt til flere arrangementer som foregår likt
 											this.forceUpdate();
 										})
-										userService.addPoints(interesteduser.userId).then((result) =>{
+										userService.addPoints(interestedUser.userId).then((result) =>{
 											//legger til vaktpoeng
 										})
 										//oppdateter utdelte vakter listen
@@ -531,7 +543,7 @@ export default class EventInfo extends React.Component {
 								}
 							})
 						}
-						//når alle kompatible interesserte brukere er valgt, kjøres det gjennom brukere 
+						//når alle kompatible interesserte brukere er valgt, kjøres det gjennom brukere
 						for(let user of this.allUsers) {
 							userService.isUserPassive(user.id, this.evnt.id).then((result) => {
 								this.userPassive = result;

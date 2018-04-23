@@ -4,8 +4,6 @@ import { userService } from '../../../services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
-
-
 export default class UserStatistics extends React.Component {
     constructor(props) {
         super(props);

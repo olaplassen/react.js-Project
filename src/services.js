@@ -33,8 +33,8 @@ connect();
 // Class that performs database queries related to customers
 class UserService {
 
-  //funkjson for å hente ut all informasjon til en bruker ved hjelp av id
-getUsers(id, callback): Promise<user[]> {
+//USer funksjoner -----------------------------------------------------------------------------------
+getUsers(id, callback) {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
       if (error) throw error;
@@ -42,16 +42,14 @@ getUsers(id, callback): Promise<user[]> {
     });
   });
 }
-
 getUserByMail(recieverEmail) {
   return new Promise ((resolve, reject) => {
   connection.query('SELECT * FROM Users WHERE email=?', [recieverEmail], (error, result) => {
     if (error) throw error;
     resolve(result[0]);
+    });
   });
-});
 }
-
 getAllUsers(callback) {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE admin=0 ORDER BY vaktpoeng', (error, result) => {
@@ -65,11 +63,10 @@ getUserName(id, callback) {
   connection.query('SELECT firstName,lastName FROM Users WHERE id=?', [id], (error, result) => {
     if (error) throw error;
     resolve(result[0]);
+    });
   });
-});
 }
-  //funksjon for å legge til bruker i databasen
-addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,): Promise <user[]> {
+addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,) {
     return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username, password], (error, result) => {
       if (error) throw error;
@@ -86,68 +83,7 @@ deactivateUser(userid) {
     })
   })
 }
-
-addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList): Promise {
-    return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
-        if (error) throw error;
-        else
-        resolve();
-      });
-    });
-  }
-
-  getRole() {
-    return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role', (error, result) => {
-        if(error) throw error;
-        resolve(result);
-      });
-    });
-  }
-
-getArrangement() {
-     return new Promise ((resolve, reject) => {
-      connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {
-        if (error) throw error;
-        console.log(result);
-
-          resolve(result)
-      });
-    });
-    }
-
-getLastArrangement() {
-         return new Promise ((resolve, reject) => {
-          connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
-            if (error) throw error;
-              resolve(result[0])
-        });
-      });
-  }
-
-  //funkjson for å endre bruker
-changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id): Promise<user[]> {
-    return new Promise ((resolve, reject) => {
-   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
-     if (error) throw error;
-
-    resolve(result);
-      });
-    });
-  }
-
-changePassword(password, id): Promise<user[]> {
-    return new Promise ((resolve, reject) => {
-    connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
-      if (error) throw error;
-      console.log("endring fullført")
-      resolve(result);
-        });
-      });
-    }
-  // funkjson for å matche login verdier med bruker i databasen
-loginUser(username, password, callback): Promise<void> {
+loginUser(username, password, callback) {
     return new Promise ((resolve, reject) => {
 
     connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
@@ -160,18 +96,86 @@ loginUser(username, password, callback): Promise<void> {
       });
 
   }
-signOut() {
-     localStorage.clear();
-  }
-
 getSignedInUser() {
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
 
      return JSON.parse(item);
    }
+unConfirmedUsers(callback) {
+ return new Promise ((resolve, reject) => {
+   connection.query('SELECT id, firstName, lastName, phone, email FROM Users WHERE confirmed=?', [false], (error, result) => {
+   if (error) throw error;
+     resolve(result)
+   });
+ });
+}
+confirmUser(id, callback) {
+      return new Promise ((resolve, reject) => {
+      connection.query('UPDATE Users SET confirmed=? WHERE id=?', [true, id], (error, result) => {
+        if(error) throw error;
 
-getPoststed(postnr, callback): Promise<user[]> {
+        resolve(result);
+      })
+    });
+  }
+userList(callback) {
+      return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
+        if (error) throw error;
+
+        resolve(result);
+      })
+    });
+  }
+userPassive(passive_start, passive_slutt, userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+getUserPassive(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+isUserPassive(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+
+    })
+  })
+}
+changePassword(password, id) {
+    return new Promise ((resolve, reject) => {
+    connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
+      if (error) throw error;
+      console.log("endring fullført")
+      resolve(result);
+        });
+      });
+    }
+  // funkjson for å matche login verdier med bruker i databasen
+signOut() {
+     localStorage.clear();
+  }
+changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id){
+    return new Promise ((resolve, reject) => {
+   connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
+     if (error) throw error;
+
+    resolve(result);
+      });
+    });
+  }
+getPoststed(postnr, callback) {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT poststed FROM poststed WHERE postnr=?', [postnr], (error, result) => {
       if (error) throw error;
@@ -179,8 +183,7 @@ getPoststed(postnr, callback): Promise<user[]> {
         });
       });
     }
-  //funksjon for å endre passord og sende mail med det nye passordet.
-resetPassword(username, email, callback): Promise<user[]> {
+resetPassword(username, email, callback) {
     return new Promise ((resolve, reject) => {
     //oppretter random nytt passord
     let newpassword = Math.random().toString(36).slice(-8);
@@ -208,94 +211,47 @@ resetPassword(username, email, callback): Promise<user[]> {
         });
       });
     };
-// funksjon for å hente alle brukere som har comfirmed = 0(false) i databsen
-unConfirmedUsers(callback) {
+
+//Event Funksjoner -------------------------------------------------------------------------------
+
+addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) {
+    return new Promise ((resolve, reject) => {
+      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
+        if (error) throw error;
+        else
+        resolve();
+      });
+    });
+  }
+
+  getRole() {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Role', (error, result) => {
+        if(error) throw error;
+        resolve(result);
+      });
+    });
+  }
+getArrangement() {
      return new Promise ((resolve, reject) => {
-      connection.query('SELECT id, firstName, lastName, phone, email FROM Users WHERE confirmed=?', [false], (error, result) => {
+      connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {
         if (error) throw error;
+        console.log(result);
+
           resolve(result)
       });
     });
     }
-    //funksjon for å sette confirmed=1(true) i databasen
-
-confirmUser(id, callback): Promise<user[]> {
-      return new Promise ((resolve, reject) => {
-      connection.query('UPDATE Users SET confirmed=? WHERE id=?', [true, id], (error, result) => {
-        if(error) throw error;
-
-        resolve(result);
-      })
-    });
-  }
-
-confirmInteressed(arrangementId, userId) {
-      return new Promise((resolve, reject) => {
-        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
-          if(error) throw error;
-          resolve(result);
-        })
-      });
-    }
-
-getInteressed(arrangementId, userId) {
-      return new Promise ((resolve, reject) => {
-        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
-          if (error) throw error;
-          console.log(result)
-          resolve(result)
+getLastArrangement() {
+         return new Promise ((resolve, reject) => {
+          connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
+            if (error) throw error;
+              resolve(result[0])
         });
       });
-    }
-removeInterested(userid, arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
-      if(error) throw error;
-      resolve()
-    })
-  });
-}
-
-
-getInteressedUsers(arrangementId){
-      return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
-          if(error) throw error;
-          resolve(result);
-         })
-       });
-     }
-
-userList(callback) {
-      return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
-        if (error) throw error;
-
-        resolve(result);
-      })
-    });
   }
 
-searchList(input, callback) {
-      return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND CONCAT(firstName, " ", lastName) LIKE "%"?"%" OR CONCAT(lastName, " ", firstName) LIKE "%"?"%" order by id', [true, false, input, input], (error, result) => {
-        if(error) throw error;
-
-        resolve(result);
-      })
-    });
-  }
-getAllArrangement() {
-       return new Promise ((resolve, reject) => {
-        connection.query('SELECT * FROM Arrangement', (error, result) => {
-          if (error) throw error;
-
-
-            resolve(result)
-        });
-      });
-    }
-
+  //funkjson for å endre bruker
 getEventInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
@@ -312,7 +268,18 @@ changeEvent(title, meetingLocation, description, contactPerson, gearList, show, 
      });
    });
 }
+getAllArrangement() {
+       return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Arrangement', (error, result) => {
+          if (error) throw error;
 
+
+            resolve(result)
+        });
+      });
+    }
+
+//Skill funksjoner -------------------------------------------------------------------------------------------
 
 getAllSkills() {
      return new Promise ((resolve, reject) => {
@@ -355,7 +322,6 @@ addSkills(newSkills, userid) {
         });
       });
     }
-
 getYourSkills(userid, callback) {
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
@@ -364,7 +330,6 @@ getYourSkills(userid, callback) {
       });
     });
   }
-
 getSkillInfo(skillid, callback) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
@@ -383,6 +348,19 @@ deleteSkill(userid, skillid) {
   })
 
 }
+checkSkillValid() {
+  let today= new Date()
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM UserKomp WHERE validTo < ?', [today], (error, result) => {
+      if(error) throw error;
+      resolve()
+
+    })
+  })
+}
+
+//Role funksjoner ----------------------------------------------------------------------------------------------
+
 getVaktmal(callback) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
@@ -391,17 +369,6 @@ getVaktmal(callback) {
     })
   })
 }
-
-getRolewithUserInfo(arrid, callback) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM ((ArrangementRoller INNER JOIN Users ON ArrangementRoller.userid = Users.id) INNER JOIN Role ON ArrangementRoller.roleid = Role.roleid ) WHERE ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
-      if(error) throw error;
-      resolve(result)
-
-    })
-  })
-}
-
 getThisVaktmal(vaktmalid, callback) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal WHERE vaktmalid=? ', [vaktmalid], (error, result) => {
@@ -418,7 +385,6 @@ getRolesForMal(vaktmalid, callback) {
     })
   })
 }
-
 getAllRoles() {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role', (error, result) => {
@@ -427,7 +393,6 @@ getAllRoles() {
     });
   });
   }
-
 getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
@@ -449,8 +414,8 @@ getRoleInfo(roleid, callback) {
     connection.query('SELECT title FROM Role WHERE roleid=?',[roleid], (error, result) => {
       if (error) throw error;
       resolve(result[0]);
+    });
   });
-});
 }
 addRolesforArr(arrid, roleid, vaktmalid) {
   return new Promise ((resolve, reject) => {
@@ -464,7 +429,7 @@ addRolesforArrSingle(arrid, roleid) {
   return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO ArrangementRoller (arrid, roleid) values (?,?)', [arrid, roleid], (error, result) => {
       if(error) throw error;
-      resolve()
+      resolve(result)
     })
   })
 }
@@ -516,6 +481,63 @@ changeUserForRole(userid, arr_roleid, arrid, tildeltTid) {
     })
   })
 }
+getRolewithUserInfo(arrid, callback) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM ((ArrangementRoller INNER JOIN Users ON ArrangementRoller.userid = Users.id) INNER JOIN Role ON ArrangementRoller.roleid = Role.roleid ) WHERE ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result)
+
+    })
+  })
+}
+
+
+//Interessert funksjoner -------------------------------------------------------------------------------------------------
+
+confirmInteressed(arrangementId, userId) {
+      return new Promise((resolve, reject) => {
+        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
+          if(error) throw error;
+          resolve(result);
+        })
+      });
+    }
+getInteressed(arrangementId, userId) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
+          if (error) throw error;
+          console.log(result)
+          resolve(result)
+        });
+      });
+    }
+removeInterested(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve()
+    })
+  });
+}
+getInteressedUsers(arrangementId){
+      return new Promise ((resolve, reject) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
+          if(error) throw error;
+          console.log(result)
+          resolve(result);
+         })
+       });
+     }
+checkIfInteressed(userId, arrangementId) {
+         return new Promise ((resolve, reject) => {
+         connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
+           if(error) throw error;
+           resolve(result);
+         })
+       });
+     }
+
+//EventRole funksjoner -------------------------------------------------------------------------------------------------------
 addShiftChange(original_userid, toChange_userid, arr_rolleid) {
   return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO VaktBytte (original_userid, change_userid, arr_rolleid) VALUES (?,?,?) ', [original_userid, toChange_userid, arr_rolleid], (error, result) => {
@@ -560,7 +582,6 @@ getUsedEventRoles(arrid, arr_rolleid) {
       })
     })
 }
-
 getComingVaktListe(userid) {
   let today = new Date();
   return new Promise ((resolve, reject) => {
@@ -581,14 +602,6 @@ getDoneVaktListe(userid) {
     })
   })
 }
-checkIfInteressed(userId, arrangementId) {
-          return new Promise ((resolve, reject) => {
-          connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
-            if(error) throw error;
-            resolve(result);
-          })
-        });
-      }
 godkjennVakt(arr_rolleid) {
   let today = new Date();
   return new Promise ((resolve, reject) => {
@@ -598,32 +611,6 @@ godkjennVakt(arr_rolleid) {
     })
   })
 }
-userPassive(passive_start, passive_slutt, userid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-    })
-  })
-}
-getUserPassive(userid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-    })
-  })
-}
-isUserPassive(userid, arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-
-    })
-  })
-}
-
 getArrRolleInfo(arr_rolleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM ArrangementRoller WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
@@ -633,6 +620,17 @@ getArrRolleInfo(arr_rolleid) {
     })
   })
 }
+
+//Div funksjoner ----------------------------------------------------------------------------------------------------------
+searchList(input, callback) {
+      return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND CONCAT(firstName, " ", lastName) LIKE "%"?"%" OR CONCAT(lastName, " ", firstName) LIKE "%"?"%" order by id', [true, false, input, input], (error, result) => {
+        if(error) throw error;
+
+        resolve(result);
+      })
+    });
+  }
 shiftInfo2mnd() {
   let toMnd = new Date();
   toMnd.setMonth(toMnd.getMonth() - 2)
