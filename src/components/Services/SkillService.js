@@ -100,7 +100,7 @@ deleteSkill(userid, skillid) {// fjerner kompetanse
   })
 
 }
-checkSkillValid()  // fjerner kompetanse fra bruker der validetsdatoen er gått ut
+checkSkillValid() { // fjerner kompetanse fra bruker der validetsdatoen er gått ut
   let today= new Date()
   return new Promise ((resolve, reject) => {
     connection.query('DELETE FROM UserKomp WHERE validTo < ?', [today], (error, result) => {
