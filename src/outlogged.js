@@ -10,57 +10,67 @@ import { checkLogInAdmin } from './app';
 
 // class for navigasjons meny
 export class StartMenu extends React.Component {
-	render() {
-
-		return (
-			<div className="menu">
-				<ul className="ul">
-					<li className="li"><Link to='/login' className="link">Logg inn</Link></li>
-					<li className="li"><Link to='/registration' className="link">Registrering</Link></li>
-				</ul>
-			</div>
-
-		);
-	}
+ render() {
+   return (
+     <div className="menu">
+      <ul className="ul">
+       <li className="li"><Link to ='/login' className="link">Logg inn</Link></li>
+       <li className="li"><Link to ='/registration' className="link">Registrering</Link></li>
+      </ul>
+      </div>
+   );
+ }
 }
 //
 export class Login extends React.Component {
-	render() {
-		return (
+  render() {
+    return (
+      <div>
+      <h1 className="h1">Velkommen</h1>
+      <img className="img" src={'src/img/rkors.jpg'} />
+      <div className="login">
+        <input className="loginInput" ref="username" placeholder="Type your username"></input><br/>
+        <input className="loginInput" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
+        <button className="button" ref="loginBtn">Login</button> <br/>
+        <Link to='/newPassword'>Forgot password</Link> <br/>
+        <div ref="error">
+        </div>
+      </div>
+      </div>
+    );
+  }
+  componentDidMount() {
+    //
+    this.refs.loginBtn.onclick = () => {
+      userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
+        if (result != undefined && result.confirmed == true) {
 
-			<div className="loggin">
-				<h1 className="h1">Velkommen</h1>
-				<img className="img" src={'src/img/rkors.jpg'} />
-				<table className="loggintabell">
-					<tr>
-						<td>
-							Brukernavn
-          </td>
-						<td>
-							<input className="loggininput" ref="username" placeholder="Skriv inn brukernavn"></input>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							Passord
-          </td>
-						<td>
-							<input className="loggininput" type="password" ref="password" placeholder="Skriv inn passord"></input>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<button className="button" ref="loginBtn">Login</button>
-						</td>
-						<td>
-							<Link className="button" to='/newPassword'>Glemt passord</Link>
-						</td>
-					</tr>
-				</table>
-			</div>
-		);
-	}
-	componentDidMount() {
+          //slik at loginAdmin kjøres
+        if (result.admin == true) {
+          let admin = {
+            adminId: result.id
+          };
+          checkLogInAdmin(admin);
+        }
+        else {
+          // oppretter array for user med id slik at verdien kan sendes til den nye
+          // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
+          let user = {
+            userId: result.id
+
+          }
+          console.log(user.userId);
+
+           checkLogInUser(user);
+        }
+      }
+      else {
+        //feilmelding ved mislykket innlogging
+        this.refs.error = "Feil passord eller brukernavn, eller så er din bruker ikke godkjent"
+      }
+
+    })
+
 
 		//
 		this.refs.loginBtn.onclick = () => {
@@ -101,6 +111,7 @@ export class Login extends React.Component {
 		}
 	}
 }
+}
 
 export class RegistrationFelt extends React.Component {
 	constructor() {
@@ -123,6 +134,7 @@ export class RegistrationFelt extends React.Component {
 }
 
 export class Registration extends React.Component {
+
 	constructor() {
 		super();
 		this.state = {
@@ -212,6 +224,7 @@ export class Registration extends React.Component {
     var phonenumberValid = regex.test(phonenumberVerdi);
     this.setState({phonenumberValid, phonenumberVerdi});
   }
+
   valideremailaddressFelt(emailaddressVerdi) {
     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var emailaddressValid = regex.test(emailaddressVerdi);
@@ -227,6 +240,7 @@ export class Registration extends React.Component {
     var passwordValid = regex.test(passwordVerdi);
     this.setState({passwordValid, passwordVerdi});
   }
+
 
 	//funksjon for oprette path historie for å sende bruker til ny side
 	nextPath(path) {
