@@ -1,7 +1,8 @@
 
-
+ // Klasse for å sende epost ved glemt passord.
 class MailService {
 
+  // Sender mail ved glemt passord og når en bruker blir kalt ut til vakt.
 sendMail(recieverAdress, mailSubject, mailtext) {
 let nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
@@ -11,7 +12,7 @@ let transporter = nodemailer.createTransport({
     pass: 'YpmfXR8f'
   }
 });
-//definerer mail innhold
+  // Definerer mail innhold
 var mailOptions = {
   from: 'badrgruppe22@gmail.com',
   to: recieverAdress,
