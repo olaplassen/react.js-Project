@@ -1,4 +1,5 @@
 
+  // Importerer klasser inn i denne filen.
 import mysql from 'mysql';
 import { mailService } from './mailservices';
 var passwordHash = require('password-hash')
@@ -92,5 +93,6 @@ class EvntService {
   }
 }
 
+  // Eksporterer klassen så vi kan bruke funksjonaliteten i andre filer
 let evntService = new EvntService();
 export {evntService}
