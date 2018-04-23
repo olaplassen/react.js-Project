@@ -49,7 +49,7 @@ export class Login extends React.Component {
         if(!variabel ) return null;
         let correctPassword = JSON.parse(variabel)
 
-        console.log(correctPassword)
+
         if (result != undefined && result.confirmed == true && correctPassword == true) {
 					// når resultatet fra LoginUser er undefined avsluttes funkjsonen
 					//slik at loginAdmin kjøres
@@ -59,7 +59,7 @@ export class Login extends React.Component {
 							adminId: result.id
 
 						}
-						console.log(admin.adminId);
+
 
 						checkLogInAdmin(admin);
 					}
@@ -70,7 +70,7 @@ export class Login extends React.Component {
 							userId: result.id
 
 						}
-						console.log(user.userId);
+						
 
 						checkLogInUser(user);
 					}
@@ -189,6 +189,7 @@ export class Registration extends React.Component {
           <RegistrationFeltPassword validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" />
            <RegistrationFeltPassword validert={this.state.passwordconfirmValid}  verdi={this.state.passwordconfirmVerdi} regexValidering={this.validerpasswordconfirmFelt} felttype="Bekrefte passord" />
 							<div className="errormessage" ref="errorpassword"></div>
+							<div className="errormessage" ref="errorpasswordconfirm"></div>
 				<div ref="error"></div>
 				 <button className="button" ref="newUserbtn">Submit</button>
 				</form>
@@ -197,7 +198,7 @@ export class Registration extends React.Component {
 	}
 
 	validerfornavnFelt(firstnameVerdi) {
-		// etter var regex så defineres hva som skal være tillatt i inputboksen
+		// etter "var regex" så defineres hva som skal være tillatt i inputboksen
 		var regex = /^[a-zæøå ]{2,}$/i;
 		var firstnameValid = regex.test(firstnameVerdi);
 		this.setState({firstnameValid, firstnameVerdi});
@@ -245,8 +246,8 @@ export class Registration extends React.Component {
     this.setState({passwordValid, passwordVerdi});
   }
 	validerpasswordconfirmFelt(passwordconfirmVerdi) {
-     var passwordVerdi = this.state.passwordVerdi;
-		var passwordconfirmValid = passwordVerdi;
+    var passwordconfirmValid = /^[a-zæøå 0-9]{6,}$/i;
+		var passwordconfirmValid = passwordconfirmVerdi;
     this.setState({passwordconfirmValid, passwordconfirmVerdi});
   }
 
@@ -270,6 +271,7 @@ export class Registration extends React.Component {
 		 this.refs.erroremailaddress.textContent="";
 		 this.refs.errorusername.textContent="";
 		 this.refs.errorpassword.textContent="";
+		 this.refs.errorpasswordconfirm.textContent="";
 
 			if(this.state.firstnameValid == false){
 this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og må fylles ut"
@@ -278,7 +280,7 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 		else	if(this.state.lastnameValid == false){
 
 				this.refs.errorlastname.textContent="Etternavnet kan bare inneholde bokstaver og må fylles ut"
-       this.refs.errorlastname.textContent=""
+
 			}
 		else	if(this.state.addressValid == false){
 
@@ -299,6 +301,9 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 		else	if(this.state.passwordValid == false){
 
 				this.refs.errorpassword.textContent="Passordet må inneholde minst seks tegn og må fylles ut"
+			}
+			else if(this.state.passwordVerdi != this.state.passwordconfirmVerdi) {
+				this.refs.errorpasswordconfirm.textContent="Passordene matcher ikke"
 			}
 			else {
 			userService.addUser(this.state.firstnameVerdi, this.state.lastnameVerdi, this.state.addressVerdi, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
@@ -325,7 +330,7 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 				else {
 					for (let place of result) {
 						  this.refs.newPoststed.value = place.poststed;
-						console.log(place.poststed)
+
 
 					}
 				}

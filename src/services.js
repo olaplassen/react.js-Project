@@ -15,7 +15,7 @@ function connect() {
 
   // Connect to MySQL-server
   connection.connect((error) => {
-    console.log("Database is connected");
+
     if (error) throw error; // If error, show error in console and return from this function
   });
 
@@ -72,8 +72,7 @@ addUser(firstName, lastName, address, postnr, poststed, phone, email, username, 
     var hashedPassword = passwordHash.generate(password);
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username,hashedPassword], (error, result) => {
       if (error) throw error;
-    console.log(result)
-      resolve();
+     resolve();
     });
   });
   }
@@ -163,7 +162,6 @@ changePassword(password, id) {
     let hashedPassword = passwordHash.generate(password);
     connection.query('UPDATE Users SET password=? WHERE id=?', [hashedPassword, id], (error, result) => {
       if (error) throw error;
-      console.log("endring fullført")
       resolve(result);
         });
       });
@@ -211,7 +209,7 @@ resetPassword(username, email, callback) {
       mailService.sendMail(email, subject, textmail);
       });
     }
-    
+
 
         });
       });
@@ -241,7 +239,7 @@ getArrangement() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {
         if (error) throw error;
-        console.log(result);
+
 
           resolve(result)
       });
@@ -518,7 +516,7 @@ getInteressed(arrangementId, userId) {
       return new Promise ((resolve, reject) => {
         connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
           if (error) throw error;
-          console.log(result)
+
           resolve(result)
         });
       });
@@ -535,7 +533,6 @@ getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
          connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
           if(error) throw error;
-          console.log(result)
           resolve(result);
          })
        });
