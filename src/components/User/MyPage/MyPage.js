@@ -68,9 +68,10 @@ export default class MyPage extends React.Component {
 
         //liste over alle passive meldinger
         for (let passive of this.passiveUser){
-          passiveList.push(<tr key={passive.userPassive_id}>
-            <td>{passive.passive_start.toDateString()}</td>
-            <td>{passive.passive_slutt.toDateString()}</td>
+          passiveList.push(
+            <tr key={passive.userPassive_id}>
+              <td>Du er passiv fra {passive.passive_start.toDateString()} t</td>
+              <td>il {passive.passive_slutt.toDateString()}</td>
             </tr>)
         }
         //Liste over dine registrerte kurs
@@ -183,7 +184,9 @@ export default class MyPage extends React.Component {
                           <p> Sluttdato for passivmelding </p>  <input type='datetime-local' ref="endPassiveTime"></input><br />
                           <button className="button1" ref="newpassivebutton" onClick={() => this.registerUserPassive()}>Melde passiv</button>
                           <div ref="error"></div>
-                       {passiveList}
+                          <tabel>
+                            {passiveList}
+                          </tabel>
                     </div>
                 </div>
 
@@ -221,10 +224,14 @@ export default class MyPage extends React.Component {
                                 value={selectValue}
                             />
                             <div>
-                              {this.inputList}
+                              <table>
+                                {this.inputList}
+                              </table>
                             </div>
                             <div>
-                              {this.dateInputList}
+                              <table>
+                                {this.dateInputList}
+                              </table>
                             </div>
                             <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                           </div>
@@ -329,10 +336,14 @@ export default class MyPage extends React.Component {
                               value={selectValue}
                           />
                           <div>
-                            {this.inputList}
+                            <table>
+                              {this.inputList}
+                            </table>
                           </div>
                           <div>
-                            {this.dateInputList}
+                            <table>
+                              {this.dateInputList}
+                            </table>
                           </div>
                           <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
                         </div>
