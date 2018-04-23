@@ -189,8 +189,6 @@ resetPassword(username, email) {//forespørsel om nytt passord
     });
   });
 };
-//Interessert funksjoner - USERSERVICE -------------------------------------------------------------------------------------------------
-
 
 //EventRole funksjoner -------------------------------------------------------------------------------------------------------
 addShiftChange(original_userid, toChange_userid, arr_rolleid) {
@@ -359,7 +357,6 @@ getUserPassive(userid) {
       })
     })
   }
-
 isUserPassive(userid, arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
