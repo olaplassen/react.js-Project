@@ -28,19 +28,19 @@ export default class UserHome extends React.Component {
 			if(kommendeVakt.godkjent == 0) {
 				kommendeVakterList.push(
 					<tr key={kommendeVakt.arr_rolleid}>
-					<td className="td">{kommendeVakt.arrTitle}</td>
-					<td className="td">{kommendeVakt.start.toLocaleString().slice(0,-3)}</td>
-					<td className="td">{kommendeVakt.roleTitle}</td>
-					<td className="td">{kommendeVakt.tildelt_tid.toLocaleString().slice(0,-3)}</td>
-					<td className="td"><button onClick={() => {
-						//Godkjenner vakten og oppdaterer kommendevakter listen
-						userService.godkjennVakt(kommendeVakt.arr_rolleid).then((result) => {
-							userService.getComingVaktListe(this.userId).then((result) => {
-								this.kommendeVakter = result;
-								this.forceUpdate();
+						<td className="td">{kommendeVakt.arrTitle}</td>
+						<td className="td">{kommendeVakt.start.toLocaleString().slice(0,-3)}</td>
+						<td className="td">{kommendeVakt.roleTitle}</td>
+						<td className="td">{kommendeVakt.tildelt_tid.toLocaleString().slice(0,-3)}</td>
+						<td className="td"><button onClick={() => {
+							//Godkjenner vakten og oppdaterer kommendevakter listen
+							userService.godkjennVakt(kommendeVakt.arr_rolleid).then((result) => {
+								userService.getComingVaktListe(this.userId).then((result) => {
+									this.kommendeVakter = result;
+									this.forceUpdate();
+								})
 							})
-						})
-					}}>Godkjenn</button></td>
+						}}>Godkjenn</button></td>
 					</tr>
 				)
 			}
