@@ -1,4 +1,12 @@
+
+/* Setter bakgrunnen på bodyen*/
 body {background-color: #f2f2f2;}
+
+/* Hovedboks på flere av sidene. Definerer område mellomromet på sidene av boksen*/
+.blokk {
+  margin-left: 50px;
+  margin-right: 50px;
+}
 
 /* Setter avstanden på menylinjen på alle sidene*/
 .menu {
@@ -27,12 +35,6 @@ body {background-color: #f2f2f2;}
 /* Gjør at linkene hovrer når musepekeren er over den spesefikke linken*/
 .link:hover {
     background-color: #111;
-}
-
-/* Hovedboks på flere av sidene. Definerer område mellomromet på sidene av boksen*/
-.blokk {
-  margin-left: 50px;
-  margin-right: 50px;
 }
 
 /* Sentrerer og setter kalenderen på admin hjem side til 100%. høyden på kalenderen settes til 400px*/
@@ -66,8 +68,7 @@ body {background-color: #f2f2f2;}
     width: 100%;
 }
 
-
-
+/* */
 .hjemmenu {
   border-radius: 5px;
   padding: 20px;
@@ -75,6 +76,7 @@ body {background-color: #f2f2f2;}
   padding:10px;
 }
 
+/* Styler infoboksen på min side for brukere og administratorer */
 .info {
   margin-left: 50px;
   width: 450px;
@@ -82,11 +84,12 @@ body {background-color: #f2f2f2;}
   float: left;
 }
 
+/* Setter tabbellen på infosiden til 400px */
 .tableinfo {
   width: 400px;
-
 }
 
+/* Plasserer diven rundt passivmeldingen til høyre for */
 .passiv {
   margin-right: 50px;
   margin-left: 50px;
@@ -95,23 +98,28 @@ body {background-color: #f2f2f2;}
   float: left;
 }
 
+/* setter maring på kopetansebokesn*/
 .kompetanse {
   margin-left: 50px;
 }
 
+/* setter bredde og posisjon åp korsboksen*/
 .kurs {
   float: left;
   width: 500px;
 }
 
+/* setter posisjonene til addkurs tabellen*/
 .addkurs {
   float: left;
 }
 
+/* setter posisjonen til addkursadmin tabellen */
 .addkursadmin {
   float: right;
 }
 
+/* styler inputboksene*/
 .input {
     width: 440px;
     padding: 12px 20px;
@@ -122,10 +130,23 @@ body {background-color: #f2f2f2;}
     box-sizing: border-box;
 }
 
+/* Styler input boksenen på endre arrangement.*/
+.changeinput {
+  width: 300px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* sentrerer teksent på logininputen.*/
 .loginInput::-webkit-input-placeholder {
   text-align: center;
 }
 
+/* styler logininputen.*/
 .loginInput {
   width: 440px;
   padding: 12px 20px;
@@ -136,42 +157,18 @@ body {background-color: #f2f2f2;}
   box-sizing: border-box;
 }
 
+/* sentrerer login bosen påp hovedsiden*/
 .loggin {
   margin: auto;
   width: 500px;
 }
 
-.loggintabell {
-  width: 400px;
-  margin: auto;
-  margin-top: 15px;
-}
-
-.loggininput {
-    width: 200px;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-
-.changeinput {
-  width: 300px;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
+/* setter maring på endre informasjon boksen.*/
 .changeinfo {
   margin-left: 50px;
-
 }
 
+/* Styler knappenen. */
 .button {
     width: 200px;
     background-color: black;
@@ -186,6 +183,7 @@ body {background-color: #f2f2f2;}
 
 }
 
+/* Styler knappenen. */
 .button2 {
     width: 40%;
     background-color: black;
@@ -196,6 +194,8 @@ body {background-color: #f2f2f2;}
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Styler knappenen. */
 .button3 {
     width: 100%;
     background-color: black;
@@ -206,6 +206,8 @@ body {background-color: #f2f2f2;}
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Styler statistikknappen*/
 .statistikkBtn {
     width: 50%;
     background-color: black;
@@ -216,6 +218,8 @@ body {background-color: #f2f2f2;}
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Styler godkjentknappen*/
 .godkjennBtn {
     width: 10%;
     height: 2%;
@@ -227,14 +231,23 @@ body {background-color: #f2f2f2;}
     border-radius: 4px;
     cursor: pointer;
 }
+
+/* Styler konfirmasjonknappen*/
+.confirmBtn {
+  display: flex;
+  justify-content: center;
+}
+
+/* sentraliserer bildet på login siden*/
 .img {
   border-radius: 8px;
   width: 170px;;
   display: block;
   margin-left: auto;
   margin-right: auto
-
 }
+
+/* Styler alle inputboksene*/
 .input {
     width: 400px;
     padding: 12px 20px;
@@ -245,32 +258,39 @@ body {background-color: #f2f2f2;}
     box-sizing: border-box;
 }
 
+/* Setter validering kantlinje til grønn*/
 .gyldig {
   border-color:green;
 }
 
+/* Setter validering kantlinje til rød*/
 .ugyldig {
   border-color:red;
 }
+/* stylere og gir deaktiveingsknappen plassering*/
+.deaktiver {
+  float: right;
+  margin-right: 25px;
+}
+
+/* Setterfornavn til rød*/
 .fornavn{
 color: red;
 display: none;
 }
+
+/* Setter feilmeldingen til rød farge*/
 .errormessage {
   color:red;
 }
 
+/* Styler h1 på forsiden, og sentrerer den.*/
 .h1 {
-
   font-size: 4em;
   text-align: center;
 }
 
-.confirmBtn {
-  display: flex;
-  justify-content: center;
-}
-
+/* Styler de fleste tabeller*/
 .table{
     border: 1px solid black;
     border-collapse: collapse;
@@ -278,28 +298,34 @@ display: none;
     width: 40%;
 }
 
+/* gjør det mulig å legge diver etter hverandre.*/
 .row:after {
     content: "";
     display: table;
     clear: both;
 }
 
-
+/* lager en boks for roller og gir den plassering*/
 .roller {
   float: left;
   width: 500px;
   margin-right: 50px;
 }
+
+/* Styler tabellen for roller*/
 .tabellroller{
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
 }
+
+/* styler tildel vakt boksen og gir den plassering*/
 .tildelvakter {
     float: left;
     width: 500px;
 }
 
+/* Styler vakt tabellen*/
 .tabellvakter{
     width: 100%;
     border: 1px solid black;
@@ -307,12 +333,14 @@ display: none;
     text-align: center;
 }
 
+/* Felles boks for flere sider*/
 .column3 {
     float: left;
     width: 40%;
     padding: 15px;
 }
 
+/* Styler calenderen for vanlige brukere*/
 .calendercolumn {
   margin-left: 30px;
   margin-right: 25px;
@@ -322,45 +350,51 @@ display: none;
   float: left;
 }
 
-
+/* Styler vakter og gir denne boksen plassering*/
 .vakter {
   margin-left: 30px;
   width: 700px;
   float: left;
-
 }
 
-
+/* Styler beskrivelsetabellen på arrangementer*/
 .beskrivelsetabell {
     width: 500px;
     float: left;
     margin-right: 50px;
 }
 
+/* Styer beskrivelse på infosiden til arrangement*/
 .beskrivelse {
   width: 205px;
   float: left;
-
 }
+
+/* Styler beskrivelsesteksten på arrangementsiden*/
 .beskrivelsetekst {
   width: 300px;
 }
 
+/* Styler og gir intresseboksen plassering*/
 .interesse {
   float: left;
   width: 300px;
   margin-top: 75px;
 }
 
+/* styler arrangement form*/
 .arrform {
   float: left;
   margin-right: 50px;
 }
 
+/* styler arrangementtabellen */
 .arrtabell {
   width: 400px;
   float: left;
 }
+
+/* styler arrangement input feltene*/
 .arrinput {
   width: 400px;
   padding: 12px 20px;
@@ -371,11 +405,7 @@ display: none;
   box-sizing: border-box;
 }
 
-.deaktiver {
-  float: right;
-  margin-right: 25px;
-}
-
+/* Styler login felteen på hovedsiden*/
 .login {
   text-align: center;
   border-radius: 5px;
