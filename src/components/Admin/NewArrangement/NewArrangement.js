@@ -5,6 +5,26 @@ import { userService } from '../../../services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
+export class RegistrationFeltArrangement extends React.Component {
+	constructor() {
+		super();
+		this.validerFelt = this.validerFelt.bind(this);
+	}
+
+	validerFelt(e) {
+		this.props.regexValidering(e.target.value);
+	}
+
+	render() {
+		return (
+			<div>
+				<input className={"input " + (this.props.validert ? "gyldig" : "ugyldig")} onChange={this.validerFelt} value={this.props.verdi} placeholder={this.props.felttype} />
+				<br />
+			</div>
+		);
+	}
+}
+
 export default class NewArrangement extends React.Component {
     constructor(props) {
         super(props);
@@ -12,8 +32,11 @@ export default class NewArrangement extends React.Component {
             allRoles: [],
             roles: [],
             selectedRoles: [],
-            selectedSingleValue: null
+            selectedSingleValue: null,
+            arrnameValid: false,
+      			arrnameVerdi: ''
         }
+        this.validerarrnameFelt = this.validerarrnameFelt.bind(this);
         this.allMals = []; // alle vaktmaler
         this.addedEvnt = []; // eventet som blir opprettet
         this.rolesForArr = []; // roller for arangementet
@@ -67,7 +90,7 @@ export default class NewArrangement extends React.Component {
                         <tbody>
                           <tr>
                             <td>Tittel</td>
-                            <td><input className="input" ref="arrName" placeholder="Skriv inn navnet på arrangementet"></input></td>
+                            <td><RegistrationFeltArrangement validert={this.state.arrnameValid} verdi={this.state.arrnameVerdi} regexValidering={this.validerarrnameFelt} felttype="Navn på arrangement" /></td>
                           </tr>
                           <tr>
                             <td>Møte lokasjon</td>
@@ -137,6 +160,12 @@ export default class NewArrangement extends React.Component {
             </div>
         );
     }
+    validerarrnameFelt(arrnameVerdi) {
+  		// etter var regex så defineres hva som skal være tillatt i inputboksen
+  		var regex = /^[a-zæøå ]{2,}$/i;
+  		var arrnameValid = regex.test(arrnameVerdi);
+  		this.setState({arrnameValid, arrnameVerdi});
+  		}
 
     addRolesforArrWidthMal(result, evntId) { //legger til alle roller i arrangementet fra vaktmalen
         for (let role of result) {
