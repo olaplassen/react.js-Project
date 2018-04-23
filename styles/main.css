@@ -1,5 +1,11 @@
 body {background-color: #f2f2f2;}
 
+/* Setter avstanden på menylinjen på alle sidene*/
+.menu {
+    border-radius: 5px;
+    padding: 20px;
+}
+/* Styler menyinjen på alle sidene.*/
 .ul {
     list-style-type: none;
     margin: 0;
@@ -8,11 +14,7 @@ body {background-color: #f2f2f2;}
     background-color: #333;
 }
 
-.li {
-    float: left;
-    list-style-type:circle;
-}
-
+/* Styler linkenene i menyen på alle sidere.*/
 .link {
   float: left;
   display: block;
@@ -20,23 +22,57 @@ body {background-color: #f2f2f2;}
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;;
-
 }
 
+/* Gjør at linkene hovrer når musepekeren er over den spesefikke linken*/
 .link:hover {
     background-color: #111;
 }
+
+/* Hovedboks på flere av sidene. Definerer område mellomromet på sidene av boksen*/
+.blokk {
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+/* Sentrerer og setter kalenderen på admin hjem side til 100%. høyden på kalenderen settes til 400px*/
+.calendercolumn100 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 400px;
+}
+
+/* Styler alle tabell headerene.*/
+.th {
+    text-align: left;
+    padding: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* Styler alle td i tabellene.*/
+.td {
+    padding: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* tyler tabellen på siden kommende vakter*/
+.table100{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
+
+
+
 .hjemmenu {
   border-radius: 5px;
   padding: 20px;
   margin: auto;
   padding:10px;
-
-
-}
-.menu {
-    border-radius: 5px;
-    padding: 20px;
 }
 
 .info {
@@ -242,24 +278,6 @@ display: none;
     width: 40%;
 }
 
-.table100{
-    border: 1px solid black;
-    border-collapse: collapse;
-    text-align: center;
-    width: 100%;
-}
-.td {
-    padding: 5px;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-.th {
-    text-align: left;
-    padding: 5px;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
 .row:after {
     content: "";
     display: table;
@@ -303,14 +321,7 @@ display: none;
   height: 400px;
   float: left;
 }
-.calendercolumn100 {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 75px;
-  width: 100%;
-  height: 400px;
-  float: left;
-}
+
 
 .vakter {
   margin-left: 30px;
@@ -319,10 +330,6 @@ display: none;
 
 }
 
-.blokk {
-  margin-left: 50px;
-  margin-right: 25px;
-}
 
 .beskrivelsetabell {
     width: 500px;
