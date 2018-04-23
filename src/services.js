@@ -73,7 +73,7 @@ addUser(firstName, lastName, address, postnr, poststed, phone, email, username, 
     return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username, password], (error, result) => {
       if (error) throw error;
-      else console.log("Registration complete")
+    console.log(result)
       resolve();
     });
   });
