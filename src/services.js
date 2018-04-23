@@ -211,9 +211,7 @@ resetPassword(username, email, callback) {
       mailService.sendMail(email, subject, textmail);
       });
     }
-    else {
-      alert("feil brukernavn eller epost");
-        }
+    
 
         });
       });

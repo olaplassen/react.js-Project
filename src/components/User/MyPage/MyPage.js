@@ -42,7 +42,7 @@ export default class MyPage extends React.Component {
                 //valgt kurs har utløpsdato, men du har allerede lagt til et kurs med utløpsdato
                 else if (result.duration != 0 && this.dateInputList.length > 0) {
                     this.setState(selectValue.splice(-1, 1));
-                    alert('Registrer ' + this.selectedSkillWithDate + ' før du legger til flere kurs med utløpsdato.');
+                    this.refs.error.textContent ='Registrer ' + this.selectedSkillWithDate + ' før du legger til flere kurs med utløpsdato.';
                 }
                 //valgt kurs har utløpsdato, skriver ut input med mulighet for å legge til dato med entydig ref
                 else {
@@ -218,6 +218,7 @@ export default class MyPage extends React.Component {
                             <h3> Legg til dine kurs </h3>
                               <div>
                                 OBSOBS!  Du kan ikke legge til flere enn et kurs med utløpsdato om gangen.
+                                <div ref="error"></div>
                               </div>
 
                             <VirtualizedSelect
