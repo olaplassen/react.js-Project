@@ -191,130 +191,6 @@ resetPassword(username, email) {//forespørsel om nytt passord
 };
 //Interessert funksjoner - USERSERVICE -------------------------------------------------------------------------------------------------
 
-confirmInteressed(arrangementId, userId) {
-      return new Promise((resolve, reject) => {
-        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
-          if(error) throw error;
-          resolve(result);
-        })
-      });
-    }
-getInteressed(arrangementId, userId) {
-      return new Promise ((resolve, reject) => {
-        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
-          if (error) throw error;
-          console.log(result)
-          resolve(result)
-        });
-      });
-    }
-removeInterested(userid, arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
-      if(error) throw error;
-      resolve()
-    })
-  });
-}
-getInteressedUsers(arrangementId){
-      return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
-          if(error) throw error;
-          console.log(result)
-          resolve(result);
-         })
-       });
-     }
-checkIfInteressed(userId, arrangementId) {
-   return new Promise ((resolve, reject) => {
-   connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
-     if(error) throw error;
-     resolve(result);
-   })
- });
-}
-
-
-
-//Skill funksjoner -------------------------------------------------------------------------------------------
-
-getAllSkills() {
-     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Kompentanse', (error, result) => {
-        if (error) throw error;
-        resolve(result)
-      });
-    });
- }
-getSkill(skillid) {
-       return new Promise ((resolve, reject) => {
-        connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
-          if (error) throw error;
-          resolve(result)
-        });
-      });
-    }
-  checkUserSkill(userid, skillid, callback) {
-      return new Promise ((resolve, reject) => {
-        connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
-          if (error) throw error;
-          resolve(result[0])
-      });
-    });
-  }
-addSkills(newSkills, userid) {
-    return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
-        if(error) throw error;
-        resolve();
-      });
-    });
-  }
-
-  addSkillswithDate(newSkills, userid, date) {
-      return new Promise ((resolve, reject) => {
-        connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
-          if(error) throw error;
-          resolve();
-        });
-      });
-    }
-getYourSkills(userid) {
-      return new Promise ((resolve, reject) => {
-        connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
-          if (error) throw error;
-          resolve(result)
-      });
-    });
-  }
-getSkillInfo(skillid) {
-    return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
-        if(error) throw error;
-        resolve(result[0])
-      });
-    });
-  }
-deleteSkill(userid, skillid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM UserKomp WHERE userid=? AND skillid=?', [userid, skillid], (error, result) => {
-      if(error) throw error;
-      resolve()
-
-    })
-  })
-
-}
-checkSkillValid() {
-  let today= new Date()
-  return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM UserKomp WHERE validTo < ?', [today], (error, result) => {
-      if(error) throw error;
-      resolve()
-
-    })
-  })
-}
 
 //Role funksjoner ----------------------------------------------------------------------------------------------
 getRole() {
@@ -695,3 +571,127 @@ class EvntService {
 
 let evntService = new EvntService();
 export {evntService}
+
+//Skill funksjoner -------------------------------------------------------------------------------------------
+
+class SkillService {
+getAllSkills() {
+     return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Kompentanse', (error, result) => {
+        if (error) throw error;
+        resolve(result)
+      });
+    });
+ }
+getSkill(skillid) {
+       return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
+          if (error) throw error;
+          resolve(result)
+        });
+      });
+    }
+  checkUserSkill(userid, skillid, callback) {
+      return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
+          if (error) throw error;
+          resolve(result[0])
+      });
+    });
+  }
+addSkills(newSkills, userid) {
+    return new Promise ((resolve, reject) => {
+      connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
+        if(error) throw error;
+        resolve();
+      });
+    });
+  }
+
+  addSkillswithDate(newSkills, userid, date) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
+          if(error) throw error;
+          resolve();
+        });
+      });
+    }
+getYourSkills(userid) {
+      return new Promise ((resolve, reject) => {
+        connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
+          if (error) throw error;
+          resolve(result)
+      });
+    });
+  }
+getSkillInfo(skillid) {
+    return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
+        if(error) throw error;
+        resolve(result[0])
+      });
+    });
+  }
+deleteSkill(userid, skillid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM UserKomp WHERE userid=? AND skillid=?', [userid, skillid], (error, result) => {
+      if(error) throw error;
+      resolve()
+
+    })
+  })
+
+}
+checkSkillValid() {
+  let today= new Date()
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM UserKomp WHERE validTo < ?', [today], (error, result) => {
+      if(error) throw error;
+      resolve()
+
+    })
+  })
+}
+}
+let skillService=new SkillService()
+export {skillService}
+
+class InterestService {
+getInteressed(arrangementId, userId) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
+          if (error) throw error;
+          console.log(result)
+          resolve(result)
+        });
+      });
+    }
+removeInterested(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve()
+    })
+  });
+}
+getInteressedUsers(arrangementId){
+      return new Promise ((resolve, reject) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
+          if(error) throw error;
+          console.log(result)
+          resolve(result);
+         })
+       });
+     }
+checkIfInteressed(userId, arrangementId) {
+   return new Promise ((resolve, reject) => {
+   connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
+     if(error) throw error;
+     resolve(result);
+   })
+ });
+}
+
+}
+let interestService=new InterestService()
+export {interestService}

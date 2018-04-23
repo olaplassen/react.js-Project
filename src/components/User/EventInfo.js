@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import createHashHistory from 'history/createHashHistory';
 import { userService } from '../../services';
 import { evntService } from '../../services';
+import { skillService} from '../../services';
+import { interestService } from '../../services';
 import { mailService } from '../../mailservices';
 
 const history: HashHistory = createHashHistory();
@@ -168,8 +170,8 @@ export default class EventInfo extends React.Component {
 				if (this.userIsInterested.length != 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
 					<button className="interesseknapp" onClick={() => {
-						userService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+						interestService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
+							interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -184,8 +186,8 @@ export default class EventInfo extends React.Component {
 				else if(this.userIsInterested.length == 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
 					<button className="interesseknapp" onClick={() => {
-						userService.getInteressed(this.evnt.id, signedInUser.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+						interestService.getInteressed(this.evnt.id, signedInUser.id).then((result) => {
+							interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -363,7 +365,7 @@ export default class EventInfo extends React.Component {
 				this.forceUpdate();
 				});
 				//sjekker om innlogget bruker er interessert i dette arrangementet
-				userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+				interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 					this.userIsInterested = result;
 					this.forceUpdate();
 				});
@@ -382,7 +384,7 @@ export default class EventInfo extends React.Component {
 
 		if(signedInUser.admin == 1) {
 			//henter alle interesserte for dette arrangementet
-			userService.getInteressedUsers(this.evntId).then((result) => {
+			interestService.getInteressedUsers(this.evntId).then((result) => {
 				this.interestedUsers = result;
 				console.log(this.interestedUsers)
 				this.forceUpdate();
