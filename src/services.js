@@ -35,7 +35,7 @@ connect();
 class UserService {
 
 //USer funksjoner -----------------------------------------------------------------------------------
-getUsers(id, callback) {
+getUsers(id) {//henter en bruker
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
       if (error) throw error;
@@ -50,33 +50,33 @@ getUserByMail(recieverEmail) {
     resolve(result[0]);
     });
   });
-}
-getAllUsers(callback) {
+}//henter bruker via mail
+getAllUsers() {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE admin=0 ORDER BY vaktpoeng', (error, result) => {
       if (error) throw error;
       resolve(result);
     });
   });
-}
-getUserName(id, callback) {
+}//henter alle brukere i databasen
+getUserName(id) {
   return new Promise ((resolve, reject) => {
   connection.query('SELECT firstName,lastName FROM Users WHERE id=?', [id], (error, result) => {
     if (error) throw error;
     resolve(result[0]);
     });
   });
-}
-addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,) {
+}//SJEKK
+addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password) {//legger til bruker
     return new Promise ((resolve, reject) => {
-    var hashedPassword = passwordHash.generate(password);
+    var hashedPassword = passwordHash.generate(password); //krypterer passord bruker har skrevet inn
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username,hashedPassword], (error, result) => {
       if (error) throw error;
-    console.log(result)
+      console.log(result)
       resolve();
     });
   });
-  }
+}
 deactivateUser(userid) {
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE Users SET confirmed=? WHERE id=?', [false, userid], (error, result) => {
@@ -84,8 +84,8 @@ deactivateUser(userid) {
       resolve();
     })
   })
-}
-loginUser(username, inputpassword) {
+}//setter godkjen=false
+loginUser(username, inputpassword) {//login for admin og bruker
     return new Promise ((resolve, reject) => {
 
     connection.query('SELECT * FROM Users WHERE (userName =?)', [username], (error, result) => {
@@ -93,21 +93,21 @@ loginUser(username, inputpassword) {
       let correctpassword = passwordHash.verify(inputpassword, hashedPassword); //Sjekker att input verdi stemmer overens med det krypterte passordet
 
       if (error) throw error;
-      localStorage.setItem('passwordResult', JSON.stringify(correctpassword));
-      localStorage.setItem('signedInUser', JSON.stringify(result[0]));
+      localStorage.setItem('passwordResult', JSON.stringify(correctpassword)); //lagrer boolean verdi for om passordet stemmet eller ikke i localStorage
+      localStorage.setItem('signedInUser', JSON.stringify(result[0]));//lagrer bruker i localStorage
       resolve(result[0]);
 
       });
       });
 
   }
-getSignedInUser() {
+getSignedInUser() { //henter item lagret i localStorage
      let item = localStorage.getItem('signedInUser'); // Get User-object from browser
      if(!item) return null;
 
      return JSON.parse(item);
    }
-unConfirmedUsers(callback) {
+unConfirmedUsers() { //liste over akke ubekreftede/deaktiverte brukere
  return new Promise ((resolve, reject) => {
    connection.query('SELECT id, firstName, lastName, phone, email FROM Users WHERE confirmed=?', [false], (error, result) => {
    if (error) throw error;
@@ -115,7 +115,7 @@ unConfirmedUsers(callback) {
    });
  });
 }
-confirmUser(id, callback) {
+confirmUser(id) {//godkjennetr bruker ved å sette godkjenn=true
       return new Promise ((resolve, reject) => {
       connection.query('UPDATE Users SET confirmed=? WHERE id=?', [true, id], (error, result) => {
         if(error) throw error;
@@ -124,7 +124,7 @@ confirmUser(id, callback) {
       })
     });
   }
-userList(callback) {
+userList(callback) {//henter alle brukere som er godkjent og ikke er admin for søke funksjon
       return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Users WHERE confirmed =? AND admin=?', [true, false], (error, result) => {
         if (error) throw error;
@@ -133,34 +133,9 @@ userList(callback) {
       })
     });
   }
-userPassive(passive_start, passive_slutt, userid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-    })
-  })
-}
-getUserPassive(userid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-    })
-  })
-}
-isUserPassive(userid, arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
-      if(error) throw error;
-      resolve(result);
-
-    })
-  })
-}
-changePassword(password, id) {
+changePassword(password, id) {//endre passord for bruker
     return new Promise ((resolve, reject) => {
-    let hashedPassword = passwordHash.generate(password);
+    let hashedPassword = passwordHash.generate(password); //krypterer verdi fra funksjon
     connection.query('UPDATE Users SET password=? WHERE id=?', [hashedPassword, id], (error, result) => {
       if (error) throw error;
       console.log("endring fullført")
@@ -171,7 +146,7 @@ changePassword(password, id) {
   // funkjson for å matche login verdier med bruker i databasen
 signOut() {
      localStorage.clear();
-  }
+  } // sletter localstorage
 changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, id){
     return new Promise ((resolve, reject) => {
    connection.query('UPDATE Users SET firstName=?, lastName=?, address=?, postnr=?, poststed=?, phone=?, email=? WHERE id=?', [firstName, lastName, address, postalNumber, poststed, phone, email, id], (error, result) => {
@@ -180,8 +155,8 @@ changeUser(firstName, lastName, address, postalNumber, poststed, phone, email, i
     resolve(result);
       });
     });
-  }
-getPoststed(postnr, callback) {
+  }//endre brukerinformasjon
+getPoststed(postnr) {
     return new Promise ((resolve, reject) => {
     connection.query('SELECT poststed FROM poststed WHERE postnr=?', [postnr], (error, result) => {
       if (error) throw error;
@@ -189,11 +164,11 @@ getPoststed(postnr, callback) {
         });
       });
     }
-resetPassword(username, email, callback) {
+resetPassword(username, email) {//forespørsel om nytt passord
     return new Promise ((resolve, reject) => {
     //oppretter random nytt passord
     let newpassword = Math.random().toString(36).slice(-8);
-    let hashedPassword = passwordHash.generate(newpassword);
+    let hashedPassword = passwordHash.generate(newpassword); //krypterer nytt passord
     //henter id til bruker som matcher username og email med det som ble skrevet inn i apllikasjonen
     connection.query('SELECT id FROM Users WHERE (userName = ? AND email = ?)', [username, email], (error, result) => {
       if (error) throw error;
@@ -210,12 +185,10 @@ resetPassword(username, email, callback) {
       //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
       mailService.sendMail(email, subject, textmail);
       });
-    }
-    
-
-        });
-      });
-    };
+      }
+    });
+  });
+};
 
 //Event Funksjoner -------------------------------------------------------------------------------
 
@@ -334,7 +307,7 @@ addSkills(newSkills, userid) {
         });
       });
     }
-getYourSkills(userid, callback) {
+getYourSkills(userid) {
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
           if (error) throw error;
@@ -342,7 +315,7 @@ getYourSkills(userid, callback) {
       });
     });
   }
-getSkillInfo(skillid, callback) {
+getSkillInfo(skillid) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
         if(error) throw error;
@@ -373,7 +346,7 @@ checkSkillValid() {
 
 //Role funksjoner ----------------------------------------------------------------------------------------------
 
-getVaktmal(callback) {
+getVaktmal() {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
       if(error) throw error;
@@ -381,7 +354,7 @@ getVaktmal(callback) {
     })
   })
 }
-getThisVaktmal(vaktmalid, callback) {
+getThisVaktmal(vaktmalid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal WHERE vaktmalid=? ', [vaktmalid], (error, result) => {
       if(error) throw error;
@@ -389,7 +362,7 @@ getThisVaktmal(vaktmalid, callback) {
     })
   })
 }
-getRolesForMal(vaktmalid, callback) {
+getRolesForMal(vaktmalid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Role, RoleVaktmal WHERE RoleVaktmal.roleid = Role.roleid AND RoleVaktmal.vaktmalid = ?', [vaktmalid], (error, result) => {
       if(error) throw error;
@@ -405,7 +378,7 @@ getAllRoles() {
     });
   });
   }
-getRolesForArr(arrid, callback) {
+getRolesForArr(arrid) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid, ArrangementRoller.arr_rolleid DESC', [arrid], (error, result) => {
         if(error) throw error;
@@ -413,7 +386,7 @@ getRolesForArr(arrid, callback) {
     })
   })
 }
-getRolesWithNoUser(arrid, callback) {
+getRolesWithNoUser(arrid) {
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? AND ArrangementRoller.userid IS NULL ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
@@ -421,7 +394,7 @@ getRolesWithNoUser(arrid, callback) {
     })
   })
 }
-getRoleInfo(roleid, callback) {
+getRoleInfo(roleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT title FROM Role WHERE roleid=?',[roleid], (error, result) => {
       if (error) throw error;
@@ -453,7 +426,7 @@ deleteRolesfromArr(arrid, roleid){
     })
   })
 }
-getRoleCount(arrid, roleid, callback) {
+getRoleCount(arrid, roleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT COUNT(roleid) as total FROM ArrangementRoller WHERE arrid=? AND roleid=?', [arrid, roleid], (error, result) => {
       if(error) throw error;
@@ -461,7 +434,7 @@ getRoleCount(arrid, roleid, callback) {
     })
   })
 }
-getRoleKomp(roleid, arrRolleid, callback) {
+getRoleKomp(roleid, arrRolleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM RoleKomp, ArrangementRoller WHERE RoleKomp.roleid = ArrangementRoller.roleid AND RoleKomp.roleid=? AND ArrangementRoller.arr_rolleid=? ORDER BY ArrangementRoller.roleid', [roleid, arrRolleid], (error, result) => {
       if(error) throw error;
@@ -469,7 +442,7 @@ getRoleKomp(roleid, arrRolleid, callback) {
     })
   })
 }
-getUserRoleKomp(roleid, arrid, userid, arrRoleid, callback) {
+getUserRoleKomp(roleid, arrid, userid, arrRoleid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT UserKomp.skillid, UserKomp.userid, RoleKomp.roleid FROM UserKomp, RoleKomp, ArrangementRoller WHERE ArrangementRoller.roleid = RoleKomp.roleid AND UserKomp.skillid = RoleKomp.skillid AND ArrangementRoller.roleid = ? AND ArrangementRoller.arrid = ? AND UserKomp.userid = ? AND ArrangementRoller.arr_rolleid = ?', [roleid, arrid, userid, arrRoleid], (error, result) => {
       if(error) throw error;
@@ -493,7 +466,7 @@ changeUserForRole(userid, arr_roleid, arrid, tildeltTid) {
     })
   })
 }
-getRolewithUserInfo(arrid, callback) {
+getRolewithUserInfo(arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM ((ArrangementRoller INNER JOIN Users ON ArrangementRoller.userid = Users.id) INNER JOIN Role ON ArrangementRoller.roleid = Role.roleid ) WHERE ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
       if(error) throw error;
@@ -634,7 +607,7 @@ getArrRolleInfo(arr_rolleid) {
 }
 
 //Div funksjoner ----------------------------------------------------------------------------------------------------------
-searchList(input, callback) {
+searchList(input) {
       return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND CONCAT(firstName, " ", lastName) LIKE "%"?"%" OR CONCAT(lastName, " ", firstName) LIKE "%"?"%" order by id', [true, false, input, input], (error, result) => {
         if(error) throw error;
@@ -700,7 +673,32 @@ removePoints(userid) {
   })
 }
 
+userPassive(passive_start, passive_slutt, userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
+}
+getUserPassive(userid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+      })
+    })
+  }
+
+isUserPassive(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    })
+  })
 }
 
+}
 let userService = new UserService();
 export { userService };

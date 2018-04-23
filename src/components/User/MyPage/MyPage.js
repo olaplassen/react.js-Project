@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
+import { userService } from '../../../services';
 import { Link } from 'react-router-dom';
 
 import VirtualizedSelect from 'react-virtualized-select'
@@ -11,7 +11,7 @@ export default class MyPage extends React.Component {
         this.user = {}
         this.userId = props.match.params.userId; // henter userId fra UserMenu
         this.state = {
-
+            showchangePassword: false,
             showDeactivateText: false
         }
         this.updateShowState = this.updateShowState.bind(this);
@@ -23,7 +23,7 @@ export default class MyPage extends React.Component {
     }
     //funksjon for vise de state som er satt til false
     updateShowState() {
-
+        this.setState({ showchangePassword: !this.state.showchangePassword });
         this.setState({ showDeactivateText: !this.state.showDeactivateText });
     }
     //funksjon for håndtere endringer i VirtualizedSelect dropdown menyen
@@ -167,17 +167,17 @@ export default class MyPage extends React.Component {
                         <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
                       </div>
                       <div>
-
-
+                      <button onClick={this.updateShowState}>Endre passord</button>
+                        {this.state.showchangePassword ?
                             <div>
-                            Endre passord<br></br>
                                 <input ref="newpassword" type="password" /> <br />
                                 <input ref="verifypassword" type="password" /> <br />
-                                <button ref="changepassword" onClick={() => this.newPassword()}>Lagre</button>
+                                <button ref="changepasswordbtn">Lagre</button>
                                 <div ref="error2"></div>
                             </div>
-
-
+                            :
+                            null
+                        }
 
                       </div>
                     </div>
@@ -412,25 +412,6 @@ export default class MyPage extends React.Component {
             });
         }
     }
-    newPassword(){
-
-               if (this.refs.newpassword.value == this.refs.verifypassword.value) {
-                    console.log("passer")
-                      userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
-                          this.refs.newpassword.value = "";
-                          this.refs.verifypassword.value = "";
-
-                          this.forceUpdate();
-                      });
-                  }
-                  else {
-                    console.log("passer ikke")
-                      this.refs.error2.textContent = "Passordene matcher ikke";
-                      this.forceUpdate();
-
-
-      }
-    }
     componentDidMount() {
         let signedInUser = userService.getSignedInUser();
         //henter bruker informasjon og passiv meldinger
@@ -449,9 +430,28 @@ export default class MyPage extends React.Component {
               this.forceUpdate();
             });
         });
+        //endre passord
+        console.log(this.state.showchangePassword )
+        if(this.state.showchangePassword == true) {
+        this.refs.changepasswordbtn.onclick = () => {
+          console.log(this.state.showchangePassword )
+          onsole.log("click")
 
 
-
+            if (this.refs.newpassword.value == this.refs.verifypassword.value) {
+                userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
+                    this.refs.newpassword.value = "";
+                    this.refs.verifypassword.value = "";
+                    console.log(result)
+                    this.forceUpdate();
+                });
+            }
+            else {
+                this.refs.error2.textContent = "Passordene matcher ikke";
+                this.forceUpdate();
+            }
+        }
+      }
         if (signedInUser.admin == 1) {
           //deaktiverknapp for admin
             this.refs.deaktiverUser.onclick = () => {
