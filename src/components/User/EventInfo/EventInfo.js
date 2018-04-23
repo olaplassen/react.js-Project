@@ -260,6 +260,7 @@ export default class EventInfo extends React.Component {
 						<div className="beskrivelsetabell">
 							<h1>{this.evnt.title} informasjon side.</h1>
 							<table>
+								<tbody>
 								<tr>
 									<td>Arrangemetet starter</td>
 									<td>{this.start}</td>
@@ -284,6 +285,7 @@ export default class EventInfo extends React.Component {
 									<td className="beskrivelse">Beskrivelse</td>
 									<td className="beskrivelsetekst">{this.evnt.description}</td>
 								</tr>
+								</tbody>
 							</table>
 							<button ref="endreInfo" className="button3" onClick={() => {this.props.history.push('/changevent/' + this.evnt.id)}}>Endre Informasjon</button>
 						</div>
@@ -292,7 +294,9 @@ export default class EventInfo extends React.Component {
 						<div className="column2">
 							<h4>Interesserte brukere</h4>
 							<table>
+							<tbody>
 									{interestedUserList}
+							</tbody>
 							</table>
 						</div>
 					</div>
