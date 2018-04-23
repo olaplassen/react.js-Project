@@ -1,4 +1,5 @@
 
+  // Importerer klasser inn i denne filen.
 import mysql from 'mysql';
 import { mailService } from './mailservices';
 var passwordHash = require('password-hash')
@@ -31,7 +32,9 @@ function connect() {
 }
 connect();
 
+ // Klasse for ulike eventer i programmet
 class EvntService {
+    // Funksjon for å legge til arrangement i databasen
   addEvnt(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) {
       return new Promise ((resolve, reject) => {
         connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
@@ -41,6 +44,7 @@ class EvntService {
       });
     });
   }
+    // Funksjon for å hente ut siste arrangement som ble lagt til i databasen.
   getLastEvnt() {
            return new Promise ((resolve, reject) => {
             connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
@@ -49,8 +53,8 @@ class EvntService {
           });
         });
     }
-
-    //funkjson for å endre bruker//henter det siste arrangementet lagt til i databasen
+    // Funkjson for å endre bruker.
+    // Henter det siste arrangementet lagt til i databasen.
   getEvntInfo(id) {
         return new Promise ((resolve, reject) => {
          connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
@@ -59,6 +63,7 @@ class EvntService {
            });
          });
       }
+    // Funksjon som gjør det mulig å endre arrangement.
   changeEvnt(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
     return new Promise ((resolve, reject) => {
      connection.query('UPDATE Arrangement SET title =?, meetingLocation=?, description=?, contactPerson=?, gearList=?, showTime=?, start=?, end=? WHERE id=?', [title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId], (error, result) => {
@@ -67,6 +72,7 @@ class EvntService {
        });
      });
   }
+    // Henter ut alle arrangementene fra databasen.
   getAllEvnts() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Arrangement', (error, result) => {
@@ -75,6 +81,7 @@ class EvntService {
       });
     });
   }
+    // Henter ut arrangement som er fram i tid.
   getComingEvnts() {
     let today = new Date()
     return new Promise ((resolve, reject) => {
@@ -86,5 +93,6 @@ class EvntService {
   }
 }
 
+  // Eksporterer klassen så vi kan bruke funksjonaliteten i andre filer
 let evntService = new EvntService();
 export {evntService}
