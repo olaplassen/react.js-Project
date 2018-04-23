@@ -18,11 +18,10 @@ export default class ChangeShift extends React.Component {
     render() {
         return (
           <div className="menu">
-          <h4>Skriv inn epost adressen til den du har avtalt å bytte vakt med</h4> <br />
-          <input className="input" ref="recieverEmail" />
-          <button className="button" ref="byttVakt">Send forespørsel</button>
-          <div ref="foresporselSvar">
-          </div>
+            <h4>Skriv inn epost adressen til den du har avtalt å bytte vakt med</h4>
+              <input className="input" ref="recieverEmail" />
+              <button className="button" ref="byttVakt">Send forespørsel</button>
+            <div ref="foresporselSvar"></div>
           </div>
         );
     }

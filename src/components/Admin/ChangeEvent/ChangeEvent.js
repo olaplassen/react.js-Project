@@ -18,38 +18,40 @@ export default class ChangeEvent extends React.Component {
               <h2> Endre {this.evnt.title} sine opplysninger</h2>
                 <div>
                   <table>
-                    <tr>
-                      <td>Tittel</td>
-                      <td><input placeholder="Tittel" className="changeinput" type='text' ref='title' /></td>
-                    </tr>
-                    <tr>
-                      <td>Møte lokasjon</td>
-                      <td><input placeholder="Møte lokasjon"  className="changeinput" type='text' ref='meetingLocation' /></td>
-                    </tr>
-                    <tr>
-                      <td>Utstyrs Liste</td>
-                      <td><input placeholder="Utstyrs Liste"  className="changeinput" type='text' ref='gearList' /></td>
-                    </tr>
-                    <tr>
-                      <td>Kontaktperson</td>
-                      <td><input placeholder="Kontaktperson"  className="changeinput" type='text' ref='contactPerson' /></td>
-                    </tr>
-                    <tr>
-                      <td>Oppmøte tidspunkt</td>
-                      <td><input placeholder="Oppmøte tidspunkt"  className="changeinput" type='datetime-local' ref='show' /></td>
-                    </tr>
-                    <tr>
-                      <td>Slutt tidspunkt</td>
-                      <td><input placeholder="Slutt tidspunkt"  className="changeinput" type='datetime-local' ref='start' /></td>
-                    </tr>
-                    <tr>
-                      <td>Slutt tidspunkt</td>
-                      <td><input placeholder="Slutt tidspunkt"  className="changeinput" type='datetime-local' ref='end' /></td>
-                    </tr>
-                    <tr>
-                      <td>Beskrivelse</td>
-                      <td><textarea className="changeinput" placeholder="Beskrivelse"  type='text' ref='description' /></td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td>Tittel</td>
+                        <td><input placeholder="Tittel" className="changeinput" type='text' ref='title' /></td>
+                      </tr>
+                      <tr>
+                        <td>Møte lokasjon</td>
+                        <td><input placeholder="Møte lokasjon"  className="changeinput" type='text' ref='meetingLocation' /></td>
+                      </tr>
+                      <tr>
+                        <td>Utstyrs Liste</td>
+                        <td><input placeholder="Utstyrs Liste"  className="changeinput" type='text' ref='gearList' /></td>
+                      </tr>
+                      <tr>
+                        <td>Kontaktperson</td>
+                        <td><input placeholder="Kontaktperson"  className="changeinput" type='text' ref='contactPerson' /></td>
+                      </tr>
+                      <tr>
+                        <td>Oppmøte tidspunkt</td>
+                        <td><input placeholder="Oppmøte tidspunkt"  className="changeinput" type='datetime-local' ref='show' /></td>
+                      </tr>
+                      <tr>
+                        <td>Slutt tidspunkt</td>
+                        <td><input placeholder="Slutt tidspunkt"  className="changeinput" type='datetime-local' ref='start' /></td>
+                      </tr>
+                      <tr>
+                        <td>Slutt tidspunkt</td>
+                        <td><input placeholder="Slutt tidspunkt"  className="changeinput" type='datetime-local' ref='end' /></td>
+                      </tr>
+                      <tr>
+                        <td>Beskrivelse</td>
+                        <td><textarea className="changeinput" placeholder="Beskrivelse"  type='text' ref='description' /></td>
+                      </tr>
+                    </tbody>
                   </table>
                     <button className="button" ref='changeEvntButton'>Lagre</button>
                     <button className="tilbake" className="button" onClick={() => {this.props.history.push('/eventinfo/'+this.evnt.id)}}> Tilbake </button>

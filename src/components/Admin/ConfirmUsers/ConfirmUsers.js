@@ -55,16 +55,21 @@ export default class ConfirmUsers extends React.Component {
 		return (
 
 			<div className="menu">
-				<h2>Deaktiverte/Ikke godkjente brukere</h2> <br />
+				<h2>Deaktiverte/Ikke godkjente brukere</h2>
 				{unConfirmedList}
 
-				<h2>Ikke godkjente vaktbytter</h2> <br />
-				<table className="table">
-				<tbody>
-				<tr><th className="th">Arrangement</th><th className="th">Nåværende bruker</th><th className="th">Øsnker bytte med</th><th className="th">Godkjenn</th></tr>
-				{unConfirmedShift}
-				</tbody>
-				</table>
+				<h2>Ikke godkjente vaktbytter</h2>
+					<table className="table">
+						<tbody>
+							<tr>
+								<th className="th">Arrangement</th>
+								<th className="th">Nåværende bruker</th>
+								<th className="th">Øsnker bytte med</th>
+								<th className="th">Godkjenn</th>
+							</tr>
+							{unConfirmedShift}
+						</tbody>
+					</table>
 			</div>
 		);
 	}
