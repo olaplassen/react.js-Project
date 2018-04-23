@@ -24,6 +24,7 @@ body {background-color: #f2f2f2;}
   text-decoration: none;;
 }
 
+/* Gjør at linkene hovrer når musepekeren er over den spesefikke linken*/
 .link:hover {
     background-color: #111;
 }
@@ -42,6 +43,28 @@ body {background-color: #f2f2f2;}
   height: 400px;
 }
 
+/* Styler alle tabell headerene.*/
+.th {
+    text-align: left;
+    padding: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* Styler alle td i tabellene.*/
+.td {
+    padding: 5px;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+/* tyler tabellen på siden kommende vakter*/
+.table100{
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: center;
+    width: 100%;
+}
 
 
 
@@ -255,24 +278,6 @@ display: none;
     width: 40%;
 }
 
-.table100{
-    border: 1px solid black;
-    border-collapse: collapse;
-    text-align: center;
-    width: 100%;
-}
-.td {
-    padding: 5px;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-
-.th {
-    text-align: left;
-    padding: 5px;
-    border: 1px solid black;
-    border-collapse: collapse;
-}
 .row:after {
     content: "";
     display: table;
