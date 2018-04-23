@@ -419,8 +419,7 @@ export default class MyPage extends React.Component {
     newPassword(){
 
                if (this.refs.newpassword.value == this.refs.verifypassword.value) {
-                    console.log("passer")
-                      userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
+                     userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
                           this.refs.newpassword.value = "";
                           this.refs.verifypassword.value = "";
 
@@ -428,7 +427,7 @@ export default class MyPage extends React.Component {
                       });
                   }
                   else {
-                    console.log("passer ikke")
+                    
                       this.refs.error2.textContent = "Passordene matcher ikke";
                       this.forceUpdate();
 

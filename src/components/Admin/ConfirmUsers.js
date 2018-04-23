@@ -41,14 +41,11 @@ export default class ConfirmUsers extends React.Component {
 					userService.godkjennBytte(shiftChange.newUserid, shiftChange.arr_rolleid, tildelt_tid).then((result) => { // godkjenner bytte og oppdaterer brukerid for rollen
 						userService.getShiftChangeInfo().then((result) => { //oppdaterer listen
 							this.allShiftChange = result;
-							console.log(result)
 							this.forceUpdate();
 							userService.addPoints(shiftChange.newUserid).then((result) =>{ // gir vaktpoeng til ny bruker
-								console.log(result)
-							})
+								})
 							userService.removePoints(shiftChange.oldUserid).then((result) => { // fjerner vaktpoeng fra gammel bruker
-								console.log(result)
-							})
+								})
 						})
 					})
 				}}>Godkjenn bytte</button></td>
@@ -86,8 +83,7 @@ export default class ConfirmUsers extends React.Component {
 		});
 		userService.getShiftChangeInfo().then((result) => { //henter vaktbyter
 			this.allShiftChange = result;
-			console.log(result)
-			this.forceUpdate();
+		  this.forceUpdate();
 		})
 	}
 

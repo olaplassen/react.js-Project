@@ -33,7 +33,7 @@ connect();
 
 
 class SkillService {
-getAllSkills() {
+getAllSkills() { //henter kompetansenavnene fra Kompetanse
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse', (error, result) => {
         if (error) throw error;
@@ -41,7 +41,7 @@ getAllSkills() {
       });
     });
  }
-getSkill(skillid) {
+getSkill(skillid) { // henter kompetanse på gitt skillid
        return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse WHERE skillid=?',[skillid], (error, result) => {
           if (error) throw error;
@@ -49,7 +49,7 @@ getSkill(skillid) {
         });
       });
     }
-  checkUserSkill(userid, skillid, callback) {
+  checkUserSkill(userid, skillid, callback) { // sjekker kompetanse til brukere ved hjelp av brukerid
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM UserKomp WHERE userid = ? AND skillid = ?', [userid, skillid], (error, result) => {
           if (error) throw error;
@@ -57,7 +57,7 @@ getSkill(skillid) {
       });
     });
   }
-addSkills(newSkills, userid) {
+addSkills(newSkills, userid) { // legger inn kompetanse til bruker
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO UserKomp (userid, skillid) values (?,?)', [userid, newSkills], (error, result) => {
         if(error) throw error;
@@ -66,7 +66,7 @@ addSkills(newSkills, userid) {
     });
   }
 
-  addSkillswithDate(newSkills, userid, date) {
+  addSkillswithDate(newSkills, userid, date) { // legger inn kompetanse med frist
       return new Promise ((resolve, reject) => {
         connection.query('INSERT INTO UserKomp (userid, skillid, validTo) values (?,?,?)', [userid, newSkills, date], (error, result) => {
           if(error) throw error;
@@ -74,7 +74,7 @@ addSkills(newSkills, userid) {
         });
       });
     }
-getYourSkills(userid) {
+getYourSkills(userid) { // henter kompetanse til brukeren som er pålogget
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Kompentanse, UserKomp WHERE UserKomp.skillid = Kompentanse.skillid AND UserKomp.userid = ?', [userid], (error, result) => {
           if (error) throw error;
@@ -82,7 +82,7 @@ getYourSkills(userid) {
       });
     });
   }
-getSkillInfo(skillid) {
+getSkillInfo(skillid) { // Henter navnet på kompetansen basert på skillid
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Kompentanse WHERE skillid = ?', [skillid], (error, result) => {
         if(error) throw error;
@@ -90,7 +90,7 @@ getSkillInfo(skillid) {
       });
     });
   }
-deleteSkill(userid, skillid) {
+deleteSkill(userid, skillid) {// fjerner kompetanse
   return new Promise ((resolve, reject) => {
     connection.query('DELETE FROM UserKomp WHERE userid=? AND skillid=?', [userid, skillid], (error, result) => {
       if(error) throw error;
@@ -100,7 +100,7 @@ deleteSkill(userid, skillid) {
   })
 
 }
-checkSkillValid() {
+checkSkillValid() { // fjerner kompetanse fra bruker der validetsdatoen er gått ut
   let today= new Date()
   return new Promise ((resolve, reject) => {
     connection.query('DELETE FROM UserKomp WHERE validTo < ?', [today], (error, result) => {

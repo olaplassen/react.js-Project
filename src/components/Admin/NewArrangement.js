@@ -9,6 +9,7 @@ import { evntService } from '../Services/Evntservice';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
+// class for validering av inputene for oppmøtetid, startid og sluttid for arrangementet
 export class RegistrationFeltArrangementTime extends React.Component {
 	constructor() {
 		super();
@@ -30,7 +31,7 @@ export class RegistrationFeltArrangementTime extends React.Component {
 		);
 	}
 }
-
+// class for validering av inputfeltene der bokstaver
 export class RegistrationFeltArrangement extends React.Component {
 	constructor() {
 		super();
@@ -61,7 +62,9 @@ export default class NewArrangement extends React.Component {
             roles: [],
             selectedRoles: [],
             selectedSingleValue: null,
-            arrnameValid: false,
+
+           // setter state på verdiene for å bruke disse til validering
+						arrnameValid: false,
       			arrnameVerdi: '',
             meetinglocationValid: false,
       			meetinglocationVerdi: '',
@@ -80,13 +83,13 @@ export default class NewArrangement extends React.Component {
 
         }
         // bruker .bind(this) for å få med innholdet videre
-        this.validerarrnameFelt = this.validerarrnameFelt.bind(this);
-        this.validermeetinglocationFelt = this.validermeetinglocationFelt.bind(this);
-        this.validergearlistFelt = this.validergearlistFelt.bind(this);
-        this.validercontactpersonFelt = this.validercontactpersonFelt.bind(this);
-        this.validershowtimeFelt = this.validershowtimeFelt.bind(this);
-        this.validerstarttimeFelt = this.validerstarttimeFelt.bind(this);
-        this.validerendtimeFelt = this.validerendtimeFelt.bind(this);
+        this.validerarrnameFelt = this.validerarrnameFelt.bind(this);                  // navn på arrangement felt
+        this.validermeetinglocationFelt = this.validermeetinglocationFelt.bind(this);  // møtelokasjon felt
+        this.validergearlistFelt = this.validergearlistFelt.bind(this);               // utstyrsliste felt
+        this.validercontactpersonFelt = this.validercontactpersonFelt.bind(this);     // kontaktperson felt
+        this.validershowtimeFelt = this.validershowtimeFelt.bind(this);               // oppmøtetid felt
+        this.validerstarttimeFelt = this.validerstarttimeFelt.bind(this);             // startid felt
+        this.validerendtimeFelt = this.validerendtimeFelt.bind(this);                 // sluttidspunkt felt
 
 
         this.allMals = []; // alle vaktmaler
@@ -142,22 +145,21 @@ export default class NewArrangement extends React.Component {
                         <tbody>
                           <tr>
                             <td>Tittel</td>
-                            <td><RegistrationFeltArrangement validert={this.state.arrnameValid} verdi={this.state.arrnameVerdi} regexValidering={this.validerarrnameFelt} felttype="Skriv inn navn på arrangement" /></td>
- <div className="errormessage" ref="errorarrname"></div>
+													    <td><RegistrationFeltArrangement validert={this.state.arrnameValid} verdi={this.state.arrnameVerdi} regexValidering={this.validerarrnameFelt} felttype="Skriv inn navn på arrangement" /></td>
+                             <div className="errormessage" ref="errorarrname"></div>
                            </tr>
-
-                          <tr>
-                            <td>Møte lokasjon</td>
-                            <td><RegistrationFeltArrangement validert={this.state.meetinglocationValid} verdi={this.state.meetinglocationVerdi} regexValidering={this.validermeetinglocationFelt} felttype="Skriv inn navn på møteplass" /></td>
+													  <tr>
+													   <td>Møte lokasjon</td>
+														<td><RegistrationFeltArrangement validert={this.state.meetinglocationValid} verdi={this.state.meetinglocationVerdi} regexValidering={this.validermeetinglocationFelt} felttype="Skriv inn navn på møteplass" /></td>
                           </tr>
                           <div className="errormessage" ref="errormeetinglocation"></div>
                           <tr>
-                            <td>Utstyrsliste</td>
+													  <td>Utstyrsliste</td>
                             <td><RegistrationFeltArrangement validert={this.state.gearlistValid} verdi={this.state.gearlistVerdi} regexValidering={this.validergearlistFelt} felttype="Skriv inn utstyrsliste" /></td>
                             </tr>
                           <div className="errormessage" ref="errorgearlist"></div>
                           <tr>
-                            <td>Kontaktperson og tlf</td>
+												   <td>Kontaktperson og tlf</td>
                             <td><RegistrationFeltArrangement validert={this.state.contactpersonValid} verdi={this.state.contactpersonVerdi} regexValidering={this.validercontactpersonFelt} felttype="Skriv inn ekstern kontaktperson" /></td>
                              <div className="errormessage" ref="errorcontactperson"></div>
                           </tr>
@@ -173,23 +175,22 @@ export default class NewArrangement extends React.Component {
                                 placeholder="Velg vaktmal, eller egendefiner roller i tabellen" /></td>
                           </tr>
                           <tr>
-                            <td>Oppmøte tidspunkt</td>
+												    <td>Oppmøte tidspunkt</td>
                             <td><RegistrationFeltArrangementTime validert={this.state.showtimeValid} verdi={this.state.showtimeVerdi} regexValidering={this.validershowtimeFelt} felttype="Skriv inn utstyrsliste" /></td>
-
-                          </tr>
+                           </tr>
                           <div className="errormessage" ref="errorshowtime"></div>
                           <tr>
-                            <td>Start tidspunkt</td>
+													<td>Start tidspunkt</td>
                             <td><RegistrationFeltArrangementTime validert={this.state.starttimeValid} verdi={this.state.starttimeVerdi} regexValidering={this.validerstarttimeFelt} felttype="Skriv inn utstyrsliste" /></td>
                             <div className="errormessage" ref="errorstarttime"></div>
                           </tr>
                           <tr>
-                            <td>Slutt tidspunkt</td>
+													 <td>Slutt tidspunkt</td>
                             <td><RegistrationFeltArrangementTime validert={this.state.endtimeValid} verdi={this.state.endtimeVerdi} regexValidering={this.validerendtimeFelt} felttype="Skriv inn utstyrsliste" /></td>
                             <div className="errormessage" ref="errorendtime"></div>
                           </tr>
                           <tr>
-                            <td>Beskrivelse</td>
+													<td>Beskrivelse</td>
                             <td><textarea className="input" ref="arrDescription" placeholder="Skriv inn nærmere beskrivelse på arrangementet"></textarea></td>
                           </tr>
                         </tbody>
@@ -221,50 +222,58 @@ export default class NewArrangement extends React.Component {
             </div>
         );
     }
-    // funksjoner som validerer input i newArrangement
-    validerarrnameFelt(arrnameVerdi) {
+    // funksjoner som validerer input i newArrangement. Bruker regex til å definere hva som er gyldig input.
+
+		validerarrnameFelt(arrnameVerdi) {
   		// etter var regex så defineres hva som skal være tillatt i inputboksen
   		var regex = /^[a-zæøå ]{2,}$/i;
   		var arrnameValid = regex.test(arrnameVerdi);
   		this.setState({arrnameValid, arrnameVerdi});
   		}
-    validermeetinglocationFelt(meetinglocationVerdi) {
-    		// etter var regex så defineres hva som skal være tillatt i inputboksen
-    		var regex = /^[a-zæøå ]{2,}$/i;
-    		var meetinglocationValid = regex.test(meetinglocationVerdi);
-    		this.setState({meetinglocationValid, meetinglocationVerdi});
-    		}
-    validergearlistFelt(gearlistVerdi) {
-      		// etter var regex så defineres hva som skal være tillatt i inputboksen
-      		var regex = /^[a-zæøå ]{2,}$/i;
-      		var gearlistValid = regex.test(gearlistVerdi);
-      		this.setState({gearlistValid, gearlistVerdi});
-      		}
-    validercontactpersonFelt(contactpersonVerdi) {
-            		// etter var regex så defineres hva som skal være tillatt i inputboksen
-            		var regex = /^[a-zæøå 0-9]{2,}$/i;
-            		var contactpersonValid = regex.test(contactpersonVerdi);
-            		this.setState({contactpersonValid, contactpersonVerdi});
-            		}
-    validershowtimeFelt(showtimeVerdi) {
-                        		// etter var regex så defineres hva som skal være tillatt i inputboksen
-                        		var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
-                        		var showtimeValid = regex.test(showtimeVerdi);
-                            this.setState({showtimeValid, showtimeVerdi});
-                        		}
 
-   validerstarttimeFelt(starttimeVerdi) {
-          // etter var regex så defineres hva som skal være tillatt i inputboksen
-        var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
-        var starttimeValid = regex.test(starttimeVerdi);
-        this.setState({starttimeValid, starttimeVerdi});
+		// validerer møtelokasjonen for arrangementet
+    validermeetinglocationFelt(meetinglocationVerdi) {
+      var regex = /^[a-zæøå ]{2,}$/i;
+    	var meetinglocationValid = regex.test(meetinglocationVerdi);
+    	this.setState({meetinglocationValid, meetinglocationVerdi});
+    		}
+
+			// validerer utstyrslisten i arrangementet
+    validergearlistFelt(gearlistVerdi) {
+    // etter var regex så defineres hva som skal være tillatt i inputboksen
+      var regex = /^[a-zæøå 0-9]{2,}$/i;
+      var gearlistValid = regex.test(gearlistVerdi);
+      this.setState({gearlistValid, gearlistVerdi});
+      	}
+
+			// validerer kontaktpersonen i arrangementet
+    validercontactpersonFelt(contactpersonVerdi) {
+      // etter var regex så defineres hva som skal være tillatt i inputboksen
+      var regex = /^[a-zæøå 0-9]{2,}$/i;
+      var contactpersonValid = regex.test(contactpersonVerdi);
+      this.setState({contactpersonValid, contactpersonVerdi});
+        }
+
+		// validerer oppmøtetidspunkt på arrangementet
+    validershowtimeFelt(showtimeVerdi) {
+     // etter "var regex" så defineres hva som skal være tillatt i inputboksen. Her er det kun dato som er tillatt
+	   var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
+     var showtimeValid = regex.test(showtimeVerdi);
+     this.setState({showtimeValid, showtimeVerdi});
       }
 
+    // validerer starttidspunktet på arrangementet
+   validerstarttimeFelt(starttimeVerdi) {
+      var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
+      var starttimeValid = regex.test(starttimeVerdi);
+      this.setState({starttimeValid, starttimeVerdi});
+      }
+
+    //validerer sluttidspunktet på arrangamentet
     validerendtimeFelt(endtimeVerdi) {
-               // etter var regex så defineres hva som skal være tillatt i inputboksen
-             var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
-             var endtimeValid = regex.test(endtimeVerdi);
-              this.setState({endtimeValid, endtimeVerdi});
+      var regex = (/^(\d{4})\-(\d{2})\-(\d{2})[T](\d{2}):(\d{2})$/);
+      var endtimeValid = regex.test(endtimeVerdi);
+      this.setState({endtimeValid, endtimeVerdi});
                                                     }
     addRolesforArrWidthMal(result, evntId) { //legger til alle roller i arrangementet fra vaktmalen
         for (let role of result) {
@@ -275,6 +284,7 @@ export default class NewArrangement extends React.Component {
 
     registerArrangement(selectValue, roleListLength) { // legger til arrangementet i databasen
 
+  // hvis noen av verdiene er false resetter disse kommandoene inputfeltene
       this.refs.errorarrname.textContent = "";
       this.refs.errormeetinglocation.textContent = "";
       this.refs.errorcontactperson.textContent= "";
@@ -283,6 +293,7 @@ export default class NewArrangement extends React.Component {
       this.refs.errorstarttime.textContent="";
       this.refs.errorendtime.textContent="";
 
+// her valideres inputfeltene med if setninger. Er en state false får man en feilmelding
       if(this.state.arrnameValid == false) {
         this.refs.errorarrname.textContent="Arrangementnavn kan bare inneholde bokstaver og må fylles ut"
         return false;
@@ -312,6 +323,7 @@ export default class NewArrangement extends React.Component {
         return false;
       }
 
+    
 
 
       else {
@@ -358,15 +370,10 @@ export default class NewArrangement extends React.Component {
                             })
                         }
                     }
-                    else {
-                        console.log("Ingen av denne typen ble valgt");
 
-                    }
                 }
             }
-            else {
-                console.log("ingenting skjedde")
-            }
+
             this.props.history.push('/eventinfo/' + this.addedEvnt.id);
         })
     }

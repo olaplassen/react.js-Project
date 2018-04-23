@@ -1,4 +1,4 @@
-
+  // Importerer klasser inn i filen.
 import mysql from 'mysql';
 import { mailService } from './mailservices';
 var passwordHash = require('password-hash')
@@ -31,8 +31,9 @@ function connect() {
 }
 connect();
 
-
+  // Klasse for å kategorisere interesser på arrangement av brukere.
 class InterestService {
+    // Gjør det mulig for brukere å melde sin interesse for et spesefikt arrangement
 getInteressed(arrangementId, userId) {
       return new Promise ((resolve, reject) => {
         connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
@@ -42,6 +43,7 @@ getInteressed(arrangementId, userId) {
         });
       });
     }
+    // Fjerner brukerer som er interesert i et arrangemnet.
 removeInterested(userid, arrid) {
   return new Promise ((resolve, reject) => {
     connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
@@ -50,6 +52,7 @@ removeInterested(userid, arrid) {
     })
   });
 }
+  // Henter ut interesserte brukere for et spesefikt arrangement.
 getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
          connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
@@ -59,6 +62,7 @@ getInteressedUsers(arrangementId){
          })
        });
      }
+    // Sjekker om en bruker er interessert i et arrangement.
 checkIfInteressed(userId, arrangementId) {
    return new Promise ((resolve, reject) => {
    connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
@@ -69,5 +73,7 @@ checkIfInteressed(userId, arrangementId) {
 }
 
 }
+
+  // Eksporterer klassen så vi kan bruke funksjonaliteten i andre filer
 let interestService = new InterestService()
 export {interestService}

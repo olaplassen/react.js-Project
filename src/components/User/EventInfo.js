@@ -387,7 +387,6 @@ export default class EventInfo extends React.Component {
 			//henter alle interesserte for dette arrangementet
 			interestService.getInteressedUsers(this.evntId).then((result) => {
 				this.interestedUsers = result;
-				console.log(this.interestedUsers)
 				this.forceUpdate();
 			});
 			//henter alle roller i databasen i stigende id rekkefølge
@@ -398,8 +397,7 @@ export default class EventInfo extends React.Component {
 					//henter ant roller valgt per rolle før endring. 'i' er her id til rollen
 					roleService.getRoleCount(this.evnt.id, i).then((result) => {
 						//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
-						console.log(result)
-						this.numberOfRoles.push(result);
+					  this.numberOfRoles.push(result);
 						this.firstNumberOfRoles.push(result);
 						this.secondNumberOfRoles = this.numberOfRoles;
 
@@ -494,14 +492,13 @@ export default class EventInfo extends React.Component {
 				})
 				//her tildeles roller automatisk, basert på om de er interesserte, vaktpoeng, passive og om de har kompetanse
 				this.refs.tildelRoller.onclick = () => {
-					console.log(this.allSelectedRoles)
-				//variabel for når vakten blir tildelt bruker
+						//variabel for når vakten blir tildelt bruker
 				let tildeltTid = new Date();
 				let usedUser = []; //brukere som allerede har blitt valgt i arrangementet
 				let usedEventRoles = []; //alle roller i arrangementet som har blitt tildelt roller
 					//går gjennom alle valget roller for arrangementet
 					for(let eventRolle of this.allSelectedRoles) {
-						console.log(eventRolle)
+
 						userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
 							//sjekker om brukere har blitt valgt for dette arrangementet fra før
 							usedUser.push(result)
@@ -516,7 +513,6 @@ export default class EventInfo extends React.Component {
 						});
 						//kjører gjennom interesserte brukere
 						for(let interestedUser of this.interestedUsers) {
-							console.log(interestedUser)
 							userService.isUserPassive(interestedUser.userId, this.evnt.id).then((result) => {
 								this.userPassive = result;
 								//sjekker om interesserte bruker er passiv under dette arrangementet
@@ -551,7 +547,6 @@ export default class EventInfo extends React.Component {
 										//oppdateter utdelte vakter listen
 										roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
-											console.log(result)
 											this.forceUpdate();
 										});
 										roleService.getRolewithUserInfo(this.evntId).then((result) => {
@@ -586,11 +581,11 @@ export default class EventInfo extends React.Component {
 							      //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
 							      mailService.sendMail(email, subject, textmail);
 										userService.userPassive(this.evnt.start, this.evnt.end, user.id).then((result) => {
-											console.log(result)
+
 											this.forceUpdate();
 										})
 										userService.addPoints(user.id).then((result) =>{
-											console.log(result)
+
 										})
 										roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
