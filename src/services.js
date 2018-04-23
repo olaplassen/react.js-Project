@@ -69,8 +69,8 @@ getUserName(id, callback) {
 }
 addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,) {
     return new Promise ((resolve, reject) => {
-    var hashedPassword = passwordHash.generate('password');
-    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, hashedPassword)', [firstName, lastName, address, postnr, poststed, phone, email, username], (error, result) => {
+    var hashedPassword = passwordHash.generate(password);
+    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username,hashedPassword], (error, result) => {
       if (error) throw error;
     console.log(result)
       resolve();
@@ -85,16 +85,20 @@ deactivateUser(userid) {
     })
   })
 }
-loginUser(username, password, callback) {
+loginUser(username, inputpassword, callback) {
     return new Promise ((resolve, reject) => {
+    let hashedPassword = inputpassword
+    connection.query('SELECT * FROM Users WHERE (userName =?)', [username], (error, result) => {
+      let hashedPassword = result[0].password;
 
-    connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
-
+      let correctpasword = passwordHash.verify(inputpassword, hashedPassword);
+      console.log(correctpasword)
       if (error) throw error;
+      if(correctpasword == true) {
       localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       resolve(result[0]);
-        });
-
+      }
+      });
       });
 
   }
@@ -157,7 +161,8 @@ isUserPassive(userid, arrid) {
 }
 changePassword(password, id) {
     return new Promise ((resolve, reject) => {
-    connection.query('UPDATE Users SET password=? WHERE id=?', [password, id], (error, result) => {
+    let hashedPassword = passwordHash.generate(newpassword);
+    connection.query('UPDATE Users SET password=? WHERE id=?', [hashedPassword, id], (error, result) => {
       if (error) throw error;
       console.log("endring fullført")
       resolve(result);
@@ -189,6 +194,7 @@ resetPassword(username, email, callback) {
     return new Promise ((resolve, reject) => {
     //oppretter random nytt passord
     let newpassword = Math.random().toString(36).slice(-8);
+    let hashedPassword = passwordHash.generate(newpassword);
     //henter id til bruker som matcher username og email med det som ble skrevet inn i apllikasjonen
     connection.query('SELECT id FROM Users WHERE (userName = ? AND email = ?)', [username, email], (error, result) => {
       if (error) throw error;
@@ -197,7 +203,7 @@ resetPassword(username, email, callback) {
       //hvis resultatet av spørringen ikke er null skal passordet oppdateres
       if(result[0] != null ) {
 
-    connection.query('UPDATE Users SET password=? WHERE (userName = ? AND email = ?)', [newpassword, username, email], (error, result) => {
+    connection.query('UPDATE Users SET password=? WHERE (userName = ? AND email = ?)', [hashedPassword, username, email], (error, result) => {
       if (error) throw error;
 
       let subject = "New password for " + username;
