@@ -13,23 +13,23 @@ import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
 //henter classene for bruker funksjonalitet
-import UserMenu from './components/User/UserMenu/UserMenu';
-import UserHome from './components/User/UserHome/UserHome';
-import MyPage from './components/User/MyPage/MyPage';
-import ChangeUser from './components/User/ChangeUser/ChangeUser';
-import SearchUser from './components/User/SearchUser/SearchUser';
-import EventInfo from './components/User/EventInfo/EventInfo';
-import ChangeShift from './components/User/ChangeShift/changeshift';
+import UserMenu from './components/User/UserMenu';
+import UserHome from './components/User/UserHome';
+import MyPage from './components/User/MyPage';
+import ChangeUser from './components/User/ChangeUser';
+import SearchUser from './components/User/SearchUser';
+import EventInfo from './components/User/EventInfo';
+import ChangeShift from './components/User/ChangeShift';
 
 //henter classene for admin funksjonalitet
-import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
-import ConfirmUsers from './components/Admin/ConfirmUsers/ConfirmUsers';
-import AdminHome from './components/Admin/AdminHome/AdminHome';
-import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
-import Arrangement from './components/Admin/Arrangement/Arrangement';
-import Statistics from './components/Admin/Statistics/Statistic';
-import UserStatistics from './components/Admin/Statistics/UserStatistic';
-import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
+import AdminMenu from './components/Admin/AdminMenu';
+import ConfirmUsers from './components/Admin/ConfirmUsers';
+import AdminHome from './components/Admin/AdminHome';
+import NewArrangement from './components/Admin/NewArrangement';
+import Arrangement from './components/Admin/Arrangement';
+import Statistics from './components/Admin/Statistic';
+import UserStatistics from './components/Admin/UserStatistic';
+import ChangeEvent from './components/Admin/ChangeEvent';
 
 function checkSkillValid() { // sjekker om kursene sin utløpsdato er før dagens dato, deretter sletter de
   userService.checkSkillValid();

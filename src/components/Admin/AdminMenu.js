@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import { logout } from '../../../logout';
+import { logout } from '../../logout';
 
 export default class AdminMenu extends React.Component {
     render() {

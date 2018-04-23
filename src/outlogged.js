@@ -90,7 +90,7 @@ export class Login extends React.Component {
 		}
 	}
 }
-
+//for å skjule passord
 export class RegistrationFeltPassword extends React.Component {
 	constructor() {
 		super();
