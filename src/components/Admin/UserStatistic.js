@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../services';
+import { evntService} from '../../services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 

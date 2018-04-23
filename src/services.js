@@ -658,7 +658,7 @@ class EvntService {
     }
 
     //funkjson for å endre bruker//henter det siste arrangementet lagt til i databasen
-  getEventInfo(id) {
+  getEvntInfo(id) {
         return new Promise ((resolve, reject) => {
          connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
            if (error) throw error;
@@ -666,7 +666,7 @@ class EvntService {
            });
          });
       }
-  changeEvent(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
+  changeEvnt(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
     return new Promise ((resolve, reject) => {
      connection.query('UPDATE Arrangement SET title =?, meetingLocation=?, description=?, contactPerson=?, gearList=?, showTime=?, start=?, end=? WHERE id=?', [title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId], (error, result) => {
        if (error) throw error;
@@ -674,7 +674,7 @@ class EvntService {
        });
      });
   }
-  getAllArrangement() {
+  getAllEvnts() {
      return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Arrangement', (error, result) => {
         if (error) throw error;

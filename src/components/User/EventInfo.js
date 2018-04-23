@@ -351,7 +351,7 @@ export default class EventInfo extends React.Component {
 		let signedInUser = userService.getSignedInUser();
 
 		//henter Arrangement info
-		evntService.getEventInfo(this.evntId).then((result) => {
+		evntService.getEvntInfo(this.evntId).then((result) => {
 			this.evnt = result;
 			//gjør om datoer med tid til leservennlige strings
 			this.start = this.evnt.start.toLocaleString().slice(0, -3);

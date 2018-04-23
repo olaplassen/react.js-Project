@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../services';
+import { evntService} from '../../services';
 import createHashHistory from 'history/createHashHistory';
 
 const history: HashHistory = createHashHistory();
@@ -61,7 +62,7 @@ export default class ChangeEvent extends React.Component {
     }
     componentDidMount() {
 
-        userService.getEventInfo(this.evntId).then((result) => { // henter event info
+        evntService.getEvntInfo(this.evntId).then((result) => { // henter event info
 
             this.evnt = result;
             let showTime = JSON.stringify(this.evnt.showTime) //definerer datoformat for mulighet til å sette value på input
@@ -80,7 +81,7 @@ export default class ChangeEvent extends React.Component {
         });
 
         this.refs.changeEvntButton.onclick = () => { // oppdaterer eventinfo
-            userService.changeEvent(
+            evntService.changeEvnt(
                 this.refs.title.value,
                 this.refs.meetingLocation.value,
                 this.refs.description.value,

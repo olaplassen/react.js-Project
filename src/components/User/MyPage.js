@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../services';
+import { evntService} from '../../services';
 import { Link } from 'react-router-dom';
 
 import VirtualizedSelect from 'react-virtualized-select'
