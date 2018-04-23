@@ -14,7 +14,7 @@ export default class ChangeEvent extends React.Component {
     render() {
 
         return (
-            <div className="changeinfo">
+            <div className="blokk">
               <h2> Endre {this.evnt.title} sine opplysninger</h2>
                 <div>
                   <table>
