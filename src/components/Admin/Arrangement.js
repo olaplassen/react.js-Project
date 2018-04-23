@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import { Link } from 'react-router-dom';
 
 export default class Arrangement extends React.Component {
@@ -45,7 +49,7 @@ export default class Arrangement extends React.Component {
     }
     componentDidMount() {
       let signedInUser = userService.getSignedInUser();
-        userService.getComingEvnts().then((result) => {
+        evntService.getComingEvnts().then((result) => {
             this.allEvnts = result;
             this.forceUpdate();
       });

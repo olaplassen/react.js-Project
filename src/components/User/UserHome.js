@@ -2,7 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import BigCalendar from 'react-big-calendar'
 import moment from 'moment';
-import { userService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import createHashHistory from 'history/createHashHistory';
 
 const history: HashHistory = createHashHistory();
@@ -105,7 +109,7 @@ export default class UserHome extends React.Component {
 			);
 	}
 	componentDidMount() {
-		userService.getAllArrangement().then((result) => {
+		evntService.getAllEvnts().then((result) => {
 			this.allEvnts = result;
 			this.forceUpdate();
 		});

@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import createHashHistory from 'history/createHashHistory';
 
 const history: HashHistory = createHashHistory();
@@ -28,7 +32,7 @@ export default class ChangeShift extends React.Component {
     componentDidMount() {
       userService.getArrRolleInfo(this.arr_rolleid).then((result) => { // henter info om vakten
         this.arrRolleInfo = result;
-        userService.getRoleKomp(this.arrRolleInfo.roleid, this.arrRolleInfo.arr_rolleid).then((result) => { //henter kompetanse krav for rollen
+        roleService.getRoleKomp(this.arrRolleInfo.roleid, this.arrRolleInfo.arr_rolleid).then((result) => { //henter kompetanse krav for rollen
           this.roleKomp= result;
           this.forceUpdate();
         });
@@ -50,7 +54,7 @@ export default class ChangeShift extends React.Component {
             }
             else {
 
-            userService.getUserRoleKomp(this.arrRolleInfo.roleid, this.arrRolleInfo.arrid, this.userToChange.id, this.arrRolleInfo.arr_rolleid).then((result) => {
+            roleService.getUserRoleKomp(this.arrRolleInfo.roleid, this.arrRolleInfo.arrid, this.userToChange.id, this.arrRolleInfo.arr_rolleid).then((result) => {
               this.userWithRoles = result; // henter brukerens kurs som inngår i denne rollen
               let tildeltTid = new Date();
 

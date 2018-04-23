@@ -1,7 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
-import { userService } from './services';
+import { userService } from './components/Services/UserService';
+import { skillService } from './components/Services/SkillService';
+import { roleService } from './components/Services/RoleService';
+import { interestService } from './components/Services/InterestService';
+import { evntService } from './components/Services/Evntservice';
+import { mailservices } from './components/Services/mailservices';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
@@ -32,7 +37,7 @@ import UserStatistics from './components/Admin/UserStatistic';
 import ChangeEvent from './components/Admin/ChangeEvent';
 
 function checkSkillValid() { // sjekker om kursene sin utløpsdato er før dagens dato, deretter sletter de
-  userService.checkSkillValid();
+  skillService.checkSkillValid();
 }
 
 

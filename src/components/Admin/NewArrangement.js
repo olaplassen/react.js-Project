@@ -1,7 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VirtualizedSelect from 'react-virtualized-select';
-import { userService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
@@ -273,7 +277,7 @@ export default class NewArrangement extends React.Component {
                                                     }
     addRolesforArrWidthMal(result, evntId) { //legger til alle roller i arrangementet fra vaktmalen
         for (let role of result) {
-            userService.addRolesforArr(evntId, role.roleid, role.vaktmalid).then((result) => {
+            roleService.addRolesforArr(evntId, role.roleid, role.vaktmalid).then((result) => {
             });
         }
     }
@@ -319,10 +323,13 @@ export default class NewArrangement extends React.Component {
         return false;
       }
 
-     else {
+    
 
-    // er alle inputene true i state, kjører denne funksjonen og legger arrangementet inn i databasen.
-        userService.addArrangement(this.state.arrnameVerdi, this.refs.arrDescription.value, this.state.meetinglocationVerdi,
+
+      else {
+
+
+        evntService.addEvnt(this.state.arrnameVerdi, this.refs.arrDescription.value, this.state.meetinglocationVerdi,
             this.state.contactpersonVerdi, this.state.showtimeVerdi, this.state.starttimeVerdi,
             this.state.endtimeVerdi, this.state.gearlistVerdi).then((result) => {
 
@@ -338,10 +345,10 @@ export default class NewArrangement extends React.Component {
             })
           };
 
-        userService.getLastArrangement().then((result) => { //henter arrangementet som ble opprettet
+        evntService.getLastEvnt().then((result) => { //henter arrangementet som ble opprettet
             this.addedEvnt = result;
             if (selectValue != undefined) { //vaktmal er valgt
-                userService.getRolesForMal(selectValue.value).then((result) => {
+                roleService.getRolesForMal(selectValue.value).then((result) => {
                     this.addRolesforArrWidthMal(result, this.addedEvnt.id); //legger til roller for arrangementet med vaktmal
 
                 });
@@ -352,13 +359,13 @@ export default class NewArrangement extends React.Component {
 
                         if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML > 1) {//antall kolonnen er større en 1
                             for (var y = 1; y < document.getElementById("myTable").rows[i].cells.item(2).innerHTML; y++) { //ant ganger denne rollen skal legges til
-                                userService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => { //legger til rollen i arrangementet
+                                roleService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => { //legger til rollen i arrangementet
 
                                 })
                             }
                         }
                         else if (document.getElementById("myTable").rows[i].cells.item(2).innerHTML == 1) {//rollen skal legges til 1 gang
-                            userService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
+                            roleService.addRolesforArrSingle(this.addedEvnt.id, document.getElementById("myTable").rows[i].cells.item(0).innerHTML).then((result) => {
 
                             })
                         }
@@ -366,19 +373,19 @@ export default class NewArrangement extends React.Component {
 
                 }
             }
-            
+
             this.props.history.push('/eventinfo/' + this.addedEvnt.id);
         })
     }
 
     componentDidMount() {
 
-        userService.getVaktmal().then((result) => { //henter alle vaktmaler
+        roleService.getVaktmal().then((result) => { //henter alle vaktmaler
             this.allMals = result;
             this.forceUpdate();
         });
 
-        userService.getRole().then((result) => {//henter alle roller
+        roleService.getRoles().then((result) => {//henter alle roller
             this.allRoles = result;
             this.forceUpdate();
         });

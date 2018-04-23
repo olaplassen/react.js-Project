@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
-import { mailService } from '../../mailservices';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/EvntService';
+import { mailService } from '../Services/mailservices';
 
 const history: HashHistory = createHashHistory();
 
@@ -64,7 +68,7 @@ export default class EventInfo extends React.Component {
  						<td className="td">{role.tildelt_tid.toLocaleString()}</td>
 						<td className="td"><button onClick={() => {
 							userService.godkjennVakt(role.arr_rolleid).then((result) => {
-								userService.getRolewithUserInfo(this.evnt.id).then((result) => {
+								roleService.getRolewithUserInfo(this.evnt.id).then((result) => {
 									this.fordeltVakter = result;
 									this.forceUpdate();
 								});
@@ -167,8 +171,8 @@ export default class EventInfo extends React.Component {
 				if (this.userIsInterested.length != 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
 					<button className="interesseknapp" onClick={() => {
-						userService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+						interestService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
+							interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -183,8 +187,8 @@ export default class EventInfo extends React.Component {
 				else if(this.userIsInterested.length == 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
 					<button className="interesseknapp" onClick={() => {
-						userService.getInteressed(this.evnt.id, signedInUser.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+						interestService.getInteressed(this.evnt.id, signedInUser.id).then((result) => {
+							interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -350,30 +354,30 @@ export default class EventInfo extends React.Component {
 		let signedInUser = userService.getSignedInUser();
 
 		//henter Arrangement info
-		userService.getEventInfo(this.evntId).then((result) => {
+		evntService.getEvntInfo(this.evntId).then((result) => {
 			this.evnt = result;
 			//gjør om datoer med tid til leservennlige strings
 			this.start = this.evnt.start.toLocaleString().slice(0, -3);
 			this.end = this.evnt.end.toLocaleString().slice(0, -3);
 			this.show = this.evnt.showTime.toLocaleString().slice(0, -3);
 			//henter alle roller valgt for dette arrangementet
-			userService.getRolesForArr(this.evnt.id).then((result) => {
+			roleService.getRolesForArr(this.evnt.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
 				});
 				//sjekker om innlogget bruker er interessert i dette arrangementet
-				userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
+				interestService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 					this.userIsInterested = result;
 					this.forceUpdate();
 				});
 			});
 			//henter alle roller for dette arrangementet som er fordelt til brukere
-			userService.getRolewithUserInfo(this.evntId).then((result) => {
+			roleService.getRolewithUserInfo(this.evntId).then((result) => {
 				this.fordeltVakter = result;
 				this.forceUpdate();
 			});
 			//henter alle rollene for dette arrangementet som ikke har blitt fordelt til bruker
-			userService.getRolesWithNoUser(this.evntId).then((result) => {
+			roleService.getRolesWithNoUser(this.evntId).then((result) => {
 				this.roleNoUser = result;
 				this.forceUpdate();
 
@@ -381,17 +385,17 @@ export default class EventInfo extends React.Component {
 
 		if(signedInUser.admin == 1) {
 			//henter alle interesserte for dette arrangementet
-			userService.getInteressedUsers(this.evntId).then((result) => {
+			interestService.getInteressedUsers(this.evntId).then((result) => {
 				this.interestedUsers = result;
 				this.forceUpdate();
 			});
 			//henter alle roller i databasen i stigende id rekkefølge
-			userService.getAllRoles().then((result) => {
+			roleService.getRoles().then((result) => {
 				this.allRoles = result;
 				this.forceUpdate();
 					for (var i = 1; i < this.allRoles.length +1; i++) {
 					//henter ant roller valgt per rolle før endring. 'i' er her id til rollen
-					userService.getRoleCount(this.evnt.id, i).then((result) => {
+					roleService.getRoleCount(this.evnt.id, i).then((result) => {
 						//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
 					  this.numberOfRoles.push(result);
 						this.firstNumberOfRoles.push(result);
@@ -427,17 +431,17 @@ export default class EventInfo extends React.Component {
 
 						if (this.difference[u - 1] > 0) {
 							for (var y = 0; y < this.difference[u - 1]; y++) {
-								userService.addRolesforArrSingle(this.evnt.id, u).then((result) => {
+								roleService.addRolesforArrSingle(this.evnt.id, u).then((result) => {
 									this.difference = []
-									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
+									roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
 									});
-									userService.getRolewithUserInfo(this.evntId).then((result) => {
+									roleService.getRolewithUserInfo(this.evntId).then((result) => {
 										this.fordeltVakter = result;
 										this.forceUpdate();
 									});
-									userService.getRolesForArr(this.evnt.id).then((result) => {
+									roleService.getRolesForArr(this.evnt.id).then((result) => {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
@@ -446,17 +450,17 @@ export default class EventInfo extends React.Component {
 						}
 						else if(this.difference[u-1] < 0) {
 							for (var y = 0; y < -(this.difference[u -1]); y++) {
-								userService.deleteRolesfromArr(this.evnt.id, u).then((result) => {
+								roleService.deleteRolesfromArr(this.evnt.id, u).then((result) => {
 									this.difference = []
-									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
+									roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
 									});
-									userService.getRolewithUserInfo(this.evntId).then((result) => {
+									roleService.getRolewithUserInfo(this.evntId).then((result) => {
 										this.fordeltVakter = result;
 										this.forceUpdate();
 									});
-									userService.getRolesForArr(this.evnt.id).then((result) => {
+									roleService.getRolesForArr(this.evnt.id).then((result) => {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
@@ -467,7 +471,7 @@ export default class EventInfo extends React.Component {
 						this.firstNumberOfRoles = [];
 						this.secondNumberOfRoles = [];
 						this.numberOfRoles = [];
-						userService.getRoleCount(this.evnt.id, u).then((result) => {
+						roleService.getRoleCount(this.evnt.id, u).then((result) => {
 							//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
 							this.numberOfRoles.push(result);
 							this.firstNumberOfRoles.push(result);
@@ -501,7 +505,7 @@ export default class EventInfo extends React.Component {
 							usedEventRoles.push(result)
 							//sjekker om rollen har blitt tildelt user fra før
 						});
-						userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
+						roleService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
 							this.roleKomp= result;
 							//henter kompetansen for rollen i for-of loopen
 						});
@@ -511,7 +515,7 @@ export default class EventInfo extends React.Component {
 								this.userPassive = result;
 								//sjekker om interesserte bruker er passiv under dette arrangementet
 								})
-							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
+							roleService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
 								//henter interesserte brukers kompetanse for denne spesifike rollen, length av denne vil være ant. kurs i denne rollen
 								this.userWithRoles = result;
 
@@ -533,11 +537,11 @@ export default class EventInfo extends React.Component {
 											//legger til vaktpoeng
 										})
 										//oppdateter utdelte vakter listen
-										userService.getRolesWithNoUser(this.evnt.id).then((result) => {
+										roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
 										});
-										userService.getRolewithUserInfo(this.evntId).then((result) => {
+										roleService.getRolewithUserInfo(this.evntId).then((result) => {
 											this.fordeltVakter = result;
 											this.forceUpdate();
 										});
@@ -550,7 +554,7 @@ export default class EventInfo extends React.Component {
 							userService.isUserPassive(user.id, this.evnt.id).then((result) => {
 								this.userPassive = result;
 								})
-							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
+							roleService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
 								if(result.length != 0){
 									this.userWithRoles = result;
 								}
@@ -563,7 +567,7 @@ export default class EventInfo extends React.Component {
 
 									userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
 
-									
+
 										userService.userPassive(this.evnt.start, this.evnt.end, user.id).then((result) => {
 
 											this.forceUpdate();
@@ -571,11 +575,11 @@ export default class EventInfo extends React.Component {
 										userService.addPoints(user.id).then((result) =>{
 
 										})
-										userService.getRolesWithNoUser(this.evnt.id).then((result) => {
+										roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
 										});
-										userService.getRolewithUserInfo(this.evntId).then((result) => {
+										roleService.getRolewithUserInfo(this.evntId).then((result) => {
 											this.fordeltVakter = result;
 											this.forceUpdate();
 										});

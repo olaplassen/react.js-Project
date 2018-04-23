@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import BigCalendar from 'react-big-calendar';
 import moment from 'moment';
 import createHashHistory from 'history/createHashHistory';
@@ -36,7 +40,7 @@ export default class AdminHome extends React.Component {
     }
 
     componentDidMount() {
-        userService.getAllArrangement().then((result) => { //henter alle arrangement for BigCalendar
+        evntService.getAllEvnts().then((result) => { //henter alle arrangement for BigCalendar
             this.allEvents = result;
             this.forceUpdate();
         });
