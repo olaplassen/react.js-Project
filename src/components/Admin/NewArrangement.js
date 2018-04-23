@@ -149,15 +149,15 @@ export default class NewArrangement extends React.Component {
                              <div className="errormessage" ref="errorarrname"></div>
                            </tr>
 													  <tr>
-													   <td>Møte lokasjon</td>
+													   <td>Møteplass</td>
 														<td><RegistrationFeltArrangement validert={this.state.meetinglocationValid} verdi={this.state.meetinglocationVerdi} regexValidering={this.validermeetinglocationFelt} felttype="Skriv inn navn på møteplass" /></td>
-                          </tr>
-                          <div className="errormessage" ref="errormeetinglocation"></div>
+                            <div className="errormessage" ref="errormeetinglocation"></div>
+													</tr>
                           <tr>
 													  <td>Utstyrsliste</td>
                             <td><RegistrationFeltArrangement validert={this.state.gearlistValid} verdi={this.state.gearlistVerdi} regexValidering={this.validergearlistFelt} felttype="Skriv inn utstyrsliste" /></td>
-                            </tr>
-                          <div className="errormessage" ref="errorgearlist"></div>
+                            <div className="errormessage" ref="errorgearlist"></div>
+														</tr>
                           <tr>
 												   <td>Kontaktperson og tlf</td>
                             <td><RegistrationFeltArrangement validert={this.state.contactpersonValid} verdi={this.state.contactpersonVerdi} regexValidering={this.validercontactpersonFelt} felttype="Skriv inn ekstern kontaktperson" /></td>
@@ -294,40 +294,40 @@ export default class NewArrangement extends React.Component {
       this.refs.errorendtime.textContent="";
 
 // her valideres inputfeltene med if setninger. Er en state false får man en feilmelding
-      if(this.state.arrnameValid == false) {
+      if(this.state.arrnameValid == false) {// arrangementnavn
         this.refs.errorarrname.textContent="Arrangementnavn kan bare inneholde bokstaver og må fylles ut"
         return false;
       }
-      else if (this.state.contactpersonValid == false ){
-        this.refs.errorcontactperson.textContent="Møtelokasjon kan bare inneholde bokstaver og må fylles ut"
+      else if (this.state.meetinglocationValid == false ){//møteplass
+        this.refs.errormeetinglocation.textContent="Møtelokasjon kan bare inneholde bokstaver og må fylles ut"
         return false;
       }
-      else if (this.state.contactpersonValid == false) {
+      else if (this.state.contactpersonValid == false) {//kontaktperson og telefonnummer
         this.refs.errorcontactperson.textContent="Kontaktperson og mobilnummer kan bare inneholde tall og bokstaver og må fylles ut"
         return false;
       }
-      else if (this.state.gearlistValid == false){
+      else if (this.state.gearlistValid == false){//utstyrsliste
         this.refs.errorgearlist.textContent="Utstyrsliste kan bare inneholde tall og bokstaver og må fylles ut"
         return false;
       }
-      else if (this.state.showtimeVerdi == false){
+      else if (this.state.showtimeVerdi == false){//oppmøtetidspunkt
         this.refs.errorshowtime.textContent="Tid og dato for oppmøtetidspunkt må fylles ut"
         return false;
       }
-      else if (this.state.starttimeVerdi == false){
-        this.refs.errorstarttime.textContent="Tid og dato for oppmøtetidspunkt må fylles ut"
+      else if (this.state.starttimeVerdi == false){//startidspunkt
+        this.refs.errorstarttime.textContent="Tid og dato for starttidspunkt må fylles ut"
         return false;
       }
-      else if (this.state.endtimeVerdi == false){
-        this.refs.errorendtime.textContent="Tid og dato for oppmøtetidspunkt må fylles ut"
+      else if (this.state.endtimeVerdi == false){//sluttidspunkt
+        this.refs.errorendtime.textContent="Tid og dato for sluttidspunkt må fylles ut"
         return false;
       }
 
-    
+
 
 
       else {
-
+       // sender inn verdiene hvis inputs returnerer true
 
         evntService.addEvnt(this.state.arrnameVerdi, this.refs.arrDescription.value, this.state.meetinglocationVerdi,
             this.state.contactpersonVerdi, this.state.showtimeVerdi, this.state.starttimeVerdi,

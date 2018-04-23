@@ -38,7 +38,7 @@ getInteressed(arrangementId, userId) {
       return new Promise ((resolve, reject) => {
         connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
           if (error) throw error;
-          console.log(result)
+
           resolve(result)
         });
       });
@@ -57,7 +57,7 @@ getInteressedUsers(arrangementId){
       return new Promise ((resolve, reject) => {
          connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
           if(error) throw error;
-          console.log(result)
+
           resolve(result);
          })
        });

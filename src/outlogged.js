@@ -146,7 +146,7 @@ export class Registration extends React.Component {
       lastnameVerdi: '',
       addressValid: false,
       addressVerdi: '',
-      phonenuberValid: false,
+      phonenumberValid: false,
 			phonenumberVerdi: '',
       emailaddressValid: false,
       emailaddressVerdi:'',
@@ -225,7 +225,8 @@ export class Registration extends React.Component {
               <tr>
                 <td>Bekreft passord</td>
                 <td><RegistrationFeltPassword validert={this.state.passwordconfirmValid}  verdi={this.state.passwordconfirmVerdi} regexValidering={this.validerpasswordconfirmFelt} felttype="Bekrefte passord" /></td>
-                <td ></td>
+                 <td className="errormessage" ref="errorpasswordconfirm"></td>
+								<td ></td>
               </tr>
             </tbody>
           </table>
@@ -308,7 +309,8 @@ export class Registration extends React.Component {
 		 this.refs.errorpasswordconfirm.textContent="";
 // validering av inputs
 			if(this.state.firstnameValid == false){//fornavn
-this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og må fylles ut"
+
+			 this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og må fylles ut"
 
 			}
 		else	if(this.state.lastnameValid == false){//etternavn
