@@ -269,15 +269,22 @@ changeEvent(title, meetingLocation, description, contactPerson, gearList, show, 
    });
 }
 getAllArrangement() {
-       return new Promise ((resolve, reject) => {
-        connection.query('SELECT * FROM Arrangement', (error, result) => {
-          if (error) throw error;
-
-
-            resolve(result)
-        });
-      });
-    }
+   return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM Arrangement', (error, result) => {
+      if (error) throw error;
+        resolve(result)
+    });
+  });
+}
+getComingEvnts() {
+  let today = new Date()
+  return new Promise ((resolve, reject) => {
+   connection.query('SELECT * FROM Arrangement WHERE Arrangement.start > ?',[today], (error, result) => {
+     if (error) throw error;
+       resolve(result)
+   });
+ });
+}
 
 //Skill funksjoner -------------------------------------------------------------------------------------------
 
@@ -529,13 +536,13 @@ getInteressedUsers(arrangementId){
        });
      }
 checkIfInteressed(userId, arrangementId) {
-         return new Promise ((resolve, reject) => {
-         connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
-           if(error) throw error;
-           resolve(result);
-         })
-       });
-     }
+   return new Promise ((resolve, reject) => {
+   connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
+     if(error) throw error;
+     resolve(result);
+   })
+ });
+}
 
 //EventRole funksjoner -------------------------------------------------------------------------------------------------------
 addShiftChange(original_userid, toChange_userid, arr_rolleid) {

@@ -13,7 +13,7 @@ export default class UserMenu extends React.Component {
       return (
           <div className="menu">
             <ul className="ul">
-              <li className="li"><Link to={'/userhome/' + this.userid} className="link">Hjem</Link></li> // topp meny med forskjellige linker
+              <li className="li"><Link to={'/userhome/' + this.userid} className="link">Hjem</Link></li>
               <li className="li"><Link to={'/mypage/' + this.userid} className="link">Min side</Link></li>
               <li className="li"><Link to={'/usersearch'} className="link">Bruker søk</Link></li>
               <li className="li"><Link to={'/arrangementer'} className="link">Arrangement Oversikt</Link></li>

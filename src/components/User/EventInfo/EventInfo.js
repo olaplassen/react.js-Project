@@ -52,6 +52,7 @@ export default class EventInfo extends React.Component {
 				 roleListUser.push(
 					<tr key={role.arr_rolleid}>
 						<td className="td">{role.title}</td>
+						<td className="td">Tildelt</td>
 						<td className="td">Ikke godjent</td>
 					</tr>
 					)
@@ -76,7 +77,7 @@ export default class EventInfo extends React.Component {
 					roleListUser.push(
  					<tr key={role.arr_rolleid}>
  						<td className="td">{role.title}</td>
- 						<td className="td">{role.firstName}{role.lastName}</td>
+ 						<td className="td">{role.firstName} {role.lastName}</td>
 						<td className="td">Godkjent</td>
  					</tr>
  					)
@@ -165,7 +166,7 @@ export default class EventInfo extends React.Component {
 
 				if (this.userIsInterested.length != 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
-					<button classname="interesseknapp" onClick={() => {
+					<button className="interesseknapp" onClick={() => {
 						userService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
 							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
@@ -242,10 +243,13 @@ export default class EventInfo extends React.Component {
 						<h4>Roller som kreves for dette arrangementet:</h4>
 						<table className="table">
 							<tbody>
+							<tr><th className="th">Rolle</th><th className="th">Tildelt</th><th className="th">Status</th></tr>
 								{roleListUser}
 							</tbody>
 						</table>
 					</div>
+					<br />
+					<hr />
 				</div>
 			)
 		}
@@ -337,11 +341,7 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
-		this.setState({
-				activeUser: userService.getSignedInUser()["id"],
-        interessedUser: userService.checkIfInteressed()
 
-		});
 		//henter Arrangement info
 		userService.getEventInfo(this.evntId).then((result) => {
 			this.evnt = result;

@@ -27,16 +27,14 @@ export class Login extends React.Component {
       <div className="menu">
       <h1 className="h1">Velkommen</h1>
       <img className="img" src={'src/img/rkors.jpg'} />
-      <form>
-        <label htmlFor="username">Username </label>
-        <input className="input" ref="username" placeholder="Type your username"></input><br/>
-        <label htmlFor="password">Password </label>
-        <input className="input" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
+      <div className="login">
+        <input className="loginInput" ref="username" placeholder="Type your username"></input><br/>
+        <input className="loginInput" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
         <button className="button" ref="loginBtn">Login</button> <br/>
         <Link to='/newPassword'>Forgot password</Link> <br/>
-        </form>
         <div ref="error">
         </div>
+      </div>
       </div>
     );
   }

@@ -86,6 +86,20 @@ body {background-color: #f2f2f2;}
     box-sizing: border-box;
 }
 
+.loginInput::-webkit-input-placeholder {
+  text-align: center;
+}
+
+.loginInput {
+  width: 440px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
 .loggin {
   margin: auto;
   width: 500px;
@@ -179,7 +193,7 @@ body {background-color: #f2f2f2;}
 }
 .img {
   border-radius: 8px;
-  width: 150px;;
+  width: 170px;;
   display: block;
   margin-left: auto;
   margin-right: auto
@@ -329,4 +343,10 @@ body {background-color: #f2f2f2;}
   height: 100px;
   float: left;
 
+}
+
+.login {
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
 }
