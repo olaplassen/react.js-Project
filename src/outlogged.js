@@ -32,6 +32,7 @@ export class Login extends React.Component {
         <input className="loginInput" ref="username" placeholder="Type your username"></input><br/>
         <input className="loginInput" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
         <button className="button" ref="loginBtn">Login</button> <br/>
+        <div ref="error"></div>
         <Link to='/newPassword'>Forgot password</Link> <br/>
         <div ref="error">
         </div>
@@ -71,10 +72,14 @@ export class Login extends React.Component {
 					}
 				}
 				else {
+          if (result.godkjent != 1) {
+            this.refs.error.textContent= "Din bruker er deaktivert, eller venter på godkjenning";
 
-					alert("Feil passord/brukernavn, eller så er din bruker ikke godkjent")
-				}
-
+          }
+          else {
+            this.refs.error.textContent = "Feil brukernavn eller passord"
+          }
+        }
 			})
 
 		}
