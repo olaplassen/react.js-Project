@@ -31,11 +31,11 @@ export class Login extends React.Component {
       <div className="login">
         <input className="loginInput" ref="username" placeholder="Type your username"></input><br/>
         <input className="loginInput" type="password" ref="password" placeholder="Type your password"></input><br/><br/>
-        <button className="button" ref="loginBtn">Login</button> <br/>
         <div ref="error"></div>
+        <button className="button" ref="loginBtn">Login</button> <br/>
+
         <Link to='/newPassword'>Forgot password</Link> <br/>
-        <div ref="error">
-        </div>
+
       </div>
       </div>
     );
@@ -45,11 +45,15 @@ export class Login extends React.Component {
 		//
 		this.refs.loginBtn.onclick = () => {
 			userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
+        let variabel = localStorage.getItem('passwordResult'); // Get User-object from browser
+        if(!variabel ) return null;
+        let correctPassword = JSON.parse(variabel)
 
-
-				if (result != undefined && result.confirmed == true) {
+        console.log(correctPassword)
+        if (result != undefined && result.confirmed == true && correctPassword == true) {
 					// når resultatet fra LoginUser er undefined avsluttes funkjsonen
 					//slik at loginAdmin kjøres
+
 					if (result.admin == true) {
 						let admin = {
 							adminId: result.id
@@ -72,12 +76,13 @@ export class Login extends React.Component {
 					}
 				}
 				else {
-          if (result.godkjent != 1) {
+          if (result.godkjent != 1 && correctPassword == true) {
             this.refs.error.textContent= "Din bruker er deaktivert, eller venter på godkjenning";
-
+            localStorage.clear();
           }
           else {
-            this.refs.error.textContent = "Feil brukernavn eller passord"
+            this.refs.error.textContent = "Feil brukernavn eller passord";
+            localStorage.clear();
           }
         }
 			})
