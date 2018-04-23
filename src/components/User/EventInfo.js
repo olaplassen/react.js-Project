@@ -419,7 +419,7 @@ export default class EventInfo extends React.Component {
 
 				}
 				}
-
+				//ingen roller ble endret på
 			if (this.difference == [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) {
 				this.refs.error.textContent = "ingen endring i roller";
 
@@ -429,28 +429,30 @@ export default class EventInfo extends React.Component {
 			else {
 					for (var u = 1; u < this.allRoles.length + 1; u++) {
 
-						if (this.difference[u - 1] > 0) {
+						if (this.difference[u - 1] > 0) {//sjekker om differanse sin verdi for denne vakten er større enn 0
 							for (var y = 0; y < this.difference[u - 1]; y++) {
-								roleService.addRolesforArrSingle(this.evnt.id, u).then((result) => {
-									this.difference = []
-									roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
+								roleService.addRolesforArrSingle(this.evnt.id, u).then((result) => { //legger til roller til arrangementet basert på hvor stor differansen er
+									this.difference = []//nulstiller differansen
+									roleService.getRolesWithNoUser(this.evnt.id).then((result) => { //henter roller uten bruker listen på nytt
 										this.roleNoUser = result;
 										this.forceUpdate();
 									});
-									roleService.getRolewithUserInfo(this.evntId).then((result) => {
+									roleService.getRolewithUserInfo(this.evntId).then((result) => { //henter roller som har blitt fordelt
 										this.fordeltVakter = result;
 										this.forceUpdate();
 									});
-									roleService.getRolesForArr(this.evnt.id).then((result) => {
+									roleService.getRolesForArr(this.evnt.id).then((result) => { // henter alle valgte roller for arrangementet
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
 								})
 							}
 						}
-						else if(this.difference[u-1] < 0) {
+						else if(this.difference[u-1] < 0) { // differansen er minus og det skal fjernes kurs
 							for (var y = 0; y < -(this.difference[u -1]); y++) {
 								roleService.deleteRolesfromArr(this.evnt.id, u).then((result) => {
+									// sletter ant kurs som er valgt, de som ble lagt til sist blit først slettet for å
+									//for å unngå at fordelte roller blir slettet
 									this.difference = []
 									roleService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
@@ -527,8 +529,14 @@ export default class EventInfo extends React.Component {
 									usedUser.push(interestedUser.userId) //legger til bruker slik at den ikke kan bli valgt igjen
 									usedEventRoles.push(eventRolle.arr_rolleid);
 
-									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => { //legger til bruker id for denne rollen
-
+									roleService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => { //legger til bruker id for denne rollen
+										console.log("interesert")
+										console.log(interestedUser)
+										let email = interestedUser.email;
+										let subject = "Røde Kors ny vakt"
+							      let textmail = "Du har blitt kalt for vakt til " + this.evnt.title + " den " + this.evnt.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      mailService.sendMail(email, subject, textmail);
 										userService.userPassive(this.evnt.start, this.evnt.end, interestedUser.userId).then((result) => {
 											//legger til passiv periode for brukeren i arrangement perioden, så bruker ikke kan blir valgt til flere arrangementer som foregår likt
 											this.forceUpdate();
@@ -549,7 +557,7 @@ export default class EventInfo extends React.Component {
 								}
 							})
 						}
-						//når alle kompatible interesserte brukere er valgt, kjøres det gjennom brukere
+						//når alle kompatible interesserte brukere er valgt, kjøres det gjennom brukere, sammme prinsipp som i forrige for of loop
 						for(let user of this.allUsers) {
 							userService.isUserPassive(user.id, this.evnt.id).then((result) => {
 								this.userPassive = result;
@@ -565,9 +573,13 @@ export default class EventInfo extends React.Component {
 									usedUser.push(user.id)
 									usedEventRoles.push(eventRolle.arr_rolleid)
 
-									userService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
-
-
+									roleService.addUserForRole(user.id, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+										console.log("user")
+										let email = interestedUser.email;
+										let subject = "Røde Kors ny vakt"
+							      let textmail = "Du har blitt kalt for vakt til " + this.evnt.title + " den " + this.evnt.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
+							      mailService.sendMail(email, subject, textmail);
 										userService.userPassive(this.evnt.start, this.evnt.end, user.id).then((result) => {
 
 											this.forceUpdate();

@@ -58,6 +58,10 @@ export function outlogged(){
     checkLogInAdmin(admin)
   }
   else {
+
+    //Vi hadde problemer med å få kalenderen til å fungere når vi satte user&admin home osm start side i deres ReactDOM
+    //pga av Parent Component User&Admin menu klarte ikke den å selecteevent når vi history pusha med props
+    //valgte derfor å ta bort start side foreløpig for å få et fullt fungerende program
 ReactDOM.render((
 
   <HashRouter>
@@ -94,6 +98,7 @@ ReactDOM.render((
       <Route exact path='/arrangementer' component={Arrangement} />
       <Route exact path='/eventinfo/:id' component={EventInfo} />
       <Route exact path='/changeshift/:arr_rolleid' component={ChangeShift} />
+
       </Switch>
     </div>
   </HashRouter>
