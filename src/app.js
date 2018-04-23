@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import { userService } from './services';
+import { skillService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
@@ -32,7 +33,7 @@ import UserStatistics from './components/Admin/UserStatistic';
 import ChangeEvent from './components/Admin/ChangeEvent';
 
 function checkSkillValid() { // sjekker om kursene sin utløpsdato er før dagens dato, deretter sletter de
-  userService.checkSkillValid();
+  skillService.checkSkillValid();
 }
 
 

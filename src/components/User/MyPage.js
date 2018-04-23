@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { userService } from '../../services';
 import { evntService} from '../../services';
+import { skillService} from '../../services';
+import { interestService } from '../../services';
 import { Link } from 'react-router-dom';
 
 import VirtualizedSelect from 'react-virtualized-select'
@@ -35,7 +37,7 @@ export default class MyPage extends React.Component {
         this.dateInputList = []; //liste for å legge til utløpsdato
         for (let skill of selectValue) {
             //henter informasjon om valgte kurs
-            userService.getSkillInfo(skill.value).then((result) => {
+            skillService.getSkillInfo(skill.value).then((result) => {
                 //valgt kurs har ingen utløpsdato
                 if (result.duration === 0) {
                     this.inputList.push(<tr key={skill.value}><td>{skill.label}</td><td>Dette kurset har ingen utløpsdato</td></tr>);
@@ -86,8 +88,8 @@ export default class MyPage extends React.Component {
                         <td className="table">
                             <button onClick={() => {
                               //sletter valgt kurs og oppdaterer brukers kurs liste
-                                userService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
-                                    userService.getYourSkills(this.user.id).then((result) => {
+                                skillService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
+                                    skillService.getYourSkills(this.user.id).then((result) => {
                                         this.yourSkills = result;
                                         this.forceUpdate();
                                     });
@@ -104,8 +106,8 @@ export default class MyPage extends React.Component {
                         <td className="table">Ingen utløpsdato</td>
                         <td className="table">
                             <button onClick={() => {
-                                userService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
-                                    userService.getYourSkills(this.user.id).then((result) => {
+                                skillService.deleteSkill(this.user.id, yourskill.skillid).then((result) => {
+                                    skillService.getYourSkills(this.user.id).then((result) => {
                                         this.yourSkills = result;
                                         this.forceUpdate();
                                     });
@@ -386,13 +388,13 @@ export default class MyPage extends React.Component {
         this.dateInputList = [];
         //for løkke for å hente informasjon om alle kurs bruker har valgt å legge til
         for (let skill of selectValue) {
-            userService.getAllSkills(skill.value).then((result) => {
+            skillService.getAllSkills(skill.value).then((result) => {
                 this.testSkill = result;
                 //legger til kurs med utløpsdato når utløpsdato er definert og valgt kurs har utløpsdato
                 if (this.dateRef.value != undefined && this.testSkill.duration != 0) {
-                    userService.addSkillswithDate(skill.value, this.user.id, this.dateRef.value).then((result) => {
+                    skillService.addSkillswithDate(skill.value, this.user.id, this.dateRef.value).then((result) => {
                         //oppdaterer brukers kurs liste
-                      userService.getYourSkills(this.user.id).then((result) => {
+                      skillService.getYourSkills(this.user.id).then((result) => {
                           //setter VirtualizedSelect sin verdi til null
                           this.setState({ selectValue: null })
                           this.yourSkills = result;
@@ -402,8 +404,8 @@ export default class MyPage extends React.Component {
                   }
                 //legger til kurs uten utløpsdato
                 else {
-                    userService.addSkills(skill.value, this.user.id).then((result) => {
-                        userService.getYourSkills(this.user.id).then((result) => {
+                    skillService.addSkills(skill.value, this.user.id).then((result) => {
+                        skillService.getYourSkills(this.user.id).then((result) => {
                             this.setState({ selectValue: null })
                             this.yourSkills = result;
                             this.forceUpdate();
@@ -443,9 +445,9 @@ export default class MyPage extends React.Component {
             })
         });
         //henter alle kurs og alle registrerte kurs fra databasen
-        userService.getAllSkills().then((result) => {
+        skillService.getAllSkills().then((result) => {
             this.allSkills = result;
-            userService.getYourSkills(this.user.id).then((result) => {
+            skillService.getYourSkills(this.user.id).then((result) => {
               this.yourSkills = result;
               this.forceUpdate();
             });
