@@ -5,14 +5,14 @@ import { userService } from './services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
-//henter classene fra outlogged.js
+//henter classene for utlogget funksjonalitet
 import { StartMenu } from './outlogged'
 import { Login } from './outlogged';
 import { Registration } from './outlogged';
 import { NewPassword } from './outlogged';
 import { NewPasswordSendt } from './outlogged';
 
-//henter classene fra users.js
+//henter classene for bruker funksjonalitet
 import UserMenu from './components/User/UserMenu/UserMenu';
 import UserHome from './components/User/UserHome/UserHome';
 import MyPage from './components/User/MyPage/MyPage';
@@ -21,19 +21,25 @@ import SearchUser from './components/User/SearchUser/SearchUser';
 import EventInfo from './components/User/EventInfo/EventInfo';
 import ChangeShift from './components/User/ChangeShift/changeshift';
 
-//henter classene fra admin.js
+//henter classene for admin funksjonalitet
 import AdminMenu from './components/Admin/AdminMenu/AdminMenu';
 import ConfirmUsers from './components/Admin/ConfirmUsers/ConfirmUsers';
 import AdminHome from './components/Admin/AdminHome/AdminHome';
 import NewArrangement from './components/Admin/NewArrangement/NewArrangement';
 import Arrangement from './components/Admin/Arrangement/Arrangement';
-import ConfirmInteressedUsers from './components/Admin/ConfirmInteressedUsers/ConfirmInteressedUsers';
 import Statistics from './components/Admin/Statistics/Statistic';
 import UserStatistics from './components/Admin/Statistics/UserStatistic';
+import ChangeEvent from './components/Admin/ChangeEvent/ChangeEvent';
+
+function checkSkillValid() { // sjekker om kursene sin utløpsdato er før dagens dato, deretter sletter de
+  userService.checkSkillValid();
+}
 
 
+//funksjon som kjøres når programmet startes/refreshes for å sjekke om det er lagret en bruker i localStorage (kjøres nederst i app)
 export function outlogged(){
   let signedInUser = userService.getSignedInUser();
+  //når bruker ikke er admin, kjøres user ReactDOM
   if (signedInUser != undefined && signedInUser.admin == false) {
     let user = {
       userId: signedInUser.id
@@ -68,7 +74,7 @@ ReactDOM.render((
 ), document.getElementById('root'));
 }
 }
-//ny ReactDOM som kjøres når user logger inn.
+//ReactDOM når signedInUser er user
  export function checkLogInUser(user) {
   ReactDOM.render((
   <HashRouter>
@@ -88,29 +94,31 @@ ReactDOM.render((
   </HashRouter>
 ), document.getElementById('root'))
 };
-//ny ReactDOM som kjøres når user admin inn.
+//ReactDOM når signedInUser er admin
 export function checkLogInAdmin(admin) {
   ReactDOM.render((
   <HashRouter>
     <div>
       <AdminMenu />
       <Switch>
-
-          <Route exact path='/hjem' component={AdminHome} />
+        <Route exact path='/hjem' component={AdminHome} />
          <Route exact path='/confirmusers' component={ConfirmUsers} />
          <Route exact path='/newarrangement' component={NewArrangement} />
          <Route exact path='/arrangementer' component={Arrangement} />
-         <Route exact path='/interesserte' component={ConfirmInteressedUsers} />
          <Route exact path='/adminsearch' component={SearchUser} />
          <Route exact path='/mypage/:userId' component={MyPage} />
          <Route exact path='/changeUser/:userId' component={ChangeUser} />
          <Route exact path='/eventinfo/:id' component={EventInfo} />
          <Route exact path='/statistics' component={Statistics} />
          <Route exact path='/userStatistic/:userid' component={UserStatistics} />
+         <Route exact path='/changevent/:eventId' component={ChangeEvent} />
+
 
       </Switch>
     </div>
   </HashRouter>
 ), document.getElementById('root'))
 };
+
+checkSkillValid()
 outlogged();

@@ -10,13 +10,13 @@ export default class Statistics extends React.Component {
 
     constructor(props) {
         super(props);
-        this.userShiftInfo = [];
-        this.state = { value: '' };
+        this.userShiftInfo = []; //Vakt statistikk
+        this.state = { value: '' }; //søk verdi
         this.handleChange = this.handleChange.bind(this);
     }
     render() {
       let statisticList = [];
-      
+
       for(let userInfo of this.userShiftInfo){
         statisticList.push(
           <tr key={userInfo.id}>
@@ -34,7 +34,12 @@ export default class Statistics extends React.Component {
                 <input type="text" className="input" placeholder="Søk etter navn her" value={this.state.value} onChange={this.handleChange} />
                 <table className="table100">
                     <tbody>
-                        <tr><th className="th">Medlemsnummer</th><th className="th">Navn</th><th className="th">Vaktpoeng</th><th className="th">Antall Vakter siste 2 mnd</th></tr>
+                        <tr>
+                          <th className="th">Medlemsnummer</th>
+                          <th className="th">Navn</th>
+                          <th className="th">Vaktpoeng</th>
+                          <th className="th">Antall Vakter siste 2 mnd</th>
+                        </tr>
                         {statisticList}
                     </tbody>
                 </table>
@@ -44,19 +49,16 @@ export default class Statistics extends React.Component {
     }
 
     componentDidMount() {
-      userService.shiftInfo2mnd().then((result) => {
+      userService.shiftInfo2mnd().then((result) => { //henter informasjon om alle brukere sin vakt statistikk de siste 2 mnd
         this.userShiftInfo = result;
-        console.log(result)
         this.forceUpdate();
       })
     }
-    handleChange(event) {
+    handleChange(event) { //søkefunksjon
         if (event.target.value != undefined) {
-
-            this.setState({ value: event.target.value.toUpperCase() });
-
-            userService.shiftInfo2mndSearch(event.target.value).then((result) => {
-                  this.userShiftInfo = result;
+            this.setState({ value: event.target.value.toUpperCase() });//setter state til input value
+            userService.shiftInfo2mndSearch(event.target.value).then((result) => { //henter vakt statistikk for brukere som matcher søke verdi
+                this.userShiftInfo = result;
                 this.forceUpdate();
             });
         }

@@ -9,18 +9,17 @@ const history: HashHistory = createHashHistory();
 export default class EventInfo extends React.Component {
 	constructor(props) {
 		super(props);
-		this.arrangement = {};
-    this.allSelectedRoles = [];
-    this.allRoles = [];
-    this.id = props.match.params.id;
-    this.numberOfRoles = [];
+		this.evnt = {}; // dette arrangementet
+    this.allSelectedRoles = []; // alle valgte roller for dette arrangementet
+    this.allRoles = []; // alle roller
+    this.evntId = props.match.params.id; // Arrangement id
+    this.numberOfRoles = []; // ant roller av en rolle
     this.firstNumberOfRoles = [];
     this.secondNumberOfRoles = [];
     this.difference = [];
     this.allUsers = [];
     this.roleKomp = [];
     this.userWithRoles = [];
-    this.usedUser = [];
 		this.roleNoUser = [];
 		this.fordeltVakter = [];
 		this.interestedUsers = [];
@@ -53,6 +52,7 @@ export default class EventInfo extends React.Component {
 				 roleListUser.push(
 					<tr key={role.arr_rolleid}>
 						<td className="td">{role.title}</td>
+						<td className="td">Tildelt</td>
 						<td className="td">Ikke godjent</td>
 					</tr>
 					)
@@ -64,7 +64,7 @@ export default class EventInfo extends React.Component {
  						<td className="td">{role.tildelt_tid.toLocaleString()}</td>
 						<td className="td"><button onClick={() => {
 							userService.godkjennVakt(role.arr_rolleid).then((result) => {
-								userService.getRolewithUserInfo(this.arrangement.id).then((result) => {
+								userService.getRolewithUserInfo(this.evnt.id).then((result) => {
 									this.fordeltVakter = result;
 									this.forceUpdate();
 								});
@@ -77,7 +77,7 @@ export default class EventInfo extends React.Component {
 					roleListUser.push(
  					<tr key={role.arr_rolleid}>
  						<td className="td">{role.title}</td>
- 						<td className="td">{role.firstName}{role.lastName}</td>
+ 						<td className="td">{role.firstName} {role.lastName}</td>
 						<td className="td">Godkjent</td>
  					</tr>
  					)
@@ -166,9 +166,9 @@ export default class EventInfo extends React.Component {
 
 				if (this.userIsInterested.length != 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
-					<button classname="interesseknapp" onClick={() => {
-						userService.removeInterested(signedInUser.id, this.arrangement.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+					<button className="interesseknapp" onClick={() => {
+						userService.removeInterested(signedInUser.id, this.evnt.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -183,8 +183,8 @@ export default class EventInfo extends React.Component {
 				else if(this.userIsInterested.length == 0) {
 					isInterestedList.push(<div key={signedInUser.id}>
 					<button className="interesseknapp" onClick={() => {
-						userService.getInteressed(this.arrangement.id, signedInUser.id).then((result) => {
-							userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+						userService.getInteressed(this.evnt.id, signedInUser.id).then((result) => {
+							userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 								this.userIsInterested = result;
 								this.forceUpdate();
 							});
@@ -196,6 +196,7 @@ export default class EventInfo extends React.Component {
 					</div>
 				)
 				}
+
 		if (signedInUser.admin == 0) {
 
 			return (
@@ -203,32 +204,34 @@ export default class EventInfo extends React.Component {
 
 					<div className="row">
 						<div className="beskrivelsetabell">
-							<h1>{this.arrangement.title} informasjon side.</h1>
+							<h1>{this.evnt.title} informasjon side.</h1>
 							<table>
-								<tr>
-									<td>Arrangemetet starter</td>
-									<td>{this.start}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte sted</td>
-									<td>{this.arrangement.meetingLocation}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte tidspunktn</td>
-									<td>{this.show}</td>
-								</tr>
-								<tr>
-									<td>Planlagt slutt</td>
-									<td>{this.end}</td>
-								</tr>
-								<tr>
-									<td>Kontaktperson</td>
-									<td>{this.arrangement.contactPerson}</td>
-								</tr>
-								<tr>
-									<td className="beskrivelse">Beskrivelse</td>
-									<td className="beskrivelsetekst">{this.arrangement.description}</td>
-								</tr>
+									<tbody>
+									<tr>
+										<td>Arrangemetet starter</td>
+										<td>{this.start}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte sted</td>
+										<td>{this.evnt.meetingLocation}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte tidspunktn</td>
+										<td>{this.show}</td>
+									</tr>
+									<tr>
+										<td>Planlagt slutt</td>
+										<td>{this.end}</td>
+									</tr>
+									<tr>
+										<td>Kontaktperson</td>
+										<td>{this.evnt.contactPerson}</td>
+									</tr>
+									<tr>
+										<td className="beskrivelse">Beskrivelse</td>
+										<td className="beskrivelsetekst">{this.evnt.description}</td>
+									</tr>
+								</tbody>
 							</table>
 						</div>
 						<div  className="interesse">
@@ -241,6 +244,11 @@ export default class EventInfo extends React.Component {
 						<h4>Roller som kreves for dette arrangementet:</h4>
 						<table className="table">
 							<tbody>
+								<tr>
+									<th className="th">Rolle</th>
+									<th className="th">Tildelt</th>
+									<th className="th">Status</th>
+								</tr>
 								{roleListUser}
 							</tbody>
 						</table>
@@ -253,40 +261,45 @@ export default class EventInfo extends React.Component {
 				<div className="blokk">
 					<div className="row">
 						<div className="beskrivelsetabell">
-							<h1>{this.arrangement.title} informasjon side.</h1>
+							<h1>{this.evnt.title} informasjon side.</h1>
 							<table>
-								<tr>
-									<td>Arrangemetet starter</td>
-									<td>{this.start}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte sted</td>
-									<td>{this.arrangement.meetingLocation}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte tidspunktn</td>
-									<td>{this.show}</td>
-								</tr>
-								<tr>
-									<td>Planlagt slutt</td>
-									<td>{this.end}</td>
-								</tr>
-								<tr>
-									<td>Kontaktperson</td>
-									<td>{this.arrangement.contactPerson}</td>
-								</tr>
-								<tr>
-									<td className="beskrivelse">Beskrivelse</td>
-									<td className="beskrivelsetekst">{this.arrangement.description}</td>
-								</tr>
+								<tbody>
+									<tr>
+										<td>Arrangemetet starter</td>
+										<td>{this.start}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte sted</td>
+										<td>{this.evnt.meetingLocation}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte tidspunktn</td>
+										<td>{this.show}</td>
+									</tr>
+									<tr>
+										<td>Planlagt slutt</td>
+										<td>{this.end}</td>
+									</tr>
+									<tr>
+										<td>Kontaktperson</td>
+										<td>{this.evnt.contactPerson}</td>
+									</tr>
+									<tr>
+										<td className="beskrivelse">Beskrivelse</td>
+										<td className="beskrivelsetekst">{this.evnt.description}</td>
+									</tr>
+								</tbody>
 							</table>
+							<button ref="endreInfo" className="button3" onClick={() => {this.props.history.push('/changevent/' + this.evnt.id)}}>Endre Informasjon</button>
 						</div>
 					<br />
 
 						<div className="column2">
 							<h4>Interesserte brukere</h4>
 							<table>
-									{interestedUserList}
+								<tbody>
+										{interestedUserList}
+								</tbody>
 							</table>
 						</div>
 					</div>
@@ -294,7 +307,8 @@ export default class EventInfo extends React.Component {
 
 					<div className="row">
 						<div className="roller">
-							<h4>Roller som kreves for dette arrangementet</h4>
+							<h4>Roller som er lagt til for dette arrangementet</h4>
+							<div ref="error"></div>
 								<table className="tabellroller" id="myTable">
 									<tbody>
 										<tr>
@@ -307,11 +321,11 @@ export default class EventInfo extends React.Component {
 										{roleListAdmin}
 									</tbody>
 								</table>
-							<button ref="endreRoller" className="button">Endre Roller</button>
+							<button ref="endreRoller" className="button3">Endre Roller</button>
 						</div>
 
 						<div className="tildelvakter">
-							<h4> Vakter som er utdelt</h4>
+							<h4>Utdelte vakter</h4>
             	<table className="tabellvakter">
 								<tbody>
 									<tr>
@@ -323,7 +337,7 @@ export default class EventInfo extends React.Component {
 	           			{roleUserList}
 								</tbody>
 							</table>
-							<button ref="tildelRoller" className="button">Generer vaktlister</button>
+							<button ref="tildelRoller" className="button3">Generer vaktlister</button>
 						</div>
 					</div>
 				</div>
@@ -334,181 +348,211 @@ export default class EventInfo extends React.Component {
 	componentDidMount() {
 
 		let signedInUser = userService.getSignedInUser();
-		this.setState({
-				activeUser: userService.getSignedInUser()["id"],
-        interessedUser: userService.checkIfInteressed()
 
-		});
-
-		userService.getArrangementInfo(this.id).then((result) => {
-			this.arrangement = result;
-			this.start = this.arrangement.start.toLocaleString().slice(0, -3);
-			this.end = this.arrangement.end.toLocaleString().slice(0, -3);
-			this.show = this.arrangement.showTime.toLocaleString().slice(0, -3);
-			userService.getRolesForArr(this.arrangement.id).then((result) => {
+		//henter Arrangement info
+		userService.getEventInfo(this.evntId).then((result) => {
+			this.evnt = result;
+			//gjør om datoer med tid til leservennlige strings
+			this.start = this.evnt.start.toLocaleString().slice(0, -3);
+			this.end = this.evnt.end.toLocaleString().slice(0, -3);
+			this.show = this.evnt.showTime.toLocaleString().slice(0, -3);
+			//henter alle roller valgt for dette arrangementet
+			userService.getRolesForArr(this.evnt.id).then((result) => {
 				this.allSelectedRoles = result;
 				this.forceUpdate();
 				});
-				userService.checkIfInteressed(signedInUser.id, this.arrangement.id).then((result) => {
+				//sjekker om innlogget bruker er interessert i dette arrangementet
+				userService.checkIfInteressed(signedInUser.id, this.evnt.id).then((result) => {
 					this.userIsInterested = result;
 					this.forceUpdate();
 				});
 			});
-			userService.getRolewithUserInfo(this.id).then((result) => {
+			//henter alle roller for dette arrangementet som er fordelt til brukere
+			userService.getRolewithUserInfo(this.evntId).then((result) => {
 				this.fordeltVakter = result;
 				this.forceUpdate();
 			});
-			userService.getRolesWithNoUser(this.id).then((result) => {
+			//henter alle rollene for dette arrangementet som ikke har blitt fordelt til bruker
+			userService.getRolesWithNoUser(this.evntId).then((result) => {
 				this.roleNoUser = result;
 				this.forceUpdate();
 
 			});
 
-			userService.getRolesForArr(this.arrangement.id).then((result) => {
-				this.allSelectedRoles = result;
-});
 		if(signedInUser.admin == 1) {
-			userService.getInteressedUsers(this.id).then((result) => {
+			//henter alle interesserte for dette arrangementet
+			userService.getInteressedUsers(this.evntId).then((result) => {
 				this.interestedUsers = result;
+				console.log(this.interestedUsers)
 				this.forceUpdate();
 			});
-
-
-
-
-
+			//henter alle roller i databasen i stigende id rekkefølge
 			userService.getAllRoles().then((result) => {
 				this.allRoles = result;
+				this.forceUpdate();
 					for (var i = 1; i < this.allRoles.length +1; i++) {
-					userService.getRoleCount(this.arrangement.id, i).then((result) => {
+					//henter ant roller valgt per rolle før endring. 'i' er her id til rollen
+					userService.getRoleCount(this.evnt.id, i).then((result) => {
+						//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
+						console.log(result)
 						this.numberOfRoles.push(result);
 						this.firstNumberOfRoles.push(result);
 						this.secondNumberOfRoles = this.numberOfRoles;
+
+
 						this.forceUpdate()
 					})
 				}
 			});
-		this.refs.endreRoller.onclick = () => {
-
-
-
+			this.refs.endreRoller.onclick = () => {
+			//sjekker om ant roller pr rolle har endret seg og pusher differansen inn i en array
 			for (var i = 0; i < this.allRoles.length; i++) {
 				if (this.secondNumberOfRoles[i] != this.firstNumberOfRoles[i]) {
 					this.difference.push(this.secondNumberOfRoles[i] - this.firstNumberOfRoles[i]);
 
 				}
+				//ingen differanse
 				else if(this.secondNumberOfRoles[i] == this.firstNumberOfRoles[i]) {
 					this.difference.push(0);
+
 				}
-			}
-			if (this.difference == this.firstNumberOfRoles) {
-				this.props.history.push('/eventinfo/' + this.arrangement.id);
+				}
+
+			if (this.difference == [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]) {
+				this.refs.error.textContent = "ingen endring i roller";
+
 
 			}
+
 			else {
-					for (var i = 1; i < this.allRoles.length; i++) {
-						if (this.difference[i -1] > 0) {
-							for (var y = 0; y < this.difference[i -1]; y++) {
-								userService.addRolesforArrSingle(this.arrangement.id, i).then((result) => {
-									userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+					for (var u = 1; u < this.allRoles.length + 1; u++) {
+
+						if (this.difference[u - 1] > 0) {
+							for (var y = 0; y < this.difference[u - 1]; y++) {
+								userService.addRolesforArrSingle(this.evnt.id, u).then((result) => {
+									this.difference = []
+									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
 									});
-									userService.getRolewithUserInfo(this.id).then((result) => {
+									userService.getRolewithUserInfo(this.evntId).then((result) => {
 										this.fordeltVakter = result;
 										this.forceUpdate();
 									});
-									userService.getRolesForArr(this.arrangement.id).then((result) => {
+									userService.getRolesForArr(this.evnt.id).then((result) => {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
 								})
 							}
 						}
-						else if(this.difference[i-1] < 0) {
-							for (var y = 0; y < -(this.difference[i -1]); y++) {
-								userService.deleteRolesfromArr(this.arrangement.id, i).then((result) => {
-									userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+						else if(this.difference[u-1] < 0) {
+							for (var y = 0; y < -(this.difference[u -1]); y++) {
+								userService.deleteRolesfromArr(this.evnt.id, u).then((result) => {
+									this.difference = []
+									userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 										this.roleNoUser = result;
 										this.forceUpdate();
 									});
-									userService.getRolewithUserInfo(this.id).then((result) => {
+									userService.getRolewithUserInfo(this.evntId).then((result) => {
 										this.fordeltVakter = result;
 										this.forceUpdate();
 									});
-									userService.getRolesForArr(this.arrangement.id).then((result) => {
+									userService.getRolesForArr(this.evnt.id).then((result) => {
 										this.allSelectedRoles = result;
 										this.forceUpdate();
 									});
+
 								});
 							}
 						}
+						this.firstNumberOfRoles = [];
+						this.secondNumberOfRoles = [];
+						this.numberOfRoles = [];
+						userService.getRoleCount(this.evnt.id, u).then((result) => {
+							//setter to ant roller arrays like hverandre for å sammenligne de etter at ant roller er endret
+							this.numberOfRoles.push(result);
+							this.firstNumberOfRoles.push(result);
+							this.secondNumberOfRoles = this.numberOfRoles;
+							this.forceUpdate();
+						})
+
 					}
-					userService.getAllRoles().then((result) => {
-						this.allRoles = result;
-						for (var i = 1; i < this.allRoles.length +1; i++) {
-							userService.getRoleCount(this.arrangement.id, i).then((result) => {
-								this.numberOfRoles.push(result);
-								this.firstNumberOfRoles.push(result);
-								this.secondNumberOfRoles = this.numberOfRoles;
-								this.forceUpdate()
-							})
-						}
-					})
 				}
+
 			}
+			//henter alle brukere i databasen
 			userService.getAllUsers().then((result) => {
 				this.allUsers = result;
 				this.forceUpdate();
 				})
+				//her tildeles roller automatisk, basert på om de er interesserte, vaktpoeng, passive og om de har kompetanse
 				this.refs.tildelRoller.onclick = () => {
+					console.log(this.allSelectedRoles)
+				//variabel for når vakten blir tildelt bruker
 				let tildeltTid = new Date();
-				let usedUser = [];
-				let usedEventRoles = [];
+				let usedUser = []; //brukere som allerede har blitt valgt i arrangementet
+				let usedEventRoles = []; //alle roller i arrangementet som har blitt tildelt roller
+					//går gjennom alle valget roller for arrangementet
 					for(let eventRolle of this.allSelectedRoles) {
+						console.log(eventRolle)
 						userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
+							//sjekker om brukere har blitt valgt for dette arrangementet fra før
 							usedUser.push(result)
 						});
 						userService.getUsedEventRoles(eventRolle.arrid, eventRolle.arr_rolleid).then((result) => {
 							usedEventRoles.push(result)
+							//sjekker om rollen har blitt tildelt user fra før
 						});
 						userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
 							this.roleKomp= result;
+							//henter kompetansen for rollen i for-of loopen
 						});
-						let u = 0;
+						//kjører gjennom interesserte brukere
 						for(let interestedUser of this.interestedUsers) {
-							userService.isUserPassive(interestedUser.userId, this.arrangement.id).then((result) => {
+							console.log(interestedUser)
+							userService.isUserPassive(interestedUser.userId, this.evnt.id).then((result) => {
 								this.userPassive = result;
+								//sjekker om interesserte bruker er passiv under dette arrangementet
 								})
 							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, interestedUser.userId, eventRolle.arr_rolleid).then((result) => {
-								if(result.length != 0){
-									this.userWithRoles = result;
-								}
-								let exists = usedUser.includes(interestedUser.userId);
-								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid);
-								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) {
-									usedUser.push(interestedUser.userId)
-									usedEventRoles.push(eventRolle.arr_rolleid)
+								//henter interesserte brukers kompetanse for denne spesifike rollen, length av denne vil være ant. kurs i denne rollen
+								this.userWithRoles = result;
 
-									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => {
+								let exists = usedUser.includes(interestedUser.userId); // variabel for om brukeren har rolle i arrangementet
+								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid); // variabel for om rollen er tildelt bruker
+
+								// console.log(exists)
+								// console.log(hasUser)
+								// console.log(this.userPassive.length)
+								// console.log(this.roleKomp.length)
+								// console.log(this.userWithRoles.length)
+								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) { //bruker har ikke rolle, rollen har ikke bruker, brukeren har riktig kompetanse og brukeren er ikke passiv
+									usedUser.push(interestedUser.userId) //legger til bruker slik at den ikke kan bli valgt igjen
+									usedEventRoles.push(eventRolle.arr_rolleid);
+
+									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => { //legger til bruker id for denne rollen
 										console.log("interesert")
+										console.log(interestedUser)
 										// let email = interestedUser.email;
 										// let subject = "Røde Kors ny vakt"
-							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // let textmail = "Du har blitt kalt for vakt til " + this.evnt.title + " den " + this.evnt.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
 							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
 							      // mailService.sendMail(email, subject, textmail);
-										userService.userPassive(this.arrangement.start, this.arrangement.end, interestedUser.userId).then((result) => {
-											console.log(result)
+										userService.userPassive(this.evnt.start, this.evnt.end, interestedUser.userId).then((result) => {
+											//legger til passiv periode for brukeren i arrangement perioden, så bruker ikke kan blir valgt til flere arrangementer som foregår likt
 											this.forceUpdate();
 										})
-										userService.addPoints(interesteduser.userId).then((result) =>{
-											console.log(result)
+										userService.addPoints(interestedUser.userId).then((result) =>{
+											//legger til vaktpoeng
 										})
-										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+										//oppdateter utdelte vakter listen
+										userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
+											console.log(result)
 											this.forceUpdate();
 										});
-										userService.getRolewithUserInfo(this.id).then((result) => {
+										userService.getRolewithUserInfo(this.evntId).then((result) => {
 											this.fordeltVakter = result;
 											this.forceUpdate();
 										});
@@ -516,8 +560,9 @@ export default class EventInfo extends React.Component {
 								}
 							})
 						}
+						//når alle kompatible interesserte brukere er valgt, kjøres det gjennom brukere
 						for(let user of this.allUsers) {
-							userService.isUserPassive(user.id, this.arrangement.id).then((result) => {
+							userService.isUserPassive(user.id, this.evnt.id).then((result) => {
 								this.userPassive = result;
 								})
 							userService.getUserRoleKomp(eventRolle.roleid, eventRolle.arrid, user.id, eventRolle.arr_rolleid).then((result) => {
@@ -535,21 +580,21 @@ export default class EventInfo extends React.Component {
 										console.log("user")
 										// let email = interestedUser.email;
 										// let subject = "Røde Kors ny vakt"
-							      // let textmail = "Du har blitt kalt for vakt til " + this.arrangement.title + " den " + this.arrangement.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
+							      // let textmail = "Du har blitt kalt for vakt til " + this.evnt.title + " den " + this.evnt.start.toLocaleString() + ". Logg inn i systemet for å godkjenn vakten.";
 							      // //kjører sendMail funksjon fra mailservices.js som sender mail med passord subject til brukerens email.
 							      // mailService.sendMail(email, subject, textmail);
-										userService.userPassive(this.arrangement.start, this.arrangement.end, user.id).then((result) => {
+										userService.userPassive(this.evnt.start, this.evnt.end, user.id).then((result) => {
 											console.log(result)
 											this.forceUpdate();
 										})
 										userService.addPoints(user.id).then((result) =>{
 											console.log(result)
 										})
-										userService.getRolesWithNoUser(this.arrangement.id).then((result) => {
+										userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
 											this.forceUpdate();
 										});
-										userService.getRolewithUserInfo(this.id).then((result) => {
+										userService.getRolewithUserInfo(this.evntId).then((result) => {
 											this.fordeltVakter = result;
 											this.forceUpdate();
 										});
@@ -562,20 +607,5 @@ export default class EventInfo extends React.Component {
 				}
 			}
 		};
-	getInteressed(arrangementId, userId) {
-		this.setState({ showInterestedText: !this.state.showInterestedText });;
-    userService.checkIfInteressed(this.state.activeUser, this.arrangement.id).then((result) => {
-			this.state.interessedUser = result;
-			this.forceUpdate();
-				if(this.state.interessedUser == 0){
-					this.state.activeUser = userId;
-		       	userService.getInteressed(arrangementId, userId).then((result) => {
-		          this.forceUpdate();
-		       	})
-					}
-				else {
-					alert("du er allerede registrert som interessert")
-				}
-			})
-		};
+
 }

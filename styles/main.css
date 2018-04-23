@@ -77,13 +77,27 @@ body {background-color: #f2f2f2;}
 }
 
 .input {
-    width: 400px;
+    width: 440px;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+.loginInput::-webkit-input-placeholder {
+  text-align: center;
+}
+
+.loginInput {
+  width: 440px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .loggin {
@@ -156,9 +170,30 @@ body {background-color: #f2f2f2;}
     border-radius: 4px;
     cursor: pointer;
 }
+.statistikkBtn {
+    width: 50%;
+    background-color: black;
+    color: white;
+    padding: 8px 13px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.godkjennBtn {
+    width: 10%;
+    height: 2%;
+    background-color: black;
+    color: white;
+    padding: 8px 13px;
+    margin: 4px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
 .img {
   border-radius: 8px;
-  width: 150px;;
+  width: 170px;;
   display: block;
   margin-left: auto;
   margin-right: auto
@@ -190,7 +225,8 @@ display: none;
 }
 
 .h1 {
-  font-size: 5em;
+
+  font-size: 4em;
   text-align: center;
 }
 
@@ -247,6 +283,7 @@ display: none;
 }
 
 .tabellvakter{
+    width: 100%;
     border: 1px solid black;
     border-collapse: collapse;
     text-align: center;
@@ -266,7 +303,14 @@ display: none;
   height: 400px;
   float: left;
 }
-
+.calendercolumn100 {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 75px;
+  width: 100%;
+  height: 400px;
+  float: left;
+}
 
 .vakter {
   margin-left: 30px;
@@ -325,9 +369,8 @@ display: none;
   margin-right: 25px;
 }
 
-textarea {
-
-  height: 100px;
-  float: left;
-
+.login {
+  text-align: center;
+  border-radius: 5px;
+  padding: 20px;
 }
