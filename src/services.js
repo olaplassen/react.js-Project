@@ -34,7 +34,7 @@ connect();
 // Class that performs database queries related to customers
 class UserService {
 
-//USer funksjoner -----------------------------------------------------------------------------------
+//USer funksjoner- USERSERVICE-----------------------------------------------------------------------------------
 getUsers(id) {//henter en bruker
     return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Users WHERE id=?', [id], (error, result) => {
@@ -189,8 +189,52 @@ resetPassword(username, email) {//forespørsel om nytt passord
     });
   });
 };
+//Interessert funksjoner - USERSERVICE -------------------------------------------------------------------------------------------------
 
-//Event Funksjoner -------------------------------------------------------------------------------
+confirmInteressed(arrangementId, userId) {
+      return new Promise((resolve, reject) => {
+        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
+          if(error) throw error;
+          resolve(result);
+        })
+      });
+    }
+getInteressed(arrangementId, userId) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
+          if (error) throw error;
+          console.log(result)
+          resolve(result)
+        });
+      });
+    }
+removeInterested(userid, arrid) {
+  return new Promise ((resolve, reject) => {
+    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
+      if(error) throw error;
+      resolve()
+    })
+  });
+}
+getInteressedUsers(arrangementId){
+      return new Promise ((resolve, reject) => {
+         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
+          if(error) throw error;
+          console.log(result)
+          resolve(result);
+         })
+       });
+     }
+checkIfInteressed(userId, arrangementId) {
+   return new Promise ((resolve, reject) => {
+   connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
+     if(error) throw error;
+     resolve(result);
+   })
+ });
+}
+
+//Event Funksjoner EVNT-SERVICE-------------------------------------------------------------------------------
 
 addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) {
     return new Promise ((resolve, reject) => {
@@ -198,28 +242,9 @@ addArrangement(title, description, meetingLocation, contactPerson, showTime, sta
         if (error) throw error;
         else
         resolve();
-      });
     });
-  }
-
-  getRole() {
-    return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role', (error, result) => {
-        if(error) throw error;
-        resolve(result);
-      });
-    });
-  }
-getArrangement() {
-     return new Promise ((resolve, reject) => {
-      connection.query('SELECT id, title, description, meetingLocation, contactPerson, showTime, start, end, gearList FROM Arrangement', [false], (error, result) => {
-        if (error) throw error;
-        console.log(result);
-
-          resolve(result)
-      });
-    });
-    }
+  });
+}
 getLastArrangement() {
          return new Promise ((resolve, reject) => {
           connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
@@ -345,7 +370,14 @@ checkSkillValid() {
 }
 
 //Role funksjoner ----------------------------------------------------------------------------------------------
-
+getRole() {
+  return new Promise ((resolve, reject) => {
+    connection.query('SELECT * FROM Role', (error, result) => {
+      if(error) throw error;
+      resolve(result);
+    });
+  });
+}
 getVaktmal() {
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM Vaktmal', (error, result) => {
@@ -476,51 +508,6 @@ getRolewithUserInfo(arrid) {
   })
 }
 
-
-//Interessert funksjoner -------------------------------------------------------------------------------------------------
-
-confirmInteressed(arrangementId, userId) {
-      return new Promise((resolve, reject) => {
-        connection.query('UPDATE Interessert SET interessed ="0" WHERE arrangementId=? AND userId=?', [arrangementId, userId], (error, result) => {
-          if(error) throw error;
-          resolve(result);
-        })
-      });
-    }
-getInteressed(arrangementId, userId) {
-      return new Promise ((resolve, reject) => {
-        connection.query('INSERT INTO Interessert(arrangementId, userId) VALUES (?, ?)', [arrangementId, userId], (error, result) => {
-          if (error) throw error;
-          console.log(result)
-          resolve(result)
-        });
-      });
-    }
-removeInterested(userid, arrid) {
-  return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM Interessert WHERE userId=? AND arrangementid=?', [userid, arrid], (error, result) => {
-      if(error) throw error;
-      resolve()
-    })
-  });
-}
-getInteressedUsers(arrangementId){
-      return new Promise ((resolve, reject) => {
-         connection.query('SELECT Interessert.userId, Interessert.arrangementId, Users.firstname, Users.lastName, Users.vaktpoeng, Users.email, Arrangement.title FROM Users, Arrangement, Interessert WHERE Users.id=Interessert.userId AND Arrangement.id=Interessert.arrangementId AND Interessert.arrangementId=? ORDER BY Users.vaktpoeng DESC', [arrangementId],(error, result) => {
-          if(error) throw error;
-          console.log(result)
-          resolve(result);
-         })
-       });
-     }
-checkIfInteressed(userId, arrangementId) {
-   return new Promise ((resolve, reject) => {
-   connection.query('SELECT userId, arrangementId FROM Interessert WHERE userId=? AND arrangementId=? ', [userId, arrangementId], (error, result) => {
-     if(error) throw error;
-     resolve(result);
-   })
- });
-}
 
 //EventRole funksjoner -------------------------------------------------------------------------------------------------------
 addShiftChange(original_userid, toChange_userid, arr_rolleid) {
