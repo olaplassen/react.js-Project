@@ -79,6 +79,7 @@ body {background-color: #f2f2f2;}
 /* Styler infoboksen på min side for brukere og administratorer */
 .info {
   margin-left: 50px;
+  margin-bottom: 100px;
   width: 450px;
   height: 300px;
   float: left;
@@ -123,6 +124,15 @@ body {background-color: #f2f2f2;}
 .input {
     width: 440px;
     padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.smallinput {
+    width: 300px;
+    padding: 6px 10px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
@@ -198,6 +208,16 @@ body {background-color: #f2f2f2;}
 /* Styler knappenen. */
 .button3 {
     width: 100%;
+    background-color: black;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.button4 {
+    width: 300px;
     background-color: black;
     color: white;
     padding: 14px 20px;

@@ -174,10 +174,11 @@ export default class MyPage extends React.Component {
 
 
                             <div>
-                            Endre passord<br></br>
-                                <input ref="newpassword" type="password" /> <br />
-                                <input ref="verifypassword" type="password" /> <br />
-                                <button ref="changepassword" onClick={() => this.newPassword()}>Lagre</button>
+                              Endre passord<br></br>
+
+                                <input ref="newpassword" className="smallinput" placeholder="Passord" type="password" /> <br />
+                                <input ref="verifypassword" className="smallinput" placeholder="Bekreft passord" type="password" /> <br />
+                                <button className="button4" ref="changepassword" onClick={() => this.newPassword()}>Lagre</button>
                                 <div ref="error2"></div>
                             </div>
 
@@ -427,7 +428,7 @@ export default class MyPage extends React.Component {
                       });
                   }
                   else {
-                    
+
                       this.refs.error2.textContent = "Passordene matcher ikke";
                       this.forceUpdate();
 
