@@ -83,7 +83,7 @@ deactivateUser(userid) {
       resolve();
     })
   })
-}//setter godkjen=false
+}//setter godkjent=false
 loginUser(username, inputpassword) {//login for admin og bruker
     return new Promise ((resolve, reject) => {
 
@@ -197,7 +197,7 @@ addShiftChange(original_userid, toChange_userid, arr_rolleid) {
     })
   })
 }
-getShiftChangeInfo() {
+getShiftChangeInfo() {// får informasjon om vaktbytte
   return new Promise ((resolve, reject) => {
     connection.query('SELECT vaktbytteid, ArrangementRoller.arrid, a.id AS newUserid, b.id AS oldUserid, a.firstName AS newfirstName, a.lastName AS newlastName, b.firstName AS oldfirstName, b.lastName AS oldlastName, Arrangement.title, ArrangementRoller.arr_rolleid FROM Users a, Users b, ArrangementRoller, VaktBytte, Arrangement WHERE VaktBytte.change_userid = a.id AND VaktBytte.original_userid = b.id AND ArrangementRoller.arr_rolleid = VaktBytte.arr_rolleid AND ArrangementRoller.arrid = Arrangement.id AND godkjent_bytte = 0', (error, result) => {
       if(error) throw error;
@@ -205,7 +205,7 @@ getShiftChangeInfo() {
     })
   })
 }
-godkjennBytte(newuserid, arr_rolleid, tildelt_tid) {
+godkjennBytte(newuserid, arr_rolleid, tildelt_tid) { //oppdaterer arrangementroller og godkjenner vaktbyttet
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE ArrangementRoller SET userid=?, tildelt_tid=?  WHERE arr_rolleid=?', [newuserid, tildelt_tid, arr_rolleid,], (error, result) => {
       connection.query('UPDATE VaktBytte SET godkjent_bytte=1'), (error, result) => {
@@ -217,7 +217,7 @@ godkjennBytte(newuserid, arr_rolleid, tildelt_tid) {
     })
   })
 }
-getUsedUsers(arr_rolleid) {
+getUsedUsers(arr_rolleid) { // finner bruker som allerede har en rolle
   return new Promise ((resolve, reject) => {
     connection.query('SELECT userid FROM ArrangementRoller WHERE arr_rolleid=? AND userid IS NOT NULL', [arr_rolleid], (error, result) => {
       if(error) throw error;
@@ -225,7 +225,7 @@ getUsedUsers(arr_rolleid) {
     })
   })
 }
-getUsedEventRoles(arrid, arr_rolleid) {
+getUsedEventRoles(arrid, arr_rolleid) { // finnere roller som allerede er besatt i arrangement
   return new Promise ((resolve, reject) => {
     connection.query('SELECT arr_rolleid FROM ArrangementRoller WHERE arrid=? AND userid IS NOT NULL AND arr_rolleid =?', [arrid, arr_rolleid], (error, result) => {
       if(error) throw error;
@@ -233,7 +233,7 @@ getUsedEventRoles(arrid, arr_rolleid) {
       })
     })
 }
-getComingVaktListe(userid) {
+getComingVaktListe(userid) { // henter kommende arrangement vaktiliste
   let today = new Date();
   return new Promise ((resolve, reject) => {
 
@@ -243,7 +243,7 @@ getComingVaktListe(userid) {
     })
   })
 }
-getDoneVaktListe(userid) {
+getDoneVaktListe(userid) { // henter
   let today = new Date();
   return new Promise ((resolve, reject) => {
 
@@ -253,7 +253,7 @@ getDoneVaktListe(userid) {
     })
   })
 }
-godkjennVakt(arr_rolleid) {
+godkjennVakt(arr_rolleid) { // oppdaterer vakter der den blir godkjent, setter også inn tidspunkt det blir gjort
   let today = new Date();
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE ArrangementRoller SET godkjent=1, godkjent_tid=?  WHERE arr_rolleid=?', [today, arr_rolleid], (error, result) => {
@@ -262,7 +262,7 @@ godkjennVakt(arr_rolleid) {
     })
   })
 }
-getArrRolleInfo(arr_rolleid) {
+getArrRolleInfo(arr_rolleid) { // henter roller for et bestemt arrangement
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM ArrangementRoller WHERE arr_rolleid=?', [arr_rolleid], (error, result) => {
       if(error) throw error;
@@ -273,7 +273,7 @@ getArrRolleInfo(arr_rolleid) {
 }
 
 //Div funksjoner ----------------------------------------------------------------------------------------------------------
-searchList(input) {
+searchList(input) { // søker etter
       return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Users Where confirmed=? AND admin=? AND CONCAT(firstName, " ", lastName) LIKE "%"?"%" OR CONCAT(lastName, " ", firstName) LIKE "%"?"%" order by id', [true, false, input, input], (error, result) => {
         if(error) throw error;
@@ -282,7 +282,7 @@ searchList(input) {
       })
     });
   }
-shiftInfo2mnd() {
+shiftInfo2mnd() { // henter vaktinformasjonen for de siste 2 måneder
   let toMnd = new Date();
   toMnd.setMonth(toMnd.getMonth() - 2)
 
@@ -294,7 +294,7 @@ shiftInfo2mnd() {
     })
   })
 }
-shiftInfo2mndSearch(input) {
+shiftInfo2mndSearch(input) {// henter kommende arrangement for neste 2 måneder 
   let toMnd = new Date();
   toMnd.setMonth(toMnd.getMonth() - 2)
 
@@ -306,7 +306,7 @@ shiftInfo2mndSearch(input) {
     })
   })
 }
-participatedRoles(userid) {
+participatedRoles(userid) {// henter antallet roller som er besatt i et bestemt arrangement
   return new Promise ((resolve, reject) => {
     connection.query('SELECT COUNT(ArrangementRoller.roleid) as deltattRolle, Role.title, Role.roleid FROM ArrangementRoller, Role WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.userid=? GROUP BY Role.roleid', [userid], (error, result) => {
       if(error) throw error;
@@ -314,7 +314,7 @@ participatedRoles(userid) {
     })
   })
 }
-getUserShiftInfoBetween(userid, start, end) {
+getUserShiftInfoBetween(userid, start, end) {// henter ut antallet timer brukeren har tjenestegjort.
   return new Promise ((resolve, reject) => {
     connection.query('SELECT COUNT(ArrangementRoller.arr_rolleid) as antVakter, SUM(TIMESTAMPDIFF(hour, Arrangement.start, Arrangement.end)) timer FROM ArrangementRoller, Arrangement WHERE ArrangementRoller.arrid = Arrangement.id AND ArrangementRoller.userid = ? AND Arrangement.end > ? AND Arrangement.end < ? GROUP BY ArrangementRoller.userid', [userid, start, end], (error, result) => {
       if(error) throw error;
@@ -322,7 +322,7 @@ getUserShiftInfoBetween(userid, start, end) {
     })
   })
 }
-addPoints(userid) {
+addPoints(userid) { // oppdaterer Users og gir vaktpoeng
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE Users SET vaktpoeng = vaktpoeng + 1 WHERE id=?', [userid], (error, result) => {
       if(error) throw error;
@@ -330,7 +330,7 @@ addPoints(userid) {
     })
   })
 }
-removePoints(userid) {
+removePoints(userid) { //oppdaterer Users og fjerner ett vaktpoeng
   return new Promise ((resolve, reject) => {
     connection.query('UPDATE Users SET vaktpoeng = vaktpoeng - 1 WHERE id=?', [userid], (error, result) => {
       if(error) throw error;
@@ -339,7 +339,7 @@ removePoints(userid) {
   })
 }
 
-userPassive(passive_start, passive_slutt, userid) {
+userPassive(passive_start, passive_slutt, userid) { // setter user passive fra gitt tidspunkt til gitt slutt
   return new Promise ((resolve, reject) => {
     connection.query('INSERT INTO UserPassive (passive_start, passive_slutt, userid) VALUES (?,?,?) ', [passive_start, passive_slutt, userid], (error, result) => {
       if(error) throw error;
@@ -347,7 +347,7 @@ userPassive(passive_start, passive_slutt, userid) {
     })
   })
 }
-getUserPassive(userid) {
+getUserPassive(userid) { // henter start og sluttidspunkt for passive brukere
   return new Promise ((resolve, reject) => {
     connection.query('SELECT passive_start, passive_slutt FROM UserPassive WHERE userid=?', [userid], (error, result) => {
       if(error) throw error;
@@ -355,7 +355,7 @@ getUserPassive(userid) {
       })
     })
   }
-isUserPassive(userid, arrid) {
+isUserPassive(userid, arrid) { // sjekker om user er passiv
   return new Promise ((resolve, reject) => {
     connection.query('SELECT * FROM UserPassive, Arrangement WHERE UserPassive.passive_start <= Arrangement.end AND UserPassive.passive_slutt >= Arrangement.start AND UserPassive.userid=? AND Arrangement.id=?', [userid, arrid], (error, result) => {
       if(error) throw error;

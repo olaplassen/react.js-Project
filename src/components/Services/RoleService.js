@@ -32,7 +32,7 @@ function connect() {
 connect();
 
 class RoleService {
-  getRoles() {
+  getRoles() { // henter roller fra Role
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role', (error, result) => {
         if(error) throw error;
@@ -40,7 +40,7 @@ class RoleService {
       });
     });
   }
-  getVaktmal() {
+  getVaktmal() { // henter vaktmal fra Vaktmal
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Vaktmal', (error, result) => {
         if(error) throw error;
@@ -48,7 +48,7 @@ class RoleService {
       })
     })
   }
-  getRolesForMal(vaktmalid) {
+  getRolesForMal(vaktmalid) { // henter roller for bestemt mal
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM Role, RoleVaktmal WHERE RoleVaktmal.roleid = Role.roleid AND RoleVaktmal.vaktmalid = ?', [vaktmalid], (error, result) => {
         if(error) throw error;
@@ -56,7 +56,7 @@ class RoleService {
       })
     })
   }
-  getRolesForArr(arrid) {
+  getRolesForArr(arrid) { // henter roller for et bestemt arrangement
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid, ArrangementRoller.arr_rolleid DESC', [arrid], (error, result) => {
           if(error) throw error;
@@ -64,7 +64,7 @@ class RoleService {
       })
     })
   }
-  getRolesWithNoUser(arrid) {
+  getRolesWithNoUser(arrid) { // henter roller som ikke er besatt av bruker
       return new Promise ((resolve, reject) => {
         connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? AND ArrangementRoller.userid IS NULL ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
           if(error) throw error;
@@ -72,7 +72,7 @@ class RoleService {
       })
     })
   }
-  addRolesforArr(arrid, roleid, vaktmalid) {
+  addRolesforArr(arrid, roleid, vaktmalid) { // legger til roller for et bestemt arrangement med vaktmal
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO ArrangementRoller (arrid, roleid, vaktmalid) values (?,?,?)', [arrid, roleid, vaktmalid], (error, result) => {
         if(error) throw error;
@@ -80,7 +80,7 @@ class RoleService {
       })
     })
   }
-  addRolesforArrSingle(arrid, roleid) {
+  addRolesforArrSingle(arrid, roleid) { //legger til bestemte roller for et bestemt arrangement
     return new Promise ((resolve, reject) => {
       connection.query('INSERT INTO ArrangementRoller (arrid, roleid) values (?,?)', [arrid, roleid], (error, result) => {
         if(error) throw error;
@@ -88,7 +88,7 @@ class RoleService {
       })
     })
   }
-  deleteRolesfromArr(arrid, roleid){
+  deleteRolesfromArr(arrid, roleid){ // fjerne roller for arrangement
     return new Promise ((resolve, reject) => {
       connection.query('DELETE FROM ArrangementRoller WHERE arrid=? AND roleid=? ORDER BY arr_rolleid DESC LIMIT 1', [arrid, roleid], (error, result) => {
         if(error) throw error;
@@ -96,7 +96,7 @@ class RoleService {
       })
     })
   }
-  getRoleCount(arrid, roleid) {
+  getRoleCount(arrid, roleid) {// henter antallet roller som trengs for et bestemt arrangement
     return new Promise ((resolve, reject) => {
       connection.query('SELECT COUNT(roleid) as total FROM ArrangementRoller WHERE arrid=? AND roleid=?', [arrid, roleid], (error, result) => {
         if(error) throw error;
@@ -104,7 +104,7 @@ class RoleService {
       })
     })
   }
-  getRoleKomp(roleid, arrRolleid) {
+  getRoleKomp(roleid, arrRolleid) {// henter hvilke kompetanser som trengs for hver enkelt rolle
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM RoleKomp, ArrangementRoller WHERE RoleKomp.roleid = ArrangementRoller.roleid AND RoleKomp.roleid=? AND ArrangementRoller.arr_rolleid=? ORDER BY ArrangementRoller.roleid', [roleid, arrRolleid], (error, result) => {
         if(error) throw error;
@@ -112,7 +112,7 @@ class RoleService {
       })
     })
   }
-  getUserRoleKomp(roleid, arrid, userid, arrRoleid) {
+  getUserRoleKomp(roleid, arrid, userid, arrRoleid) { // sjekker hvilken roller brukere kan ha basert på kompetanse
     return new Promise ((resolve, reject) => {
       connection.query('SELECT UserKomp.skillid, UserKomp.userid, RoleKomp.roleid FROM UserKomp, RoleKomp, ArrangementRoller WHERE ArrangementRoller.roleid = RoleKomp.roleid AND UserKomp.skillid = RoleKomp.skillid AND ArrangementRoller.roleid = ? AND ArrangementRoller.arrid = ? AND UserKomp.userid = ? AND ArrangementRoller.arr_rolleid = ?', [roleid, arrid, userid, arrRoleid], (error, result) => {
         if(error) throw error;
@@ -120,7 +120,7 @@ class RoleService {
       })
     })
   }
-  addUserForRole(userid, arr_roleid, arrid, tildeltTid) {
+  addUserForRole(userid, arr_roleid, arrid, tildeltTid) {// legger inn rolle til en bestemt bruker i et bestemt arrangement
     return new Promise ((resolve, reject) => {
       connection.query('UPDATE ArrangementRoller SET userid=?, tildelt_tid=?  WHERE arr_rolleid=? AND arrid=?', [userid, tildeltTid, arr_roleid, arrid], (error, result) => {
         if(error) throw error;
@@ -128,7 +128,7 @@ class RoleService {
       })
     })
   }
-  getRolewithUserInfo(arrid) {
+  getRolewithUserInfo(arrid) {// henter informasjon om brukeren og rollen i et bestemt arrangement
     return new Promise ((resolve, reject) => {
       connection.query('SELECT * FROM ((ArrangementRoller INNER JOIN Users ON ArrangementRoller.userid = Users.id) INNER JOIN Role ON ArrangementRoller.roleid = Role.roleid ) WHERE ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
         if(error) throw error;
