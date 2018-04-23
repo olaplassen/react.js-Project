@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
+import { userService } from '../../services';
+import { evntService } from '../../services';
 import { mailService } from '../../mailservices';
 
 const history: HashHistory = createHashHistory();
@@ -350,7 +351,7 @@ export default class EventInfo extends React.Component {
 		let signedInUser = userService.getSignedInUser();
 
 		//henter Arrangement info
-		userService.getEventInfo(this.evntId).then((result) => {
+		evntService.getEventInfo(this.evntId).then((result) => {
 			this.evnt = result;
 			//gjør om datoer med tid til leservennlige strings
 			this.start = this.evnt.start.toLocaleString().slice(0, -3);
