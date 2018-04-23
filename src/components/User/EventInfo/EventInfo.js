@@ -481,12 +481,14 @@ export default class EventInfo extends React.Component {
 				})
 				//her tildeles roller automatisk, basert på om de er interesserte, vaktpoeng, passive og om de har kompetanse
 				this.refs.tildelRoller.onclick = () => {
+					console.log(this.allSelectedRoles)
 				//variabel for når vakten blir tildelt bruker
 				let tildeltTid = new Date();
 				let usedUser = []; //brukere som allerede har blitt valgt i arrangementet
 				let usedEventRoles = []; //alle roller i arrangementet som har blitt tildelt roller
 					//går gjennom alle valget roller for arrangementet
 					for(let eventRolle of this.allSelectedRoles) {
+						console.log(eventRolle)
 						userService.getUsedUsers(eventRolle.arr_rolleid).then((result) => {
 							//sjekker om brukere har blitt valgt for dette arrangementet fra før
 							usedUser.push(result)
@@ -501,6 +503,7 @@ export default class EventInfo extends React.Component {
 						});
 						//kjører gjennom interesserte brukere
 						for(let interestedUser of this.interestedUsers) {
+							console.log(interestedUser)
 							userService.isUserPassive(interestedUser.userId, this.evnt.id).then((result) => {
 								this.userPassive = result;
 								//sjekker om interesserte bruker er passiv under dette arrangementet
@@ -511,9 +514,15 @@ export default class EventInfo extends React.Component {
 
 								let exists = usedUser.includes(interestedUser.userId); // variabel for om brukeren har rolle i arrangementet
 								let hasUser = usedEventRoles.includes(eventRolle.arr_rolleid); // variabel for om rollen er tildelt bruker
+
+								// console.log(exists)
+								// console.log(hasUser)
+								// console.log(this.userPassive.length)
+								// console.log(this.roleKomp.length)
+								// console.log(this.userWithRoles.length)
 								if (exists == false && hasUser == false && this.roleKomp.length == this.userWithRoles.length && this.userPassive.length == 0) { //bruker har ikke rolle, rollen har ikke bruker, brukeren har riktig kompetanse og brukeren er ikke passiv
 									usedUser.push(interestedUser.userId) //legger til bruker slik at den ikke kan bli valgt igjen
-									usedEventRoles.push(eventRolle.arr_rolleid)
+									usedEventRoles.push(eventRolle.arr_rolleid);
 
 									userService.addUserForRole(interestedUser.userId, eventRolle.arr_rolleid, eventRolle.arrid, tildeltTid).then((result) => { //legger til bruker id for denne rollen
 										console.log("interesert")
@@ -533,6 +542,7 @@ export default class EventInfo extends React.Component {
 										//oppdateter utdelte vakter listen
 										userService.getRolesWithNoUser(this.evnt.id).then((result) => {
 											this.roleNoUser = result;
+											console.log(result)
 											this.forceUpdate();
 										});
 										userService.getRolewithUserInfo(this.evntId).then((result) => {

@@ -402,7 +402,7 @@ getAllRoles() {
   }
 getRolesForArr(arrid, callback) {
     return new Promise ((resolve, reject) => {
-      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid', [arrid], (error, result) => {
+      connection.query('SELECT * FROM Role, ArrangementRoller WHERE ArrangementRoller.roleid = Role.roleid AND ArrangementRoller.arrid = ? ORDER BY ArrangementRoller.roleid, ArrangementRoller.arr_rolleid DESC', [arrid], (error, result) => {
         if(error) throw error;
         resolve(result)
     })
@@ -442,7 +442,7 @@ addRolesforArrSingle(arrid, roleid) {
 }
 deleteRolesfromArr(arrid, roleid){
   return new Promise ((resolve, reject) => {
-    connection.query('DELETE FROM ArrangementRoller WHERE arrid=? AND roleid=? LIMIT 1', [arrid, roleid], (error, result) => {
+    connection.query('DELETE FROM ArrangementRoller WHERE arrid=? AND roleid=? ORDER BY arr_rolleid DESC LIMIT 1', [arrid, roleid], (error, result) => {
       if(error) throw error;
       resolve()
     })

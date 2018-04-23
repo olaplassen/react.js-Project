@@ -17,7 +17,8 @@ export default class AdminHome extends React.Component {
 
     render() {
         return (
-            <div className="calendercolumn">
+          <div className="blokk">
+            <div className="calendercolumn100">
               <h2>Arrangementskalender</h2>
                 <BigCalendar
                     events={this.allEvents}
@@ -29,6 +30,7 @@ export default class AdminHome extends React.Component {
                     onSelectEvent={event => this.props.history.push('/eventinfo/' + event.id)}
                 />
             </div>
+          </div>
 
         );
     }

@@ -24,7 +24,7 @@ export class StartMenu extends React.Component {
 export class Login extends React.Component {
   render() {
     return (
-      <div className="menu">
+      <div>
       <h1 className="h1">Velkommen</h1>
       <img className="img" src={'src/img/rkors.jpg'} />
       <div className="login">
