@@ -46,7 +46,7 @@ export class Login extends React.Component {
   }
   componentDidMount() {
 
-		//
+
 		this.refs.loginBtn.onclick = () => {
 			userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
         let variabel = localStorage.getItem('passwordResult'); // Get User-object from browser
@@ -74,7 +74,7 @@ export class Login extends React.Component {
 							userId: result.id
 
 						}
-						
+
 
 						checkLogInUser(user);
 					}
@@ -94,7 +94,7 @@ export class Login extends React.Component {
 		}
 	}
 }
-//for å skjule passord
+//lager egen class for å validere og skjule passord
 export class RegistrationFeltPassword extends React.Component {
 	constructor() {
 		super();
@@ -133,12 +133,13 @@ export class RegistrationFelt extends React.Component {
 		);
 	}
 }
-
+// class for å validere og registrere potensiell bruker.
 export class Registration extends React.Component {
 
 	constructor() {
 		super();
 		this.state = {
+			// setter state for validering av inputs av brukerregistrering.
 			firstnameValid: false,
 			firstnameVerdi: '',
       lastnameValid: false,
@@ -156,15 +157,15 @@ export class Registration extends React.Component {
 			passwordconfirmValid: false,
 			passwordconfirmVerdi:''
 		}
-
-		this.validerfornavnFelt = this.validerfornavnFelt.bind(this);
-    this.valideretternavnFelt= this.valideretternavnFelt.bind(this);
-    this.valideraddressFelt= this.valideraddressFelt.bind(this);
-    this.validerphonenumberFelt= this.validerphonenumberFelt.bind(this);
-    this.valideremailaddressFelt= this.valideremailaddressFelt.bind(this);
-    this.validerusernameFelt= this.validerusernameFelt.bind(this);
-    this.validerpasswordFelt= this.validerpasswordFelt.bind(this);
-		this.validerpasswordconfirmFelt= this.validerpasswordconfirmFelt.bind(this);
+// her bindes innholdet som kan brukes senere i classen for validering
+		this.validerfornavnFelt = this.validerfornavnFelt.bind(this); // fornavn felt
+    this.valideretternavnFelt= this.valideretternavnFelt.bind(this); // etternavn felt
+    this.valideraddressFelt= this.valideraddressFelt.bind(this); // addresse felt
+    this.validerphonenumberFelt= this.validerphonenumberFelt.bind(this); // Telefonnummer felt
+    this.valideremailaddressFelt= this.valideremailaddressFelt.bind(this); // epost felt
+    this.validerusernameFelt= this.validerusernameFelt.bind(this); // brukernavn felt
+    this.validerpasswordFelt= this.validerpasswordFelt.bind(this); // passord felt
+		this.validerpasswordconfirmFelt= this.validerpasswordconfirmFelt.bind(this); // bekrefte passord felt
 
   }
 
@@ -233,55 +234,50 @@ export class Registration extends React.Component {
 			</div>
 		);
 	}
-
+//validering av fornavnsfeltet
 	validerfornavnFelt(firstnameVerdi) {
-		// etter "var regex" så defineres hva som skal være tillatt i inputboksen
+		// etter "var regex" så defineres det hva som skal være tillatt i inputboksen
 		var regex = /^[a-zæøå ]{2,}$/i;
 		var firstnameValid = regex.test(firstnameVerdi);
 		this.setState({firstnameValid, firstnameVerdi});
 		}
-
+//validering av etternavnsfeltet
   valideretternavnFelt(lastnameVerdi) {
 		var regex = /^[a-zæøå ]{2,}$/i;
 		var lastnameValid = regex.test(lastnameVerdi);
     this.setState({lastnameValid, lastnameVerdi});
 	}
+	//validering av addressefeltet
   valideraddressFelt(addressVerdi) {
 		var regex = /^[a-zæøå 0-9]{2,}$/i;
 		var addressValid = regex.test(addressVerdi);
     this.setState({addressValid, addressVerdi});
 	}
-  validerpostalnumberFelt(postalnumberVerdi) {
-		var regex = /^[0-9]{4,4}$/i;
-		var postalnumberValid = regex.test(postalnumberVerdi);
-    this.setState({postalnumberValid, postalnumberVerdi});
-	}
-  validerpostalplaceFelt(postalplaceVerdi) {
-		var regex = /^[a-zæøå]{2,}$/i;
-		var postalplaceValid = regex.test(postalplaceVerdi);
-    this.setState({postalplaceValid, postalplaceVerdi});
-	}
+//validering av telefonnummerfeltet
   validerphonenumberFelt(phonenumberVerdi) {
     var regex = /^[0-9]{8,8}$/i;
     var phonenumberValid = regex.test(phonenumberVerdi);
     this.setState({phonenumberValid, phonenumberVerdi});
   }
-
+//validering av epostaddressefeltet
   valideremailaddressFelt(emailaddressVerdi) {
     var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     var emailaddressValid = regex.test(emailaddressVerdi);
     this.setState({emailaddressValid, emailaddressVerdi});
   }
+	//validering av brukernavnfeltet
   validerusernameFelt(usernameVerdi) {
     var regex = /^[a-zæøå 0-9]{2,}$/i;
     var usernameValid = regex.test(usernameVerdi);
     this.setState({usernameValid, usernameVerdi});
   }
+	//validering av passordfeltet
   validerpasswordFelt(passwordVerdi) {
     var regex = /^[a-zæøå 0-9]{6,}$/i;
     var passwordValid = regex.test(passwordVerdi);
     this.setState({passwordValid, passwordVerdi});
   }
+	//validering av bekreft passordfeltet
 	validerpasswordconfirmFelt(passwordconfirmVerdi) {
     var passwordconfirmValid = /^[a-zæøå 0-9]{6,}$/i;
 		var passwordconfirmValid = passwordconfirmVerdi;
@@ -296,11 +292,12 @@ export class Registration extends React.Component {
 	}
 
 
-	//rendrer på nytt og lagrer dataen bruker har ført inn i databasen
+	//rendrer på nytt og lagrer dataen brukeren har ført inn i databasen
 	componentDidMount() {
 
 
 		this.refs.newUserbtn.onclick = () => {
+			// resetter input når man trykker onclick
 			this.refs.errorfirstname.textContent="";
  		 this.refs.errorlastname.textContent="";
 		 this.refs.erroraddress.textContent="";
@@ -309,39 +306,40 @@ export class Registration extends React.Component {
 		 this.refs.errorusername.textContent="";
 		 this.refs.errorpassword.textContent="";
 		 this.refs.errorpasswordconfirm.textContent="";
-
-			if(this.state.firstnameValid == false){
+// validering av inputs
+			if(this.state.firstnameValid == false){//fornavn
 this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og må fylles ut"
 
 			}
-		else	if(this.state.lastnameValid == false){
+		else	if(this.state.lastnameValid == false){//etternavn
 
 				this.refs.errorlastname.textContent="Etternavnet kan bare inneholde bokstaver og må fylles ut"
 			}
-		else	if(this.state.addressValid == false){
+		else	if(this.state.addressValid == false){//addresse
 
 				this.refs.erroraddress.textContent="Adressa kan bare inneholde bokstaver og tall og må fylles ut"
 			}
-		else	if(this.state.phonenumberValid == false){
+		else	if(this.state.phonenumberValid == false){//Telefonnummer
 
 		this.refs.errorphonenumber.textContent="Telefonummeret kan bare inneholde 8 tall og må fylles ut"
 			}
-		else	if(this.state.emailaddressValid == false){
+		else	if(this.state.emailaddressValid == false){//epostaddresse
 
 			this.refs.erroremailaddress.textContent="Epostadressa er ikke gyldig og må fylles ut"
 			}
-		else	if(this.state.usernameValid == false){
+		else	if(this.state.usernameValid == false){// brukernavn
 
 				this.refs.errorusername.textContent="Brukernavnet kan bare inneholde bokstaver og tall og må fylles ut"
 			}
-		else	if(this.state.passwordValid == false){
+		else	if(this.state.passwordValid == false){//passord
 
 				this.refs.errorpassword.textContent="Passordet må inneholde minst seks tegn og må fylles ut"
 			}
-			else if(this.state.passwordVerdi != this.state.passwordconfirmVerdi) {
+			else if(this.state.passwordVerdi != this.state.passwordconfirmVerdi) {//bekreftpassord
 				this.refs.errorpasswordconfirm.textContent="Passordene matcher ikke"
 			}
 			else {
+				//legges inn hvis alle inputs er true
 			userService.addUser(this.state.firstnameVerdi, this.state.lastnameVerdi, this.state.addressVerdi, Number(this.refs.newPostnr.value), this.refs.newPoststed.value,
 				this.state.phonenumberVerdi, this.state.emailaddressVerdi, this.state.usernameVerdi, this.state.passwordVerdi).then((result) => {
 
@@ -357,6 +355,7 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 				});
 			}
 		}
+		// henter postestedet fra databasen når brukeren skriver inn postnummer
 	this.refs.newPostnr.oninput = () => {
 
 			userService.getPoststed(this.refs.newPostnr.value).then((result) => {
@@ -374,7 +373,7 @@ this.refs.errorfirstname.textContent="Fornavnet kan bare inneholde bokstaver og 
 		}
 	}
 }
-
+// Class for å sende nytt passord til brukeren via mail
 export class NewPassword extends React.Component {
 	render() {
 		return (
