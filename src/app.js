@@ -1,8 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
-import { userService } from './services';
-import { skillService } from './services';
+import { userService } from './components/Services/UserService';
+import { skillService } from './components/Services/SkillService';
+import { roleService } from './components/Services/RoleService';
+import { interestService } from './components/Services/InterestService';
+import { evntService } from './components/Services/Evntservice';
+import { mailservices } from './components/Services/mailservices';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 

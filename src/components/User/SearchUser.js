@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
-import { userService } from '../../services';
-import { evntService} from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 
 export default class SearchUser extends React.Component {
     constructor(props) {

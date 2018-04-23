@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import VirtualizedSelect from 'react-virtualized-select';
-import { userService } from '../../services';
-import { evntService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
@@ -370,7 +373,7 @@ export default class NewArrangement extends React.Component {
 
     componentDidMount() {
 
-        userService.getVaktmal().then((result) => { //henter alle vaktmaler
+        roleService.getVaktmal().then((result) => { //henter alle vaktmaler
             this.allMals = result;
             this.forceUpdate();
         });

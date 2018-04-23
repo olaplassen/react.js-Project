@@ -3,7 +3,11 @@ import ReactDOM from 'react-dom';
 import { Link, HashRouter, Switch, Route } from 'react-router-dom';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
-import { userService } from './services';
+import { userService } from './components/Services/UserService';
+import { skillService } from './components/Services/SkillService';
+import { roleService } from './components/Services/RoleService';
+import { interestService } from './components/Services/InterestService';
+import { evntService } from './components/Services/Evntservice';
 import { checkLogInUser } from './app';
 import { checkLogInAdmin } from './app';
 

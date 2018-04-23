@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { userService } from '../../services';
-import { evntService} from '../../services';
-import { skillService} from '../../services';
-import { interestService } from '../../services';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/Evntservice';
 import { Link } from 'react-router-dom';
 
 import VirtualizedSelect from 'react-virtualized-select'
@@ -119,7 +120,7 @@ export default class MyPage extends React.Component {
         }
         //liste over alle kurs bruker ikke har for virtualized-select dropdown meny
         for (let skill of this.allSkills) {
-            userService.checkUserSkill(this.user.id, skill.skillid).then((result) => {
+            skillService.checkUserSkill(this.user.id, skill.skillid).then((result) => {
                 if (result == undefined) {
                     skillList.push({ value: skill.skillid, label: skill.title }, );
                 }

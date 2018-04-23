@@ -1,11 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createHashHistory from 'history/createHashHistory';
-import { userService } from '../../services';
-import { evntService } from '../../services';
-import { skillService} from '../../services';
-import { interestService } from '../../services';
-import { mailService } from '../../mailservices';
+import { userService } from '../Services/UserService';
+import { skillService } from '../Services/SkillService';
+import { roleService } from '../Services/RoleService';
+import { interestService } from '../Services/InterestService';
+import { evntService } from '../Services/EvntService';
+import { mailService } from '../Services/mailservices';
 
 const history: HashHistory = createHashHistory();
 
@@ -507,7 +508,7 @@ export default class EventInfo extends React.Component {
 							usedEventRoles.push(result)
 							//sjekker om rollen har blitt tildelt user fra før
 						});
-						userService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
+						roleService.getRoleKomp(eventRolle.roleid, eventRolle.arr_rolleid).then((result) => {
 							this.roleKomp= result;
 							//henter kompetansen for rollen i for-of loopen
 						});
