@@ -40,43 +40,12 @@ export class Login extends React.Component {
     );
   }
   componentDidMount() {
-    //
-    this.refs.loginBtn.onclick = () => {
-      userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
-        if (result != undefined && result.confirmed == true) {
-
-          //slik at loginAdmin kjøres
-        if (result.admin == true) {
-          let admin = {
-            adminId: result.id
-          };
-          checkLogInAdmin(admin);
-        }
-        else {
-          // oppretter array for user med id slik at verdien kan sendes til den nye
-          // reactDOM'en. userId settes lik id fra resultatet fra spørringen i services.
-          let user = {
-            userId: result.id
-
-          }
-          console.log(user.userId);
-
-           checkLogInUser(user);
-        }
-      }
-      else {
-        //feilmelding ved mislykket innlogging
-        this.refs.error = "Feil passord eller brukernavn, eller så er din bruker ikke godkjent"
-      }
-
-    })
-
 
 		//
 		this.refs.loginBtn.onclick = () => {
 			userService.loginUser(this.refs.username.value, this.refs.password.value).then((result) => {
 
-				console.log(result)
+
 				if (result != undefined && result.confirmed == true) {
 					// når resultatet fra LoginUser er undefined avsluttes funkjsonen
 					//slik at loginAdmin kjøres
@@ -111,7 +80,7 @@ export class Login extends React.Component {
 		}
 	}
 }
-}
+
 
 export class RegistrationFelt extends React.Component {
 	constructor() {
@@ -168,6 +137,8 @@ export class Registration extends React.Component {
 		// registrerings skjemaet som skrives ut under registrerings komponenten
 		return (
 			<div className="menu">
+      <h2>Fyll inn nødvendig informasjon</h2>
+      <h4>Boksene blir grønne når riktig informasjon er fyllt inn</h4>
 				<form>
 					<RegistrationFelt validert={this.state.firstnameValid} verdi={this.state.firstnameVerdi} regexValidering={this.validerfornavnFelt} felttype="Fornavn" />
 					  <div className="errormessage" ref="errorfirstname"></div>
@@ -183,7 +154,7 @@ export class Registration extends React.Component {
             <div className="errormessage" ref="erroremailaddress"></div>
 					<RegistrationFelt validert={this.state.usernameValid}  verdi={this.state.usernameVerdi} regexValidering={this.validerusernameFelt} felttype="Brukernavn" />
               <div className="errormessage" ref="errorusername"></div>
-          <RegistrationFelt validert={this.state.passwordValid}  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="Passord" />
+          <RegistrationFelt validert={this.state.passwordValid} ng-model="password"  verdi={this.state.passwordVerdi} regexValidering={this.validerpasswordFelt} felttype="password" />
               <div className="errormessage" ref="errorpassword"></div>
 				<div ref="error"></div>
 				 <button className="button" ref="newUserbtn">Submit</button>

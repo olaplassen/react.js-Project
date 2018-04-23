@@ -69,8 +69,8 @@ getUserName(id, callback) {
 }
 addUser(firstName, lastName, address, postnr, poststed, phone, email, username, password,) {
     return new Promise ((resolve, reject) => {
-    var hashedPassword = passwordHash.generate('password');
-    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, hashedPassword)', [firstName, lastName, address, postnr, poststed, phone, email, username], (error, result) => {
+    var hashedPassword = passwordHash.generate(password);
+    connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, ?)', [firstName, lastName, address, postnr, poststed, phone, email, username,hashedPassword], (error, result) => {
       if (error) throw error;
     console.log(result)
       resolve();
@@ -85,16 +85,20 @@ deactivateUser(userid) {
     })
   })
 }
-loginUser(username, password, callback) {
+loginUser(username, inputpassword, callback) {
     return new Promise ((resolve, reject) => {
+    let hashedPassword = inputpassword
+    connection.query('SELECT * FROM Users WHERE (userName =?)', [username], (error, result) => {
+      let hashedPassword = result[0].password;
 
-    connection.query('SELECT * FROM Users WHERE (userName =? AND password=?)', [username, password], (error, result) => {
-
+      let correctpasword = passwordHash.verify(inputpassword, hashedPassword);
+      console.log(correctpasword)
       if (error) throw error;
+      if(correctpasword == true) {
       localStorage.setItem('signedInUser', JSON.stringify(result[0]));
       resolve(result[0]);
-        });
-
+      }
+      });
       });
 
   }
