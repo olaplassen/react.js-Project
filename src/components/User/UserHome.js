@@ -19,9 +19,11 @@ export default class UserHome extends React.Component {
 		this.allEvnts = [];
 		this.kommendeVakter = [];
 		this.fullforteVakter = [];
-		this.userId = props.match.params.userId;
+		// this.userId = props.match.params.userId;
+		this.userId = props.userId;
+
 	}
-//push
+
 	render() {
 		let kommendeVakterList = [];
 		let fullforteVakterList = [];
@@ -76,6 +78,8 @@ export default class UserHome extends React.Component {
 					</tr>
 				)
 		}
+
+		
 		return (
 				<div className="row">
 					<div className="calendercolumn">
