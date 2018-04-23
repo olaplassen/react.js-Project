@@ -234,60 +234,7 @@ checkIfInteressed(userId, arrangementId) {
  });
 }
 
-//Event Funksjoner EVNT-SERVICE-------------------------------------------------------------------------------
 
-addArrangement(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) {
-    return new Promise ((resolve, reject) => {
-      connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
-        if (error) throw error;
-        else
-        resolve();
-    });
-  });
-}
-getLastArrangement() {
-         return new Promise ((resolve, reject) => {
-          connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
-            if (error) throw error;
-              resolve(result[0])
-        });
-      });
-  }
-
-  //funkjson for å endre bruker//henter det siste arrangementet lagt til i databasen
-getEventInfo(id) {
-      return new Promise ((resolve, reject) => {
-       connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
-         if (error) throw error;
-           resolve(result[0])
-         });
-       });
-    }
-changeEvent(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
-  return new Promise ((resolve, reject) => {
-   connection.query('UPDATE Arrangement SET title =?, meetingLocation=?, description=?, contactPerson=?, gearList=?, showTime=?, start=?, end=? WHERE id=?', [title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId], (error, result) => {
-     if (error) throw error;
-       resolve(result)
-     });
-   });
-}
-getAllArrangement() {
-   return new Promise ((resolve, reject) => {
-    connection.query('SELECT * FROM Arrangement', (error, result) => {
-      if (error) throw error;
-        resolve(result)
-    });
-  });
-}
-getComingEvnts() {
-  let today = new Date()
-  return new Promise ((resolve, reject) => {
-   connection.query('SELECT * FROM Arrangement WHERE Arrangement.start > ?',[today], (error, result) => {
-     if (error) throw error;
-       resolve(result)
-   });
- });
-}
 
 //Skill funksjoner -------------------------------------------------------------------------------------------
 
@@ -689,3 +636,62 @@ isUserPassive(userid, arrid) {
 }
 let userService = new UserService();
 export { userService };
+
+
+class EvntService {
+  addEvnt(title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList) {
+      return new Promise ((resolve, reject) => {
+        connection.query('INSERT INTO Arrangement (title, description, meetingLocation, contactPerson, showTime, start, end, gearList) values (?, ?, ?, ?, ?, ?, ?, ?)', [title, description, meetingLocation, contactPerson, showTime, startTime, endTime, gearList], (error, result) => {
+          if (error) throw error;
+          else
+          resolve();
+      });
+    });
+  }
+  getLastEvnt() {
+           return new Promise ((resolve, reject) => {
+            connection.query('SELECT * FROM Arrangement ORDER BY ID DESC LIMIT 1 ', (error, result) => {
+              if (error) throw error;
+                resolve(result[0])
+          });
+        });
+    }
+
+    //funkjson for å endre bruker//henter det siste arrangementet lagt til i databasen
+  getEventInfo(id) {
+        return new Promise ((resolve, reject) => {
+         connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
+           if (error) throw error;
+             resolve(result[0])
+           });
+         });
+      }
+  changeEvent(title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId) {
+    return new Promise ((resolve, reject) => {
+     connection.query('UPDATE Arrangement SET title =?, meetingLocation=?, description=?, contactPerson=?, gearList=?, showTime=?, start=?, end=? WHERE id=?', [title, meetingLocation, description, contactPerson, gearList, show, start, end, eventId], (error, result) => {
+       if (error) throw error;
+         resolve(result)
+       });
+     });
+  }
+  getAllArrangement() {
+     return new Promise ((resolve, reject) => {
+      connection.query('SELECT * FROM Arrangement', (error, result) => {
+        if (error) throw error;
+          resolve(result)
+      });
+    });
+  }
+  getComingEvnts() {
+    let today = new Date()
+    return new Promise ((resolve, reject) => {
+     connection.query('SELECT * FROM Arrangement WHERE Arrangement.start > ?',[today], (error, result) => {
+       if (error) throw error;
+         resolve(result)
+     });
+   });
+  }
+}
+
+let evntService = new EvntService();
+export {evntService}

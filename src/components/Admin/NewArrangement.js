@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import VirtualizedSelect from 'react-virtualized-select';
 import { userService } from '../../services';
+import { evntService } from '../../services';
 import createHashHistory from 'history/createHashHistory';
 const history: HashHistory = createHashHistory();
 
@@ -313,7 +314,7 @@ export default class NewArrangement extends React.Component {
       else {
 
 
-        userService.addArrangement(this.state.arrnameVerdi, this.refs.arrDescription.value, this.state.meetinglocationVerdi,
+        evntService.addEvnt(this.state.arrnameVerdi, this.refs.arrDescription.value, this.state.meetinglocationVerdi,
             this.state.contactpersonVerdi, this.state.showtimeVerdi, this.state.starttimeVerdi,
             this.state.endtimeVerdi, this.state.gearlistVerdi).then((result) => {
 
@@ -329,7 +330,7 @@ export default class NewArrangement extends React.Component {
             })
           };
 
-        userService.getLastArrangement().then((result) => { //henter arrangementet som ble opprettet
+        evntService.getLastEvnt().then((result) => { //henter arrangementet som ble opprettet
             this.addedEvnt = result;
             if (selectValue != undefined) { //vaktmal er valgt
                 userService.getRolesForMal(selectValue.value).then((result) => {
