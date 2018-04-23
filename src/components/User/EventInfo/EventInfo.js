@@ -206,32 +206,33 @@ export default class EventInfo extends React.Component {
 						<div className="beskrivelsetabell">
 							<h1>{this.evnt.title} informasjon side.</h1>
 							<table>
-								<tr>
-									<td>Arrangemetet starter</td>
-									<td>{this.start}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte sted</td>
-									<td>{this.evnt.meetingLocation}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte tidspunktn</td>
-									<td>{this.show}</td>
-								</tr>
-								<tr>
-									<td>Planlagt slutt</td>
-									<td>{this.end}</td>
-								</tr>
-								<tr>
-									<td>Kontaktperson</td>
-									<td>{this.evnt.contactPerson}</td>
-								</tr>
-								<tr>
-									<td className="beskrivelse">Beskrivelse</td>
-									<td className="beskrivelsetekst">{this.evnt.description}</td>
-								</tr>
+									<tbody>
+									<tr>
+										<td>Arrangemetet starter</td>
+										<td>{this.start}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte sted</td>
+										<td>{this.evnt.meetingLocation}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte tidspunktn</td>
+										<td>{this.show}</td>
+									</tr>
+									<tr>
+										<td>Planlagt slutt</td>
+										<td>{this.end}</td>
+									</tr>
+									<tr>
+										<td>Kontaktperson</td>
+										<td>{this.evnt.contactPerson}</td>
+									</tr>
+									<tr>
+										<td className="beskrivelse">Beskrivelse</td>
+										<td className="beskrivelsetekst">{this.evnt.description}</td>
+									</tr>
+								</tbody>
 							</table>
-
 						</div>
 						<div  className="interesse">
 							{isInterestedList}
@@ -243,13 +244,15 @@ export default class EventInfo extends React.Component {
 						<h4>Roller som kreves for dette arrangementet:</h4>
 						<table className="table">
 							<tbody>
-							<tr><th className="th">Rolle</th><th className="th">Tildelt</th><th className="th">Status</th></tr>
+								<tr>
+									<th className="th">Rolle</th>
+									<th className="th">Tildelt</th>
+									<th className="th">Status</th>
+								</tr>
 								{roleListUser}
 							</tbody>
 						</table>
 					</div>
-					<br />
-					<hr />
 				</div>
 			)
 		}
@@ -261,30 +264,30 @@ export default class EventInfo extends React.Component {
 							<h1>{this.evnt.title} informasjon side.</h1>
 							<table>
 								<tbody>
-								<tr>
-									<td>Arrangemetet starter</td>
-									<td>{this.start}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte sted</td>
-									<td>{this.evnt.meetingLocation}</td>
-								</tr>
-								<tr>
-									<td>Oppmøte tidspunktn</td>
-									<td>{this.show}</td>
-								</tr>
-								<tr>
-									<td>Planlagt slutt</td>
-									<td>{this.end}</td>
-								</tr>
-								<tr>
-									<td>Kontaktperson</td>
-									<td>{this.evnt.contactPerson}</td>
-								</tr>
-								<tr>
-									<td className="beskrivelse">Beskrivelse</td>
-									<td className="beskrivelsetekst">{this.evnt.description}</td>
-								</tr>
+									<tr>
+										<td>Arrangemetet starter</td>
+										<td>{this.start}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte sted</td>
+										<td>{this.evnt.meetingLocation}</td>
+									</tr>
+									<tr>
+										<td>Oppmøte tidspunktn</td>
+										<td>{this.show}</td>
+									</tr>
+									<tr>
+										<td>Planlagt slutt</td>
+										<td>{this.end}</td>
+									</tr>
+									<tr>
+										<td>Kontaktperson</td>
+										<td>{this.evnt.contactPerson}</td>
+									</tr>
+									<tr>
+										<td className="beskrivelse">Beskrivelse</td>
+										<td className="beskrivelsetekst">{this.evnt.description}</td>
+									</tr>
 								</tbody>
 							</table>
 							<button ref="endreInfo" className="button3" onClick={() => {this.props.history.push('/changevent/' + this.evnt.id)}}>Endre Informasjon</button>
@@ -294,9 +297,9 @@ export default class EventInfo extends React.Component {
 						<div className="column2">
 							<h4>Interesserte brukere</h4>
 							<table>
-							<tbody>
-									{interestedUserList}
-							</tbody>
+								<tbody>
+										{interestedUserList}
+								</tbody>
 							</table>
 						</div>
 					</div>

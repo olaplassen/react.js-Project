@@ -130,36 +130,36 @@ export default class MyPage extends React.Component {
                 <div>
                   <div className="row">
                     <div className="info">
-                        <h2> {this.user.firstName} {this.user.lastName}</h2>
-                          <table className="tableinfo">
-                          <tbody>
-                            <tr>
-                              <td>Brukernavn</td>
-                              <td>{this.user.userName}</td>
-                            </tr>
-                            <tr>
-                              <td>Epost</td>
-                              <td>{this.user.email}</td>
-                            </tr>
-                            <tr>
-                              <td>Mobilnummer</td>
-                              <td>{this.user.phone}</td>
-                            </tr>
-                            <tr>
-                              <td>Adresse</td>
-                              <td>{this.user.address} </td>
-                            </tr>
-                            <tr>
-                              <td>Poststed</td>
-                              <td>{this.user.poststed}</td>
-                            </tr>
-                            <tr>
-                              <td>Postnr</td>
-                              <td>{this.user.postnr}</td>
-                            </tr>
-                            </tbody>
-                          </table>
-                      <div>
+                      <h2> {this.user.firstName} {this.user.lastName}</h2>
+                      <table className="tableinfo">
+                        <tbody>
+                          <tr>
+                            <td>Brukernavn</td>
+                            <td>{this.user.userName}</td>
+                          </tr>
+                          <tr>
+                            <td>Epost</td>
+                            <td>{this.user.email}</td>
+                          </tr>
+                          <tr>
+                            <td>Mobilnummer</td>
+                            <td>{this.user.phone}</td>
+                          </tr>
+                          <tr>
+                            <td>Adresse</td>
+                            <td>{this.user.address} </td>
+                          </tr>
+                          <tr>
+                            <td>Poststed</td>
+                            <td>{this.user.poststed}</td>
+                          </tr>
+                          <tr>
+                            <td>Postnr</td>
+                            <td>{this.user.postnr}</td>
+                          </tr>
+                          </tbody>
+                        </table>
+                    <div>
                         <Link to={'/changeUser/' + this.user.id}>Endre opplysninger</Link>
                       </div>
                       <div>
@@ -184,9 +184,11 @@ export default class MyPage extends React.Component {
                           <p> Sluttdato for passivmelding </p>  <input type='datetime-local' ref="endPassiveTime"></input><br />
                           <button className="button1" ref="newpassivebutton" onClick={() => this.registerUserPassive()}>Melde passiv</button>
                           <div ref="error"></div>
-                          <tabel>
-                            {passiveList}
-                          </tabel>
+                          <table>
+                            <tbody>
+                              {passiveList}
+                            </tbody>
+                          </table>
                     </div>
                 </div>
 
@@ -225,12 +227,16 @@ export default class MyPage extends React.Component {
                             />
                             <div>
                               <table>
-                                {this.inputList}
+                                <tbody>
+                                  {this.inputList}
+                                </tbody>
                               </table>
                             </div>
                             <div>
                               <table>
-                                {this.dateInputList}
+                                <tbody>
+                                  {this.dateInputList}
+                                </tbody>
                               </table>
                             </div>
                             <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>
@@ -247,30 +253,30 @@ export default class MyPage extends React.Component {
                       <h2> {this.user.firstName} {this.user.lastName}</h2>
                         <table className="tableinfo">
                           <tbody>
-                          <tr>
-                            <td>Brukernavn</td>
-                            <td>{this.user.userName}</td>
-                          </tr>
-                          <tr>
-                            <td>Epost</td>
-                            <td>{this.user.email}</td>
-                          </tr>
-                          <tr>
-                            <td>Mobilnummer</td>
-                            <td>{this.user.phone}</td>
-                          </tr>
-                          <tr>
-                            <td>Adresse</td>
-                            <td>{this.user.address} </td>
-                          </tr>
-                          <tr>
-                            <td>Poststed</td>
-                            <td>{this.user.poststed}</td>
-                          </tr>
-                          <tr>
-                            <td>Postnr</td>
-                            <td>{this.user.postnr}</td>
-                          </tr>
+                            <tr>
+                              <td>Brukernavn</td>
+                              <td>{this.user.userName}</td>
+                            </tr>
+                            <tr>
+                              <td>Epost</td>
+                              <td>{this.user.email}</td>
+                            </tr>
+                            <tr>
+                              <td>Mobilnummer</td>
+                              <td>{this.user.phone}</td>
+                            </tr>
+                            <tr>
+                              <td>Adresse</td>
+                              <td>{this.user.address} </td>
+                            </tr>
+                            <tr>
+                              <td>Poststed</td>
+                              <td>{this.user.poststed}</td>
+                            </tr>
+                            <tr>
+                              <td>Postnr</td>
+                              <td>{this.user.postnr}</td>
+                            </tr>
                           </tbody>
                         </table>
                     <div>
@@ -337,12 +343,16 @@ export default class MyPage extends React.Component {
                           />
                           <div>
                             <table>
-                              {this.inputList}
+                              <tbody>
+                                {this.inputList}
+                              </tbody>
                             </table>
                           </div>
                           <div>
                             <table>
-                              {this.dateInputList}
+                              <tbody>
+                                {this.dateInputList}
+                              </tbody>
                             </table>
                           </div>
                           <button ref="addSkill" onClick={() => this.registerSkills(selectValue)}>Registrer</button>

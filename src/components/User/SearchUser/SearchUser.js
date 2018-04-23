@@ -17,12 +17,22 @@ export default class SearchUser extends React.Component {
         //Liste for bruker søk. Når innlogget bruker er admin vil listen vise mer informasjon
         if (signedInUser.admin == 0) {
             for (let user of this.allUsers) {
-                userList.push(<tr key={user.id}><td>{user.firstName} {user.lastName}</td> <td>{user.phone}</td> <td>{user.email}</td></tr>)
+                userList.push(<tr key={user.id}>
+                                <td>{user.firstName} {user.lastName}</td>
+                                <td>{user.phone}</td>
+                                <td>{user.email}</td>
+                              </tr>)
             }
         }
         else if (signedInUser.admin = 1) {
             for (let user of this.allUsers) {
-                userList.push(<tr key={user.id}><td>{user.id}</td> <td><Link to={'/mypage/' + user.id}>{user.firstName} {user.lastName}</Link></td> <td>{user.address}</td> <td>{user.phone}</td> <td>Epost: {user.email}</td></tr>)
+                userList.push(<tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td><Link to={'/mypage/' + user.id}>{user.firstName} {user.lastName}</Link></td>
+                                <td>{user.address}</td>
+                                <td>{user.phone}</td>
+                                <td>Epost: {user.email}</td>
+                              </tr>)
             }
         }
         if (signedInUser.admin == 1) {
@@ -32,7 +42,13 @@ export default class SearchUser extends React.Component {
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
                     <table>
                         <tbody>
-                            <tr><th>Medlemsnummer</th><th>Navn</th><th>Adresse</th><th>Telfon</th><th>Email</th></tr>
+                            <tr>
+                              <th>Medlemsnummer</th>
+                              <th>Navn</th>
+                              <th>Adresse</th>
+                              <th>Telfon</th>
+                              <th>Email</th>
+                              </tr>
                             {userList}
                         </tbody>
                     </table>
@@ -46,7 +62,11 @@ export default class SearchUser extends React.Component {
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
                     <table>
                         <tbody>
-                            <tr><th>Navn</th><th>Telfon</th><th>Email</th></tr>
+                            <tr>
+                              <th>Navn</th>
+                              <th>Telfon</th>
+                              <th>Email</th>
+                              </tr>
                             {userList}
                         </tbody>
                     </table>

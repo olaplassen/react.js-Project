@@ -72,7 +72,7 @@ addUser(firstName, lastName, address, postnr, poststed, phone, email, username, 
     var hashedPassword = passwordHash.generate('password');
     connection.query('INSERT INTO Users (firstName, lastName, address, postnr, poststed, phone, email, userName, password) values (?, ?, ?, ?, ?, ?, ?, ?, hashedPassword)', [firstName, lastName, address, postnr, poststed, phone, email, username], (error, result) => {
       if (error) throw error;
-      else console.log("Registration complete")
+    console.log(result)
       resolve();
     });
   });

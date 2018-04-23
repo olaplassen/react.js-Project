@@ -34,7 +34,12 @@ export default class Statistics extends React.Component {
                 <input type="text" className="input" placeholder="Søk etter navn her" value={this.state.value} onChange={this.handleChange} />
                 <table className="table100">
                     <tbody>
-                        <tr><th className="th">Medlemsnummer</th><th className="th">Navn</th><th className="th">Vaktpoeng</th><th className="th">Antall Vakter siste 2 mnd</th></tr>
+                        <tr>
+                          <th className="th">Medlemsnummer</th>
+                          <th className="th">Navn</th>
+                          <th className="th">Vaktpoeng</th>
+                          <th className="th">Antall Vakter siste 2 mnd</th>
+                        </tr>
                         {statisticList}
                     </tbody>
                 </table>

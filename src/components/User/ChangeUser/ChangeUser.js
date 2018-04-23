@@ -18,38 +18,38 @@ export default class ChangeUser extends React.Component {
               <h2> Endre dine opplysninger</h2>
                 <div>
                   <table>
-                    <tr>
-                      <td>Fornavn</td>
-                      <td><input placeholder="Fornavn" className="changeinput" type='text' ref='changefirstName' /></td>
-                    </tr>
-                    <tr>
-                      <td>Etternavn</td>
-                      <td><input placeholder="Etternavn"  className="changeinput" type='text' ref='changelastName' /></td>
-                    </tr>
-                    <tr>
-                      <td>Epost</td>
-                      <td><input placeholder="Epost"  className="changeinput" type='text' ref='changeemail' /></td>
-                    </tr>
-                    <tr>
-                      <td>Mobilnumer</td>
-                      <td><input placeholder="Mobilnummer"  className="changeinput" type='number' ref='changephone' /></td>
-                    </tr>
-                    <tr>
-                      <td>Adresse</td>
-                      <td><input placeholder="Adresse"  className="changeinput" type='text' ref='changeaddress' /></td>
-                    </tr>
-                    <tr>
-                      <td>Postnummer</td>
-                      <td><input placeholder="Postnummer"  className="changeinput" type='number' ref='changepostalNumber' /></td>
-                    </tr>
-                    <tr>
-                      <td>Poststed</td>
-                      <td><input placeholder="Poststed"  className="changeinput" type='text' ref='changepoststed' /></td>
-                    </tr>
-
+                  <tbody>
+                      <tr>
+                        <td>Fornavn</td>
+                        <td><input placeholder="Fornavn" className="changeinput" type='text' ref='changefirstName' /></td>
+                      </tr>
+                      <tr>
+                        <td>Etternavn</td>
+                        <td><input placeholder="Etternavn"  className="changeinput" type='text' ref='changelastName' /></td>
+                      </tr>
+                      <tr>
+                        <td>Epost</td>
+                        <td><input placeholder="Epost"  className="changeinput" type='text' ref='changeemail' /></td>
+                      </tr>
+                      <tr>
+                        <td>Mobilnumer</td>
+                        <td><input placeholder="Mobilnummer"  className="changeinput" type='number' ref='changephone' /></td>
+                      </tr>
+                      <tr>
+                        <td>Adresse</td>
+                        <td><input placeholder="Adresse"  className="changeinput" type='text' ref='changeaddress' /></td>
+                      </tr>
+                      <tr>
+                        <td>Postnummer</td>
+                        <td><input placeholder="Postnummer"  className="changeinput" type='number' ref='changepostalNumber' /></td>
+                      </tr>
+                      <tr>
+                        <td>Poststed</td>
+                        <td><input placeholder="Poststed"  className="changeinput" type='text' ref='changepoststed' /></td>
+                      </tr>
+                    </tbody>
                   </table>
-
-                    <button ref='changeUserButton'>Lagre</button>
+                  <button ref='changeUserButton'>Lagre</button>
                 </div>
             </div>
         );
