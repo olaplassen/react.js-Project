@@ -320,7 +320,7 @@ export class NewArrangement extends React.Component {
           inc++;
 
        }
-
+   // skriver ut liste for vaktmal
     for (let vaktmal of this.allMals) {
          vaktmalList.push({ value: vaktmal.vaktmalId, label: vaktmal.vaktmalTittel},);
        }
