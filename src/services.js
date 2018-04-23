@@ -229,7 +229,7 @@ getLastArrangement() {
       });
   }
 
-  //funkjson for å endre bruker
+  //funkjson for å endre bruker//henter det siste arrangementet lagt til i databasen
 getEventInfo(id) {
       return new Promise ((resolve, reject) => {
        connection.query('SELECT * FROM Arrangement WHERE id=?', [id], (error, result) => {
