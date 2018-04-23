@@ -138,6 +138,10 @@ export default class MyPage extends React.Component {
                             <td>{this.user.userName}</td>
                           </tr>
                           <tr>
+                            <td>Medlemsnummer</td>
+                            <td>{this.user.id}</td>
+                          </tr>
+                          <tr>
                             <td>Epost</td>
                             <td>{this.user.email}</td>
                           </tr>
@@ -256,6 +260,10 @@ export default class MyPage extends React.Component {
                             <tr>
                               <td>Brukernavn</td>
                               <td>{this.user.userName}</td>
+                            </tr>
+                            <tr>
+                              <td>Medlemsnummer</td>
+                              <td>{this.user.id}</td>
                             </tr>
                             <tr>
                               <td>Epost</td>
@@ -427,7 +435,7 @@ export default class MyPage extends React.Component {
         this.refs.changepasswordbtn.onclick = () => {
           console.log(this.state.showchangePassword )
           onsole.log("click")
-        
+
 
             if (this.refs.newpassword.value == this.refs.verifypassword.value) {
                 userService.changePassword(this.refs.newpassword.value, this.user.id).then((result) => {
