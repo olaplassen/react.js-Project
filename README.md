@@ -20,5 +20,5 @@ All funksjonalitet for administratorer og diverse unike sider kun admin har tilg
 <b> Users </b> <br/>
 All brukerfunksjonalitet. Funksjonalitet for frivillige i røde-kors til å melde interesse for arrengementer, registere kompetanse og roller og se statistikk.
 
-b> Services </b> <br/>
+<b> Services </b> <br/>
 Diverse tjenester for å behandle bruker og admin-data.
