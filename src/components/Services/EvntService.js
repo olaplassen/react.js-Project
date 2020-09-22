@@ -10,7 +10,7 @@ function connect() {
   connection = mysql.createConnection({
     host: 'mysql.stud.iie.ntnu.no',
     user: 'g_oops_22',
-    password: 'YpmfXR8f',
+    password: '',
     database: 'g_oops_22'
   });
 
